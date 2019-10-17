@@ -1,0 +1,76 @@
+<div class="docs-example-viewer-wrapper">
+    <div class="docs-example-viewer-title mat-elevation-z2">
+        <div class="docs-example-viewer-title-spacer">
+            <h4>User Registration</h4>
+            <div>
+                <strong>Already Registered? </strong>
+                <button class="mat-elevation-z4" mat-raised-button [routerLink]='["/login"]'>Login</button>
+            </div>
+        </div>
+    </div>
+    <div class="docs-example-viewer-body">
+        <div class="full-width">
+            <mat-card class="mat-elevation-z4">
+                <mat-card-content>
+                    <form [formGroup]="registrationForm" (ngSubmit)="registerUser()">
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="First name" formControlName="firstname" required>
+                            <mat-error *ngIf="firstname.touched && firstname.invalid">First Name is required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Last Name" formControlName="lastname" required>
+                            <mat-error *ngIf="lastname.touched && lastname.invalid">Last Name is required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="User Name" formControlName="username" required>
+                            <mat-error *ngIf="username.touched && username.hasError('required')">User Name is required
+                            </mat-error>
+                            <mat-error *ngIf="username.touched && username.hasError('userNameNotAvailable')">User Name
+                                is not
+                                available</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Password" formControlName="password"
+                                [type]="showPassword ? 'password' : 'text'" required>
+                            <mat-icon matSuffix (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' :
+                'visibility'}}</mat-icon>
+                            <mat-error *ngIf="password.touched && password.hasError('required')">Password is required
+                            </mat-error>
+                            <mat-error *ngIf="password.touched && password.hasError('passwordValidation')">
+                                Password should have minimum 8 characters, at least 1 uppercase letter, 1 lowercase
+                                letter and 1 number
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Confirm Password" formControlName="confirmPassword"
+                                [type]="showConfirmPassword ? 'password' : 'text'" required>
+                            <mat-icon matSuffix (click)="showConfirmPassword = !showConfirmPassword">
+                                {{showConfirmPassword ?'visibility_off' :'visibility'}}</mat-icon>
+                            <mat-error *ngIf="confirmPassword.touched && confirmPassword.hasError('required')">Password
+                                is required
+                            </mat-error>
+                            <mat-error *ngIf="confirmPassword.touched && confirmPassword.hasError('passwordMismatch')">
+                                Password do not match
+                            </mat-error>
+                        </mat-form-field>
+
+                        <label class="example-margin">Gender: </label>
+                        <mat-radio-group class="example-radio-group" formControlName="gender">
+                            <mat-radio-button class="example-radio-button" value="Male"> Male </mat-radio-button>
+                            <mat-radio-button class="example-radio-button" value="Female"> Female </mat-radio-button>
+                        </mat-radio-group>
+                        <mat-error *ngIf="gender.touched && gender.invalid">Gender is required</mat-error>
+                        <mat-card-actions align="right">
+                            <div fxFlex></div>
+                            <button mat-raised-button color="primary">Register</button>
+                        </mat-card-actions>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

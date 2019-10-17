@@ -1,0 +1,26 @@
+td,
+th {
+  width: 18%;
+}
+
+.docs-example-viewer-title-spacer {
+  display: flex;
+  justify-content: space-between;
+}
+
+img {
+  width: 40%;
+  overflow: hidden;
+  position: relative;
+}
+
+.btn-container {
+  display: flex;
+  text-align: center;
+  width: 18%;
+}
+
+.div-quantity {
+  margin: auto;
+  text-align: center;
+}

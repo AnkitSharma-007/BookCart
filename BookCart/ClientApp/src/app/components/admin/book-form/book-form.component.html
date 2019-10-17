@@ -1,0 +1,65 @@
+<div class="docs-example-viewer-wrapper">
+    <div class="docs-example-viewer-title mat-elevation-z2">
+        <div class="docs-example-viewer-title-spacer">
+            <h3>{{formTitle}} Book</h3>
+        </div>
+    </div>
+    <div class="docs-example-viewer-body">
+        <div class="left-div">
+            <mat-card class="mat-elevation-z2">
+                <mat-card-content>
+                    <form enctype="multipart/form-data" [formGroup]="bookForm" (ngSubmit)="saveBookData()">
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Title" formControlName="title" required>
+                            <mat-error *ngIf="title.touched && title.invalid">Title is required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Author" formControlName="author" required>
+                            <mat-error *ngIf="author.touched && author.invalid">Author name is
+                                required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <mat-select placeholder="Category" formControlName="category" required>
+                                <mat-option *ngFor="let category of categoryList" [value]="category.categoryName">
+                                    {{category.categoryName}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="category.touched && category.invalid">Category is required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Price" formControlName="price" type="number" required>
+                            <span matPrefix>&#8377;&nbsp;</span>
+                            <mat-error *ngIf="price.touched && price.hasError('required')">Price is required</mat-error>
+                            <mat-error *ngIf="price.touched && price.hasError('min')">Price cannot be less than 0
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-card-actions align="right">
+                            <div fxFlex></div>
+                            <button type="submit" mat-raised-button color="primary">SAVE</button>
+                            <button type="button" mat-raised-button color="warn" (click)="cancel()">CANCEL</button>
+                        </mat-card-actions>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="right-div">
+            <div class="docs-example-viewer-title">
+                <h6>Image Preview</h6>
+            </div>
+            <mat-card class="mat-elevation-z2">
+                <mat-card-content class="image-card">
+                    <img class="preview-image" mat-card-image src={{coverImagePath}} alt="No image available">
+                </mat-card-content>
+                <mat-card-content>
+                    <div class="upload-btn-wrapper mat-elevation-z2">
+                        <button class="btn-upload" type="button" mat-raised-button>Upload image</button>
+                        <input type="file" (change)="uploadImage($event)" />
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

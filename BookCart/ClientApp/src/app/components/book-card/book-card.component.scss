@@ -1,0 +1,35 @@
+@import '~@angular/material/theming';
+$color-hover: #777777;
+
+.image-card {
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-image {
+  max-height: 250px;
+  max-width: 200px;
+  cursor: pointer;
+}
+
+.book-card {
+  min-width: 200px;
+  max-width: 200px;
+  max-height: 400px;
+}
+
+.card-title {
+  cursor: pointer;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.mat-card-content {
+  margin-bottom: 0;
+}
+
+.on-book-card-hover {
+   @include mat-elevation(8,$color-hover,16);
+}

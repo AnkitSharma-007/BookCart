@@ -1,0 +1,14 @@
+<div class="docs-example-viewer-wrapper">
+    <div class="docs-example-viewer-title mat-elevation-z2">
+        <div class="docs-example-viewer-title-spacer">
+            <h3>Similar Books</h3>
+        </div>
+    </div>
+    <div class="docs-example-viewer-body">
+        <div fxLayout="row" fxFlex.md="70" fxLayoutWrap class="card-deck-container">
+            <div fxFlex *ngFor="let book of books" class="card-item">
+                <app-book-card [book]="book"></app-book-card>
+            </div>
+        </div>
+    </div>
+</div>

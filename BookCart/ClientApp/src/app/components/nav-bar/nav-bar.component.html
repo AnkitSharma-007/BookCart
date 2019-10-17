@@ -1,0 +1,29 @@
+<mat-toolbar color="primary" class="docs-navbar-header mat-elevation-z2">
+    <mat-toolbar-row>
+        <button mat-button [routerLink]='["/"]'>
+            <mat-icon>book</mat-icon> Book Cart
+        </button>
+        <span class="spacer"></span>
+        <button mat-icon-button [routerLinkActive]='["link-active"]' [routerLink]='["/shopping-cart"]'>
+            <mat-icon matBadge="{{cartItemCount}}" matBadgeColor="warn">shopping_cart</mat-icon>
+        </button>
+        <button mat-button *ngIf="!userData.isLoggedIn" [routerLinkActive]='["link-active"]'
+            [routerLink]='["/login"]'>Login</button>
+        <button mat-button *ngIf="userData.userTypeId==userType.admin" [routerLink]='["/admin/books"]'>Admin
+            Panel</button>
+
+        <ng-container *ngIf="userData.isLoggedIn">
+            <button mat-button [matMenuTriggerFor]="menu">
+                <mat-icon>account_circle</mat-icon> {{userData.username}} <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item [routerLink]='["/myorders"]'>My Orders</button>
+                <button mat-menu-item (click)=logout()>Logout</button>
+            </mat-menu>
+        </ng-container>
+        <app-theme-picker></app-theme-picker>
+        <button mat-button><a class="github-link" href="https://github.com/AnkitSharma-007/bookcart" target="_blank"><i
+                    class="fa fa-github"></i> GitHub</a>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>

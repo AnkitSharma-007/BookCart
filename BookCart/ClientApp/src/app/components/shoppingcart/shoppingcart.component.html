@@ -1,0 +1,84 @@
+<div class="docs-example-viewer-wrapper">
+    <div class="docs-example-viewer-title mat-elevation-z2">
+        <div class="docs-example-viewer-title-spacer">
+            <h3>Cart Items</h3>
+            <div *ngIf="cartItems && cartItems.length>0">
+                <button class="mat-elevation-z4" mat-raised-button (click)="clearCart()">Clear cart</button>
+            </div>
+        </div>
+    </div>
+    <ng-template #emptycart>
+        <mat-card>
+            <mat-card-title>
+                Shopping cart is empty
+            </mat-card-title>
+            <mat-card-content>
+                <button mat-raised-button color="primary" [routerLink]='["/"]'>Continue shopping</button>
+            </mat-card-content>
+        </mat-card>
+    </ng-template>
+    <mat-card *ngIf="cartItems && cartItems.length>0; else emptycart">
+        <mat-card-content>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>MRP</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </mat-card-content>
+
+        <table class="table">
+            <tbody>
+                <tr *ngFor="let item of cartItems">
+                    <mat-card-content class="mat-elevation-z2">
+                        <td> <img matTooltip={{item.book.title}} matTooltipPosition="after"
+                                src="/Upload/{{item.book.coverFileName}}"></td>
+                        <td><a [routerLink]="['/books/details/',item.book.bookId]">{{item.book.title}}</a></td>
+                        <td>{{ item.book.price | currency : 'INR' }}</td>
+                        <td>
+                            <div class="btn-container">
+                                <div class="btn-minus"><button [disabled]="item.quantity < 2 ? true : false"
+                                        mat-icon-button color="warn" (click)="deleteOneCartItem(item.book.bookId)">
+                                        <mat-icon>remove_circle</mat-icon>
+                                    </button>
+                                </div>
+                                <div class="div-quantity">{{item.quantity}}</div>
+                                <div class="btn-plus"><button mat-icon-button color="warn"
+                                        (click)="addToCart(item.book.bookId)">
+                                        <mat-icon>add_circle</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ item.book.price * item.quantity | currency : 'INR'}}</td>
+                        <td><button mat-icon-button color="accent" matTooltip="Delete item"
+                                (click)="deleteCartItem(item.book.bookId)">
+                                <mat-icon>delete</mat-icon>
+                            </button></td>
+                    </mat-card-content>
+                </tr>
+            </tbody>
+            <tfoot class="table">
+                <tr>
+                    <mat-card-content>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <td>Cart Total:</td>
+                        <th>{{totalPrice| currency : 'INR' }}</th>
+                        <th>
+                            <button class="mat-elevation-z4" mat-raised-button color="warn"
+                                [routerLink]='["/checkout"]'>CheckOut</button>
+                        </th>
+                    </mat-card-content>
+                </tr>
+            </tfoot>
+        </table>
+    </mat-card>
+</div>

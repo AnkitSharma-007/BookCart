@@ -1,0 +1,45 @@
+$color-row-border: #dee2e6;
+
+.image-card {
+    width: 170px;
+    height: 260px;
+    padding: 15px;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: transform .5s;
+  }
+  
+  .preview-image {
+    max-height: 300px;
+    max-width: 300px;
+  }
+  
+  .table {
+    min-height: 210px;
+    min-width: 250px;
+  }
+  
+  td{
+    border-top:0; 
+    border-bottom:1px solid $color-row-border;
+    width: 50%;
+  }
+  
+  .left-div {
+    margin-top: 10px;
+    float: left;
+    width: 20%;
+  }
+  
+  .right-div {
+    float: left;
+    width: 50%;
+    margin-left: 20px;
+  }
+  
+  .image-card:hover {
+    transform: scale(1.5);
+  }
+  

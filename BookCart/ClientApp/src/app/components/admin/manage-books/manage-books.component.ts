@@ -1,16 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { Book } from 'src/app/models/book';
 import { BookService } from 'src/app/services/book.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { DeleteBookComponent } from '../delete-book/delete-book.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-books',
   templateUrl: './manage-books.component.html',
   styleUrls: ['./manage-books.component.scss']
 })
-export class ManageBooksComponent implements OnInit {
+export class ManageBooksComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['id', 'title', 'author', 'category', 'price', 'operation'];
 
@@ -19,6 +21,7 @@ export class ManageBooksComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private bookService: BookService,
     public dialog: MatDialog,
@@ -32,11 +35,13 @@ export class ManageBooksComponent implements OnInit {
   }
 
   getAllBookData() {
-    this.bookService.getAllBooks().subscribe((data: Book[]) => {
-      this.dataSource.data = Object.values(data);
-    }, error => {
-      console.log('Error ocurred while fetching book details : ', error);
-    });
+    this.bookService.getAllBooks()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data: Book[]) => {
+        this.dataSource.data = Object.values(data);
+      }, error => {
+        console.log('Error ocurred while fetching book details : ', error);
+      });
   }
 
   applyFilter(filterValue: string) {
@@ -52,13 +57,20 @@ export class ManageBooksComponent implements OnInit {
       data: id
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) {
-        this.snackBarService.showSnackBar('Data deleted Succesfully');
-        this.getAllBookData();
-      } else {
-        this.snackBarService.showSnackBar('Error occurred!! Try again');
-      }
-    });
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(result => {
+        if (result === 1) {
+          this.getAllBookData();
+          this.snackBarService.showSnackBar('Data deleted successfully');
+        } else {
+          this.snackBarService.showSnackBar('Error occurred!! Try again');
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

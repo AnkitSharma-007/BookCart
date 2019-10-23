@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Order } from 'src/app/models/order';
 import { MyordersService } from 'src/app/services/myorders.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-orders',
@@ -16,29 +18,39 @@ import { MyordersService } from 'src/app/services/myorders.service';
     ]),
   ]
 })
-export class MyOrdersComponent implements OnInit {
+export class MyOrdersComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['orderId', 'orderedOn', 'orderTotal'];
   dataSource = new MatTableDataSource<Order>();
   expandedElement: null;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  private paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) set matPaginator(mp: MatPaginator) {
 
+    /*
+    * Since we are using *ngIf with mat-table.
+    * Refer - https://github.com/angular/components/issues/15008#issuecomment-516386055
+    */
+    this.dataSource.paginator = mp;
+  }
   userId;
+  isLoading = true;
+  private unsubscribe$ = new Subject<void>();
+
   constructor(private orderService: MyordersService) {
     this.userId = localStorage.getItem('userId');
   }
 
   ngOnInit() {
     this.getMyOrderDetails();
-    this.dataSource.paginator = this.paginator;
   }
 
   getMyOrderDetails() {
-    this.orderService.myOrderDetails(this.userId).subscribe(
-      (result: Order[]) => {
+    this.orderService.myOrderDetails(this.userId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((result: Order[]) => {
         if (result != null) {
+          this.dataSource.data = Object.values(result);
         }
-        this.dataSource.data = Object.values(result);
       }, error => {
         console.log('Error ocurred while fetching my order details : ', error);
       });
@@ -49,5 +61,10 @@ export class MyOrdersComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

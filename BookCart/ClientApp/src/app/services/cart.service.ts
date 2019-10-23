@@ -51,7 +51,7 @@ export class CartService {
       }));
   }
 
-  setCart(oldUserId, newUserId) {
+  setCart(oldUserId: number, newUserId: number) {
     return this.http.get(this.baseURL + `setShoppingCart/${oldUserId}/${newUserId}`, {})
       .pipe(map((response: any) => {
         this.cartItemCount = response;

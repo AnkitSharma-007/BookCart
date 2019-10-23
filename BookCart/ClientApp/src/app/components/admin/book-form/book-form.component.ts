@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Book } from 'src/app/models/book';
 import { BookService } from 'src/app/services/book.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-book-form',
   templateUrl: './book-form.component.html',
   styleUrls: ['./book-form.component.scss']
 })
-export class BookFormComponent implements OnInit {
+export class BookFormComponent implements OnInit, OnDestroy {
 
   private formData = new FormData();
   bookForm: FormGroup;
@@ -19,6 +21,7 @@ export class BookFormComponent implements OnInit {
   bookId;
   files;
   categoryList: [];
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private bookService: BookService,
@@ -56,26 +59,29 @@ export class BookFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.bookService.getCategories().subscribe(
-      (categoryData: []) => {
-        this.categoryList = categoryData;
-      }, error => {
-        console.log('Error ocurred while fetching category List : ', error);
-      });
+    this.bookService.getCategories()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        (categoryData: []) => {
+          this.categoryList = categoryData;
+        }, error => {
+          console.log('Error ocurred while fetching category List : ', error);
+        });
 
     if (this.bookId) {
       this.formTitle = 'Edit';
-      this.bookService.getBookById(this.bookId).subscribe(
-        (result: Book) => {
-          this.setBookFormData(result);
-        }, error => {
-          console.log('Error ocurred while fetching book data : ', error);
-        });
+      this.bookService.getBookById(this.bookId)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          (result: Book) => {
+            this.setBookFormData(result);
+          }, error => {
+            console.log('Error ocurred while fetching book data : ', error);
+          });
     }
   }
 
   saveBookData() {
-
     if (!this.bookForm.valid) {
       return;
     }
@@ -86,21 +92,25 @@ export class BookFormComponent implements OnInit {
     }
     this.formData.append('bookFormData', JSON.stringify(this.bookForm.value));
     if (this.bookId) {
-      this.bookService.updateBookDetails(this.formData).subscribe(
-        () => {
-          this.router.navigate(['/admin/books']);
-        }, error => {
-          console.log('Error ocurred while updating book data : ', error);
-        });
+      this.bookService.updateBookDetails(this.formData)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          () => {
+            this.router.navigate(['/admin/books']);
+          }, error => {
+            console.log('Error ocurred while updating book data : ', error);
+          });
     } else {
-      this.bookService.addBook(this.formData).subscribe(
-        () => {
-          this.router.navigate(['/admin/books']);
-        }, error => {
-          // reset form and show a toaster
-          this.bookForm.reset();
-          console.log('Error ocurred while adding book data : ', error);
-        });
+      this.bookService.addBook(this.formData)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          () => {
+            this.router.navigate(['/admin/books']);
+          }, error => {
+            // reset form and show a toaster
+            this.bookForm.reset();
+            console.log('Error ocurred while adding book data : ', error);
+          });
     }
   }
 
@@ -126,5 +136,10 @@ export class BookFormComponent implements OnInit {
     reader.onload = (myevent: ProgressEvent) => {
       this.coverImagePath = (myevent.target as FileReader).result;
     };
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

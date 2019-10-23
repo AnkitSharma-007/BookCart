@@ -84,7 +84,37 @@
     "template-banana-in-box": true,
     "template-no-negated-async": true,
     "use-lifecycle-interface": true,
-    "use-pipe-transform-interface": true
+    "use-pipe-transform-interface": true,
+    "rxjs-no-unsafe-takeuntil": {
+      "options": [
+        {
+          "allow": [
+            "count",
+            "defaultIfEmpty",
+            "endWith",
+            "every",
+            "finalize",
+            "finally",
+            "isEmpty",
+            "last",
+            "max",
+            "min",
+            "publish",
+            "publishBehavior",
+            "publishLast",
+            "publishReplay",
+            "reduce",
+            "share",
+            "shareReplay",
+            "skipLast",
+            "takeLast",
+            "throwIfEmpty",
+            "toArray"
+          ]
+        }
+      ],
+      "severity": "error"
+    }
   },
   "rulesDirectory": [
     "codelyzer"

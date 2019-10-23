@@ -74,28 +74,25 @@ namespace BookCart.DataAccess
 
                 order.OrderDetails = new List<CartItemDto>();
 
-                foreach (CustomerOrderDetails cutomerOrder in orderDetail)
+                foreach (CustomerOrderDetails customerOrder in orderDetail)
                 {
                     CartItemDto item = new CartItemDto();
 
                     Book book = new Book
                     {
-                        BookId = cutomerOrder.ProductId,
-                        Title = _dbContext.Book.FirstOrDefault(x => x.BookId == cutomerOrder.ProductId && cutomerOrder.OrderId == orderid).Title,
-                        Price = _dbContext.CustomerOrderDetails.FirstOrDefault(
-                        x => x.ProductId == cutomerOrder.ProductId && cutomerOrder.OrderId == orderid).Price,
+                        BookId = customerOrder.ProductId,
+                        Title = _dbContext.Book.FirstOrDefault(x => x.BookId == customerOrder.ProductId && customerOrder.OrderId == orderid).Title,
+                        Price = _dbContext.CustomerOrderDetails.FirstOrDefault(x => x.ProductId == customerOrder.ProductId && customerOrder.OrderId == orderid).Price
                     };
 
                     item.Book = book;
-                    item.Quantity = _dbContext.CustomerOrderDetails.FirstOrDefault(
-                        x => x.ProductId == cutomerOrder.ProductId && x.OrderId == orderid).Quantity;
-
+                    item.Quantity = _dbContext.CustomerOrderDetails.FirstOrDefault(x => x.ProductId == customerOrder.ProductId && x.OrderId == orderid).Quantity;
 
                     order.OrderDetails.Add(item);
                 }
                 userOrders.Add(order);
             }
-            return userOrders.OrderByDescending(x=> x.OrderDate).ToList();
+            return userOrders.OrderByDescending(x => x.OrderDate).ToList();
         }
 
         int CreateRandomNumber(int length)

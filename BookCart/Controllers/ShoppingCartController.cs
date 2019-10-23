@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BookCart.DataAccess;
 using BookCart.Dto;
 using BookCart.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookCart.Controllers
@@ -25,6 +25,7 @@ namespace BookCart.Controllers
         /// <param name="oldUserId"></param>
         /// <param name="newUserId"></param>
         /// <returns>The count of items in shopping cart</returns>
+        [Authorize]
         [HttpGet]
         [Route("SetShoppingCart/{oldUserId}/{newUserId}")]
         public int Get(int oldUserId, int newUserId)

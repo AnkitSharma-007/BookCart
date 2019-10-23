@@ -139,7 +139,7 @@ namespace BookCart.DataAccess
         {
             try
             {
-                if (tempUserId != permUserId && tempUserId > 0 && permUserId > 0)
+                if (tempUserId != permUserId && tempUserId > 0 && permUserId > 0 )
                 {
                     string tempCartId = GetCartId(tempUserId);
                     string permCartId = GetCartId(permUserId);
@@ -168,6 +168,7 @@ namespace BookCart.DataAccess
                             _dbContext.SaveChanges();
                         }
                     }
+                    DeleteCart(tempCartId);
                 }
             }
             catch
@@ -197,6 +198,13 @@ namespace BookCart.DataAccess
             {
                 throw;
             }
+        }
+
+        void DeleteCart(string cartId)
+        {
+            Cart cart = _dbContext.Cart.Find(cartId);
+            _dbContext.Cart.Remove(cart);
+            _dbContext.SaveChanges();
         }
     }
 }

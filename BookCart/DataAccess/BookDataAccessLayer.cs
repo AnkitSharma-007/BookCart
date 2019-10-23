@@ -74,7 +74,6 @@ namespace BookCart.DataAccess
         {
             try
             {
-                //Book book = _dbContext.Book.Find(bookId);
                 Book book = _dbContext.Book.FirstOrDefault(x => x.BookId == bookId);
                 if (book != null)
                 {

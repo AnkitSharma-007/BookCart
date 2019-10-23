@@ -4,7 +4,17 @@
             <h4>My Orders</h4>
         </div>
     </div>
-    <div class="docs-example-viewer-body">
+    <ng-template #noorders>
+        <mat-card>
+            <mat-card-title>
+                Looks like you have not placed any orders !!!
+            </mat-card-title>
+            <mat-card-content>
+                <button mat-raised-button color="primary" [routerLink]='["/"]'>Start shopping</button>
+            </mat-card-content>
+        </mat-card>
+    </ng-template>
+    <div *ngIf="dataSource && dataSource.filteredData.length; else noorders" class="docs-example-viewer-body">
         <div class="full-width">
             <mat-form-field class="full-width">
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">

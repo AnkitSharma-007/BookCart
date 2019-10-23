@@ -42,7 +42,8 @@
                             <input matInput placeholder="State" formControlName="state" required>
                             <mat-error *ngIf="state.touched && state.invalid">State is required</mat-error>
                         </mat-form-field>
-                        <mat-card-actions>
+                        <mat-card-actions align="right">
+                            <div fxFlex></div>
                             <button type="submit" mat-raised-button color="primary">Place Order</button>
                             <button type="button" mat-raised-button color="warn"
                                 [routerLink]='["/shopping-cart"]'>CANCEL</button>

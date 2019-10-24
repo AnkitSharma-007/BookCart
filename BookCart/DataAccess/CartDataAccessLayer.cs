@@ -139,7 +139,7 @@ namespace BookCart.DataAccess
         {
             try
             {
-                if (tempUserId != permUserId && tempUserId > 0 && permUserId > 0 )
+                if (tempUserId != permUserId && tempUserId > 0 && permUserId > 0)
                 {
                     string tempCartId = GetCartId(tempUserId);
                     string permCartId = GetCartId(permUserId);
@@ -154,7 +154,6 @@ namespace BookCart.DataAccess
                         {
                             cartItem.Quantity += item.Quantity;
                             _dbContext.Entry(cartItem).State = EntityState.Modified;
-                            _dbContext.SaveChanges();
                         }
                         else
                         {
@@ -165,8 +164,9 @@ namespace BookCart.DataAccess
                                 Quantity = item.Quantity
                             };
                             _dbContext.CartItems.Add(newCartItem);
-                            _dbContext.SaveChanges();
                         }
+                        _dbContext.CartItems.Remove(item);
+                        _dbContext.SaveChanges();
                     }
                     DeleteCart(tempCartId);
                 }

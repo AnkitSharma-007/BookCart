@@ -36,3 +36,6 @@ An e-commerce application for an online book store created with ASP.NET Core 3.0
 3. Put your connection string in [appsettings.json](https://github.com/AnkitSharma-007/BookCart/blob/master/BookCart/appsettings.json) file.
 4. Build and launch the application from Visual Studio.
 
+# Licenese
+[MIT](https://github.com/AnkitSharma-007/BookCart/blob/master/LICENSE)
+

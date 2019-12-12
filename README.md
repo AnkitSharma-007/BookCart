@@ -20,7 +20,7 @@ An e-commerce application for an online book store created with ASP.NET Core 3.0
  - Auth guards
  - Lazy loading of modules
  - HTTP Interceptors
- - Template-driven forms
+ - Reactive forms
  - Form validation (inbuilt and custom)
  - Pipes
  - Dynamic themes

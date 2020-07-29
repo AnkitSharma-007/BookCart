@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { BookFormComponent } from '../components/admin/book-form/book-form.component';
@@ -17,7 +17,6 @@ import { DeleteBookComponent } from '../components/admin/delete-book/delete-book
   imports: [
     CommonModule,
     AdminRoutingModule,
-    FormsModule,
     ReactiveFormsModule,
     NgMaterialModule
   ],

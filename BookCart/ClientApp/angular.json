@@ -22,7 +22,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "src/assets"
             ],
@@ -31,24 +31,20 @@
               {
                 "input": "src/main.scss"
               },
-              {
+              {"inject":false,
                 "input": "src/assets/pink-bluegrey.css",
-                "lazy": true,
                 "bundleName": "pink-bluegrey"
               },
-              {
+              {"inject":false,
                 "input": "src/assets/deeppurple-amber.css",
-                "lazy": true,
                 "bundleName": "deeppurple-amber"
               },
-              {
+              {"inject":false,
                 "input": "src/assets/indigo-pink.css",
-                "lazy": true,
                 "bundleName": "indigo-pink"
               },
-              {
+              {"inject":false,
                 "input": "src/assets/purple-green.css",
-                "lazy": true,
                 "bundleName": "purple-green"
               }
             ],
@@ -67,7 +63,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -118,24 +113,20 @@
               {
                 "input": "src/main.scss"
               },
-              {
+              {"inject":false,
                 "input": "src/assets/pink-bluegrey.css",
-                "lazy": true,
                 "bundleName": "pink-bluegrey"
               },
-              {
+              {"inject":false,
                 "input": "src/assets/deeppurple-amber.css",
-                "lazy": true,
                 "bundleName": "deeppurple-amber"
               },
-              {
+              {"inject":false,
                 "input": "src/assets/indigo-pink.css",
-                "lazy": true,
                 "bundleName": "indigo-pink"
               },
-              {
+              {"inject":false,
                 "input": "src/assets/purple-green.css",
-                "lazy": true,
                 "bundleName": "purple-green"
               }
             ],

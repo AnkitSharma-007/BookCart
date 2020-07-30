@@ -20,6 +20,5 @@ import { DeleteBookComponent } from '../components/admin/delete-book/delete-book
     ReactiveFormsModule,
     NgMaterialModule
   ],
-  entryComponents: [DeleteBookComponent]
 })
 export class AdminModule { }

@@ -14,10 +14,13 @@ export class HomeComponent implements OnInit {
   public books: Book[];
   public filteredProducts: Book[];
   category: string;
+  priceRange = Number.MAX_SAFE_INTEGER;
+  isLoading: boolean;
 
   constructor(private route: ActivatedRoute, private bookService: BookService) { }
 
   ngOnInit() {
+    this.isLoading = true;
     this.getAllBookData();
   }
 
@@ -29,9 +32,22 @@ export class HomeComponent implements OnInit {
       }
     )).subscribe(params => {
       this.category = params.category;
-      this.books = (this.category) ?
-        this.filteredProducts.filter(b => b.category.toLowerCase() === this.category.toLowerCase()) :
-        this.filteredProducts;
+      this.filterBookData();
     });
+  }
+
+  filterPrice(value: number) {
+    this.priceRange = value;
+    this.filterBookData();
+  }
+
+  filterBookData() {
+    if (this.category) {
+      this.books = this.filteredProducts.filter(b => b.price <= this.priceRange
+        && b.category.toLowerCase() === this.category.toLowerCase());
+    } else {
+      this.books = this.filteredProducts.filter(b => b.price <= this.priceRange);
+    }
+    this.isLoading = false;
   }
 }

@@ -19,6 +19,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [],
@@ -42,7 +43,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatBadgeModule,
     MatSnackBarModule,
     MatGridListModule,
-    MatListModule
+    MatListModule,
+    MatSliderModule
   ],
   exports: [
     CommonModule,
@@ -64,7 +66,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatBadgeModule,
     MatSnackBarModule,
     MatGridListModule,
-    MatListModule
+    MatListModule,
+    MatSliderModule
   ]
 })
 export class NgMaterialModule { }

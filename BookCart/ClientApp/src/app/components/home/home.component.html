@@ -1,17 +1,25 @@
 <div class="row">
     <div class="col-md-3">
-        <app-book-filter [category]="category"></app-book-filter>
+        <div class="filter-container">
+            <app-book-filter [category]="category"></app-book-filter>
+            <app-price-filter (priceValue)="filterPrice($event)"></app-price-filter>
+        </div>
     </div>
     <div class="col">
-        <div *ngIf="books?.length>0; else loading" class="card-deck-container">
+        <div *ngIf="books?.length>0; else nodata" class="card-deck-container">
             <div *ngFor="let book of books" class="card-item">
                 <app-book-card [book]="book"></app-book-card>
             </div>
         </div>
-        <ng-template #loading>
-            <div class="spinner-container">
-                <mat-spinner></mat-spinner>
+        <ng-template #nodata>
+            <div class="nodata d-flex justify-content-center">
+                <h1 *ngIf="!isLoading">
+                    No books found.
+                </h1>
             </div>
         </ng-template>
+        <div *ngIf="isLoading" class="spinner-container">
+            <mat-spinner></mat-spinner>
+        </div>
     </div>
 </div>

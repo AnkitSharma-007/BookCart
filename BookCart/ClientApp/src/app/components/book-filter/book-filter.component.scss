@@ -1,16 +1,9 @@
 $color-active: #fb641b;
 
-.category-container {
-    position: fixed;
-    width:250px;
-    padding-top: 14px;
-  }
-  
-  .category-list {
-    padding: 5px 5px 5px;
-  }
-  
-  .active-category {
-    background-color: $color-active !important;
-  }
-  
+.category-list {
+  padding: 5px 5px 5px;
+}
+
+.active-category {
+  background-color: $color-active !important;
+}

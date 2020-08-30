@@ -16,10 +16,7 @@ export class CartService {
   }
 
   addBookToCart(userId: number, bookId: number) {
-    return this.http.post(this.baseURL + `addToCart/${userId}/${bookId}`, {})
-      .pipe(map(response => {
-        return response;
-      }));
+    return this.http.post(this.baseURL + `addToCart/${userId}/${bookId}`, {});
   }
 
   getCartItems(userId: number) {
@@ -31,24 +28,15 @@ export class CartService {
   }
 
   removeCartItems(userId: number, bookId: number) {
-    return this.http.delete(this.baseURL + `${userId}/${bookId}`, {})
-      .pipe(map(response => {
-        return response;
-      }));
+    return this.http.delete(this.baseURL + `${userId}/${bookId}`, {});
   }
 
   deleteOneCartItem(userId: number, bookId: number) {
-    return this.http.put(this.baseURL + `${userId}/${bookId}`, {})
-      .pipe(map(response => {
-        return response;
-      }));
+    return this.http.put(this.baseURL + `${userId}/${bookId}`, {});
   }
 
   clearCart(userId: number) {
-    return this.http.delete(this.baseURL + `${userId}`, {})
-      .pipe(map(response => {
-        return response;
-      }));
+    return this.http.delete(this.baseURL + `${userId}`, {});
   }
 
   setCart(oldUserId: number, newUserId: number) {

@@ -2,6 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Book } from 'src/app/models/book';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BookService } from 'src/app/services/book.service';
+import { Observable, EMPTY } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-delete-book',
@@ -10,7 +12,7 @@ import { BookService } from 'src/app/services/book.service';
 })
 export class DeleteBookComponent implements OnInit {
 
-  public bookData = new Book();
+  bookData$: Observable<Book>;
 
   constructor(
     public dialogRef: MatDialogRef<DeleteBookComponent>,
@@ -31,11 +33,15 @@ export class DeleteBookComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.bookService.getBookById(this.bookid).subscribe(
-      (result: Book) => {
-        this.bookData = result;
-      }, error => {
-        console.log('Error ocurred while fetching book data : ', error);
-      });
+    this.fetchBookData();
+  }
+
+  fetchBookData() {
+    this.bookData$ = this.bookService.getBookById(this.bookid)
+      .pipe(
+        catchError(error => {
+          console.log('Error ocurred while fetching book data : ', error);
+          return EMPTY;
+        }));
   }
 }

@@ -9,7 +9,8 @@ import { Book } from 'src/app/models/book';
 })
 export class BookCardComponent {
 
-  @Input('book') book: Book;
+  @Input()
+  book: Book;
 
   isActive = false;
 

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,23 +16,14 @@ export class UserService {
   }
 
   registerUser(userdetails) {
-    return this.http.post(this.baseURL, userdetails)
-      .pipe(map(response => {
-        return response;
-      }));
+    return this.http.post(this.baseURL, userdetails);
   }
 
   getCartItemCount(userId: number) {
-    return this.http.get(this.baseURL + userId)
-      .pipe(map(response => {
-        return response;
-      }));
+    return this.http.get(this.baseURL + userId);
   }
 
   validateUserName(userName: string) {
-    return this.http.get(this.baseURL + 'validateUserName/' + userName)
-      .pipe(map(response => {
-        return response;
-      }));
+    return this.http.get(this.baseURL + 'validateUserName/' + userName);
   }
 }

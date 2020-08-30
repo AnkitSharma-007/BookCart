@@ -36,10 +36,6 @@ export class BookFormComponent implements OnInit, OnDestroy {
       category: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0)]],
     });
-
-    if (this.route.snapshot.params['id']) {
-      this.bookId = this.route.snapshot.paramMap.get('id');
-    }
   }
 
   get title() {
@@ -59,7 +55,7 @@ export class BookFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.bookService.getCategories()
+    this.bookService.categories$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         (categoryData: []) => {
@@ -68,20 +64,29 @@ export class BookFormComponent implements OnInit, OnDestroy {
           console.log('Error ocurred while fetching category List : ', error);
         });
 
-    if (this.bookId) {
-      this.formTitle = 'Edit';
-      this.bookService.getBookById(this.bookId)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          (result: Book) => {
-            this.setBookFormData(result);
-          }, error => {
-            console.log('Error ocurred while fetching book data : ', error);
-          });
-    }
+    this.route.params.subscribe(
+      params => {
+        if (params.id) {
+          this.bookId = +params.id;
+          this.fetchBookData();
+        }
+      }
+    );
   }
 
-  saveBookData() {
+  fetchBookData() {
+    this.formTitle = 'Edit';
+    this.bookService.getBookById(this.bookId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        (result: Book) => {
+          this.setBookFormData(result);
+        }, error => {
+          console.log('Error ocurred while fetching book data : ', error);
+        });
+  }
+
+  onFormSubmit() {
     if (!this.bookForm.valid) {
       return;
     }
@@ -91,27 +96,35 @@ export class BookFormComponent implements OnInit, OnDestroy {
       }
     }
     this.formData.append('bookFormData', JSON.stringify(this.bookForm.value));
+
     if (this.bookId) {
-      this.bookService.updateBookDetails(this.formData)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          () => {
-            this.router.navigate(['/admin/books']);
-          }, error => {
-            console.log('Error ocurred while updating book data : ', error);
-          });
+      this.editBookDetails();
     } else {
-      this.bookService.addBook(this.formData)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          () => {
-            this.router.navigate(['/admin/books']);
-          }, error => {
-            // reset form and show a toaster
-            this.bookForm.reset();
-            console.log('Error ocurred while adding book data : ', error);
-          });
+      this.saveBookDetails();
     }
+  }
+
+  editBookDetails() {
+    this.bookService.updateBookDetails(this.formData)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        () => {
+          this.router.navigate(['/admin/books']);
+        }, error => {
+          console.log('Error ocurred while updating book data : ', error);
+        });
+  }
+
+  saveBookDetails() {
+    this.bookService.addBook(this.formData)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        () => {
+          this.router.navigate(['/admin/books']);
+        }, error => {
+          this.bookForm.reset();
+          console.log('Error ocurred while adding book data : ', error);
+        });
   }
 
   cancel() {

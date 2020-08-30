@@ -16,6 +16,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
   userId;
   totalPrice: number;
   private unsubscribe$ = new Subject<void>();
+  isLoading: boolean;
 
   constructor(
     private cartService: CartService,
@@ -26,6 +27,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cartItems = [];
+    this.isLoading = true;
     this.getShoppingCartItems();
   }
 
@@ -36,6 +38,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
         (result: ShoppingCart[]) => {
           this.cartItems = result;
           this.getTotalPrice();
+          this.isLoading = false;
         }, error => {
           console.log('Error ocurred while fetching shopping cart item : ', error);
         });

@@ -8,7 +8,7 @@
         <div class="left-div">
             <mat-card class="mat-elevation-z2">
                 <mat-card-content>
-                    <form enctype="multipart/form-data" [formGroup]="bookForm" (ngSubmit)="saveBookData()">
+                    <form enctype="multipart/form-data" [formGroup]="bookForm" (ngSubmit)="onFormSubmit()">
                         <mat-form-field class="full-width">
                             <input matInput placeholder="Title" formControlName="title" required>
                             <mat-error *ngIf="title.touched && title.invalid">Title is required</mat-error>
@@ -49,7 +49,7 @@
             <div class="docs-example-viewer-title">
                 <h6>Image Preview</h6>
             </div>
-            <mat-card class="mat-elevation-z2">
+            <mat-card class="d-flex flex-column align-items-center mat-elevation-z2">
                 <mat-card-content class="image-card">
                     <img class="preview-image" mat-card-image src={{coverImagePath}} alt="No image available">
                 </mat-card-content>

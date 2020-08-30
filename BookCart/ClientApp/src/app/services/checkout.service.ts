@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 import { Order } from '../models/order';
 
 @Injectable({
@@ -15,9 +14,6 @@ export class CheckoutService {
   }
 
   placeOrder(userId: number, checkedOutItems: Order) {
-    return this.http.post(this.baseURL + `${userId}`, checkedOutItems)
-      .pipe(map(response => {
-        return response;
-      }));
+    return this.http.post(this.baseURL + `${userId}`, checkedOutItems);
   }
 }

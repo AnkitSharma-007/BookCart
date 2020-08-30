@@ -4,15 +4,14 @@
             <h3>Book Details</h3>
         </div>
     </div>
-    <div class="docs-example-viewer-body">
+    <div class="docs-example-viewer-body" *ngIf="BookDetails$ | async as book">
         <div class="left-div">
             <mat-card-content class="image-card">
-                <img *ngIf="book" class="preview-image" mat-card-image src="/Upload/{{book.coverFileName}}"
-                    alt="No image available">
+                <img class="preview-image" mat-card-image src="/Upload/{{book.coverFileName}}" alt="No image available">
             </mat-card-content>
         </div>
         <div class="right-div">
-            <table *ngIf="book" class="table">
+            <table class="table">
                 <tr>
                     <td><strong>Title</strong></td>
                     <td>{{book.title}}</td>

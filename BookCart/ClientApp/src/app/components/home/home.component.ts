@@ -22,13 +22,13 @@ export class HomeComponent implements OnInit {
   }
 
   getAllBookData() {
-    this.bookService.getAllBooks().pipe(switchMap(
+    this.bookService.books$.pipe(switchMap(
       (data: Book[]) => {
         this.filteredProducts = data;
         return this.route.queryParams;
       }
     )).subscribe(params => {
-      this.category = params['category'];
+      this.category = params.category;
       this.books = (this.category) ?
         this.filteredProducts.filter(b => b.category.toLowerCase() === this.category.toLowerCase()) :
         this.filteredProducts;

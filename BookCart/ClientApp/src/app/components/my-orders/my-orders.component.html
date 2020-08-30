@@ -5,7 +5,7 @@
         </div>
     </div>
     <ng-template #noorders>
-        <mat-card>
+        <mat-card *ngIf="!isLoading">
             <mat-card-title>
                 Looks like you have not placed any orders !!!
             </mat-card-title>
@@ -14,6 +14,9 @@
             </mat-card-content>
         </mat-card>
     </ng-template>
+    <div *ngIf="isLoading" class="spinner-container">
+        <mat-spinner></mat-spinner>
+    </div>
     <div *ngIf="dataSource && dataSource.filteredData.length; else noorders" class="docs-example-viewer-body">
         <div class="full-width">
             <mat-form-field class="full-width">

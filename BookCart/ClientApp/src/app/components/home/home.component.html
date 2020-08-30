@@ -1,12 +1,17 @@
-<div class="row flex-xl-nowrap">
+<div class="row">
     <div class="col-md-3">
         <app-book-filter [category]="category"></app-book-filter>
     </div>
     <div class="col">
-        <div *ngIf="books && books.length>0" fxLayout="row" fxFlex.md="70" fxLayoutWrap class="card-deck-container">
-            <div fxFlex *ngFor="let book of books" class="card-item">
+        <div *ngIf="books?.length>0; else loading" class="card-deck-container">
+            <div *ngFor="let book of books" class="card-item">
                 <app-book-card [book]="book"></app-book-card>
             </div>
         </div>
+        <ng-template #loading>
+            <div class="spinner-container">
+                <mat-spinner></mat-spinner>
+            </div>
+        </ng-template>
     </div>
 </div>

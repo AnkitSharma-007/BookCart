@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 import { UserService } from 'src/app/services/user.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -10,7 +10,8 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 })
 export class AddtocartComponent {
 
-  @Input('bookId') bookId;
+  @Input()
+  bookId: number;
 
   userId;
 
@@ -30,5 +31,4 @@ export class AddtocartComponent {
         console.log('Error ocurred while addToCart data : ', error);
       });
   }
-
 }

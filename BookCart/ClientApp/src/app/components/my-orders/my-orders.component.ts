@@ -24,8 +24,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['orderId', 'orderedOn', 'orderTotal'];
   dataSource = new MatTableDataSource<Order>();
   expandedElement: null;
-  private paginator: MatPaginator;
-  @ViewChild(MatPaginator, { static: false }) set matPaginator(mp: MatPaginator) {
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
 
     /*
     * Since we are using *ngIf with mat-table.
@@ -34,7 +33,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
     this.dataSource.paginator = mp;
   }
   userId;
-  isLoading = true;
+  isLoading: boolean;
   private unsubscribe$ = new Subject<void>();
 
   constructor(private orderService: MyordersService) {
@@ -42,6 +41,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isLoading = true;
     this.getMyOrderDetails();
   }
 
@@ -51,6 +51,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
       .subscribe((result: Order[]) => {
         if (result != null) {
           this.dataSource.data = Object.values(result);
+          this.isLoading = false;
         }
       }, error => {
         console.log('Error ocurred while fetching my order details : ', error);

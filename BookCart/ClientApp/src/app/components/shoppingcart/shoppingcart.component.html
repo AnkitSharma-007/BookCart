@@ -8,7 +8,7 @@
         </div>
     </div>
     <ng-template #emptycart>
-        <mat-card>
+        <mat-card *ngIf="!isLoading">
             <mat-card-title>
                 Shopping cart is empty
             </mat-card-title>
@@ -17,7 +17,10 @@
             </mat-card-content>
         </mat-card>
     </ng-template>
-    <mat-card *ngIf="cartItems && cartItems.length>0; else emptycart">
+    <div *ngIf="isLoading" class="spinner-container">
+        <mat-spinner></mat-spinner>
+    </div>
+    <mat-card *ngIf="cartItems?.length>0; else emptycart">
         <mat-card-content>
             <table class="table">
                 <thead>

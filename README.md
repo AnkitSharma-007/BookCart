@@ -1,6 +1,6 @@
 # BookCart
 
-An e-commerce application for an online book store created with ASP.NET Core 3.1 and Angular 8, using SQL Server as database.
+An e-commerce application for an online book store created with ASP.NET Core 3.1 and Angular 10, using SQL Server as database.
 
 # Concepts Covered
 

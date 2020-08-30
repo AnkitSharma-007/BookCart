@@ -6,7 +6,7 @@ describe('HttpInterceptorService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: HttpInterceptorService = TestBed.get(HttpInterceptorService);
+    const service: HttpInterceptorService = TestBed.inject(HttpInterceptorService);
     expect(service).toBeTruthy();
   });
 });

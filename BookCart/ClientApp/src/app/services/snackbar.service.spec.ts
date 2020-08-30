@@ -6,7 +6,7 @@ describe('SnackbarService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: SnackbarService = TestBed.get(SnackbarService);
+    const service: SnackbarService = TestBed.inject(SnackbarService);
     expect(service).toBeTruthy();
   });
 });

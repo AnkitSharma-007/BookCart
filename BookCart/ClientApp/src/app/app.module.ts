@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -25,6 +25,7 @@ import { ErrorInterceptorService } from './interceptors/error-interceptor.servic
 
 import { NgMaterialModule } from './ng-material/ng-material.module';
 import { AppRoutingModule } from './app-routing.module';
+import { PriceFilterComponent } from './components/price-filter/price-filter.component';
 
 @NgModule({
   declarations: [
@@ -42,13 +43,15 @@ import { AppRoutingModule } from './app-routing.module';
     ShoppingcartComponent,
     ThemePickerComponent,
     SimilarbooksComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    PriceFilterComponent
   ],
   imports: [
     NgMaterialModule,
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
     BrowserAnimationsModule,
     AppRoutingModule
   ],

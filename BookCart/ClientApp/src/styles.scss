@@ -3,6 +3,13 @@
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 @import "~bootstrap/dist/css/bootstrap.css";
 
+body {
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+  line-height: 1.5;
+  font-kerning: normal;
+}
+
 .container {
   padding-top: 60px;
 }
@@ -14,7 +21,6 @@
   justify-content: center;
   padding: 8px 20px;
   color: #ffffff;
-  background: #27ae60;
 }
 
 .docs-example-viewer-title-spacer {
@@ -87,4 +93,11 @@ app-nav-bar {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin-bottom: 0;
 }

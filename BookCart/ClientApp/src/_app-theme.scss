@@ -12,8 +12,13 @@
     background: mat-color($background, background);
   }
 
-  .table {
+  .table,
+  .price-range {
     color: mat-color($foreground, text);
+  }
+
+  .docs-example-viewer-title {
+    background: mat-color($accent);
   }
 
   ::-webkit-scrollbar-thumb {

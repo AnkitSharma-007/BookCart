@@ -1,7 +1,6 @@
 <div class="docs-example-viewer-wrapper">
   <div class="docs-example-viewer-title mat-elevation-z2">
     <div class="docs-example-viewer-title-spacer">
-      <!-- <h3 class="font-weight-light">Price Filter</h3> -->
       <h4>Price Filter</h4>
     </div>
   </div>
@@ -10,14 +9,8 @@
       [(ngModel)]="value" (change)="onChange($event)"></mat-slider>
   </div>
   <div class="d-flex justify-content-around price-range">
-    <div>
-      <strong>{{min | currency: 'INR'}}</strong>
-    </div>
-    <div>
-      to
-    </div>
-    <div>
-      <strong>{{value | currency: 'INR'}}</strong>
-    </div>
+    <div><strong>{{min | currency: 'INR'}}</strong></div>
+    <div>to</div>
+    <div><strong>{{value | currency: 'INR'}}</strong></div>
   </div>
 </div>

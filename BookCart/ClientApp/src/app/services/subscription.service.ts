@@ -8,6 +8,7 @@ import { User } from '../models/user';
 export class SubscriptionService {
 
   userData = new BehaviorSubject<User>(new User());
+  searchItemValue$ = new BehaviorSubject<string>('');
 
   constructor() { }
 }

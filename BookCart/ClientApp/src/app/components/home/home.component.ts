@@ -1,23 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Book } from 'src/app/models/book';
 import { ActivatedRoute } from '@angular/router';
 import { BookService } from 'src/app/services/book.service';
 import { switchMap } from 'rxjs/operators';
+import { SubscriptionService } from 'src/app/services/subscription.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   public books: Book[];
   public filteredProducts: Book[];
   category: string;
   priceRange = Number.MAX_SAFE_INTEGER;
   isLoading: boolean;
+  searchItem: string;
 
-  constructor(private route: ActivatedRoute, private bookService: BookService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private bookService: BookService,
+    private subscriptionService: SubscriptionService) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -32,6 +37,8 @@ export class HomeComponent implements OnInit {
       }
     )).subscribe(params => {
       this.category = params.category;
+      this.searchItem = params.item;
+      this.subscriptionService.searchItemValue$.next(this.searchItem);
       this.filterBookData();
     });
   }
@@ -42,12 +49,20 @@ export class HomeComponent implements OnInit {
   }
 
   filterBookData() {
+    const filteredData = this.filteredProducts.filter(b => b.price <= this.priceRange).slice();
+
     if (this.category) {
-      this.books = this.filteredProducts.filter(b => b.price <= this.priceRange
-        && b.category.toLowerCase() === this.category.toLowerCase());
+      this.books = filteredData.filter(b => b.category.toLowerCase() === this.category.toLowerCase());
+    } else if (this.searchItem) {
+      this.books = filteredData.filter(b => b.title.toLowerCase().indexOf(this.searchItem) !== -1
+        || b.author.toLowerCase().indexOf(this.searchItem) !== -1);
     } else {
-      this.books = this.filteredProducts.filter(b => b.price <= this.priceRange);
+      this.books = filteredData;
     }
     this.isLoading = false;
+  }
+
+  ngOnDestroy() {
+    this.subscriptionService.searchItemValue$.next('');
   }
 }

@@ -14,6 +14,8 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: 'filter', component: HomeComponent },
+  { path: 'search', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: UserRegistrationComponent },
   { path: 'books/details/:id', component: BookDetailsComponent },

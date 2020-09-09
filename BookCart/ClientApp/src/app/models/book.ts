@@ -1,7 +1,7 @@
 export class Book {
     bookId: number;
     title: string;
-    author: number;
+    author: string;
     category: string;
     price: number;
     coverFileName: string;

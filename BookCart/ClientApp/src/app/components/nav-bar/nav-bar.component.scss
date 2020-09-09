@@ -16,3 +16,14 @@ a {
 .fa-github {
   font-size: 20px;
 }
+
+mat-toolbar-row {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-title {
+  button {
+    font-size: 18px;
+  }
+}

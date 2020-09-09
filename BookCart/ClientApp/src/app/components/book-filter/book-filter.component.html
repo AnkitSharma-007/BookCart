@@ -4,7 +4,8 @@
     </mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item [class.active-category]="category== (c.categoryName | lowercase)"
-        *ngFor="let c of categories$ | async" routerLink="/" [queryParams]="{category:c.categoryName | lowercase}">
+        *ngFor="let c of categories$ | async" routerLink="/filter"
+        [queryParams]="{category:c.categoryName | lowercase}">
         <a>{{c.categoryName}}</a>
         <mat-divider></mat-divider>
     </mat-list-item>

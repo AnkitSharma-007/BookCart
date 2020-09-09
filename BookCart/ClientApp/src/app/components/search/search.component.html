@@ -1,0 +1,9 @@
+<form>
+  <input (keydown.enter)="searchStore($event)" class="searchbox" type="search" aria-label="search"
+    placeholder="Search books or authors" [formControl]="searchControl" [matAutocomplete]="auto">
+  <mat-autocomplete (optionSelected)="searchStore($event)" #auto="matAutocomplete">
+    <mat-option *ngFor="let book of filteredBooks | async" [value]="book.title">
+      {{book.title}}
+    </mat-option>
+  </mat-autocomplete>
+</form>

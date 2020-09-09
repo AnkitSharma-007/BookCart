@@ -20,6 +20,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [],
@@ -44,7 +45,8 @@ import { MatSliderModule } from '@angular/material/slider';
     MatSnackBarModule,
     MatGridListModule,
     MatListModule,
-    MatSliderModule
+    MatSliderModule,
+    MatAutocompleteModule
   ],
   exports: [
     CommonModule,
@@ -67,7 +69,8 @@ import { MatSliderModule } from '@angular/material/slider';
     MatSnackBarModule,
     MatGridListModule,
     MatListModule,
-    MatSliderModule
+    MatSliderModule,
+    MatAutocompleteModule
   ]
 })
 export class NgMaterialModule { }

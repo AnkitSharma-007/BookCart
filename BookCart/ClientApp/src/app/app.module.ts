@@ -26,6 +26,7 @@ import { ErrorInterceptorService } from './interceptors/error-interceptor.servic
 import { NgMaterialModule } from './ng-material/ng-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { PriceFilterComponent } from './components/price-filter/price-filter.component';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { PriceFilterComponent } from './components/price-filter/price-filter.com
     ThemePickerComponent,
     SimilarbooksComponent,
     PageNotFoundComponent,
-    PriceFilterComponent
+    PriceFilterComponent,
+    SearchComponent
   ],
   imports: [
     NgMaterialModule,

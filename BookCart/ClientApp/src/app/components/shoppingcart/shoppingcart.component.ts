@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ShoppingCart } from 'src/app/models/shoppingcart';
 import { CartService } from 'src/app/services/cart.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { UserService } from 'src/app/services/user.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SubscriptionService } from 'src/app/services/subscription.service';
 
 @Component({
   selector: 'app-shoppingcart',
@@ -21,7 +21,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
   constructor(
     private cartService: CartService,
     private snackBarService: SnackbarService,
-    private userService: UserService) {
+    private subscriptionService: SubscriptionService) {
     this.userId = localStorage.getItem('userId');
   }
 
@@ -56,7 +56,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         result => {
-          this.userService.cartItemcount$.next(result);
+          this.subscriptionService.cartItemcount$.next(result);
           this.snackBarService.showSnackBar('Product removed from cart');
           this.getShoppingCartItems();
         }, error => {
@@ -69,7 +69,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         result => {
-          this.userService.cartItemcount$.next(result);
+          this.subscriptionService.cartItemcount$.next(result);
           this.snackBarService.showSnackBar('One item added to cart');
           this.getShoppingCartItems();
         }, error => {
@@ -82,7 +82,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         result => {
-          this.userService.cartItemcount$.next(result);
+          this.subscriptionService.cartItemcount$.next(result);
           this.snackBarService.showSnackBar('One item removed from cart');
           this.getShoppingCartItems();
         }, error => {
@@ -95,7 +95,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         result => {
-          this.userService.cartItemcount$.next(result);
+          this.subscriptionService.cartItemcount$.next(result);
           this.snackBarService.showSnackBar('Cart cleared!!!');
           this.getShoppingCartItems();
         }, error => {

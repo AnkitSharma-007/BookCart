@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Order } from 'src/app/models/order';
-import { UserService } from 'src/app/services/user.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CartService } from 'src/app/services/cart.service';
@@ -9,6 +8,7 @@ import { ShoppingCart } from 'src/app/models/shoppingcart';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SubscriptionService } from 'src/app/services/subscription.service';
 
 @Component({
   selector: 'app-checkout',
@@ -23,12 +23,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
   constructor(
-    private userService: UserService,
     private fb: FormBuilder,
     private router: Router,
     private cartService: CartService,
     private checkOutService: CheckoutService,
-    private snackBarService: SnackbarService) {
+    private snackBarService: SnackbarService,
+    private subscriptionService: SubscriptionService) {
     this.userId = localStorage.getItem('userId');
   }
 
@@ -89,7 +89,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(
           result => {
-            this.userService.cartItemcount$.next(result);
+            this.subscriptionService.cartItemcount$.next(result);
             this.router.navigate(['/myorders']);
             this.snackBarService.showSnackBar('Order placed successfully!!!');
           }, error => {

@@ -1,0 +1,59 @@
+<div class="docs-example-viewer-wrapper">
+  <ng-container *ngIf="wishlistItems$ | async as wishlistItems">
+    <div class="docs-example-viewer-title mat-elevation-z2">
+      <div class="docs-example-viewer-title-spacer">
+        <h2>My wishlist</h2>
+        <div *ngIf="wishlistItems.length>0">
+          <button class="mat-elevation-z4" mat-raised-button (click)="clearWishlist()">Clear Wishlist</button>
+        </div>
+      </div>
+    </div>
+    <ng-template #emptycart>
+      <mat-card *ngIf="!isLoading">
+        <mat-card-title>
+          Your wishlist is empty
+        </mat-card-title>
+        <mat-card-content>
+          <button mat-raised-button color="primary" [routerLink]='["/"]'>Continue shopping</button>
+        </mat-card-content>
+      </mat-card>
+    </ng-template>
+    <div *ngIf="isLoading" class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+    <mat-card *ngIf="wishlistItems.length>0; else emptycart">
+      <mat-card-content>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Title</th>
+              <th>MRP</th>
+              <th>Add to Cart</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+        </table>
+      </mat-card-content>
+
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let item of wishlistItems">
+            <mat-card-content class="mat-elevation-z2">
+              <td> <img matTooltip={{item.title}} matTooltipPosition="after" src="/Upload/{{item.coverFileName}}">
+              </td>
+              <td><a [routerLink]="['/books/details/',item.bookId]">{{item.title}}</a></td>
+              <td>{{ item.price | currency : 'INR' }}</td>
+              <td>
+                <app-addtocart [bookId]="item.bookId"></app-addtocart>
+              </td>
+              <td>
+                <app-addtowishlist [bookId]="item.bookId" [showButton]="true"></app-addtowishlist>
+              </td>
+            </mat-card-content>
+          </tr>
+        </tbody>
+      </table>
+    </mat-card>
+  </ng-container>
+</div>

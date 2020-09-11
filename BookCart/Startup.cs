@@ -37,6 +37,7 @@ namespace BookCart
             services.AddTransient<ICartService, CartDataAccessLayer>();
             services.AddTransient<IOrderService, OrderDataAccessLayer>();
             services.AddTransient<IUserService, UserDataAccessLayer>();
+            services.AddTransient<IWishlistService, WishlistDataAccessLayer>();
 
             services.AddSwaggerGen(c =>
             {

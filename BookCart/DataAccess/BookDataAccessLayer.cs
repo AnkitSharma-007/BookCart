@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 
 namespace BookCart.DataAccess
 {
@@ -143,6 +142,26 @@ namespace BookCart.DataAccess
                     cartItemList.Add(objCartItem);
                 }
                 return cartItemList;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public List<Book> GetBooksAvailableInWishlist(string wishlistID)
+        {
+            try
+            {
+                List<Book> wishlist = new List<Book>();
+                List<WishlistItems> cartItems = _dbContext.WishlistItems.Where(x => x.WishlistId == wishlistID).ToList();
+
+                foreach (WishlistItems item in cartItems)
+                {
+                    Book book = GetBookData(item.ProductId);
+                    wishlist.Add(book);
+                }
+                return wishlist;
             }
             catch
             {

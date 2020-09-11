@@ -1,0 +1,49 @@
+:host {
+  cursor: pointer;
+}
+
+.favourite-unselected {
+  color: #c2c2c2;
+  animation: favourite-unselected-beat cubic-bezier(0.04, 0.4, 0.5, 0.95) 1.2s
+    forwards 1;
+}
+
+.favourite-selected {
+  color: #ff4343;
+  animation: favourite-selected-beat cubic-bezier(0.04, 0.4, 0.5, 0.95) 1.2s
+    forwards 1;
+}
+
+.wishlisted {
+  background-color: #ff4081;
+  color: #ffffff;
+}
+
+.not-wishlisted {
+  background-color: #11ae61;
+  color: #ffffff;
+}
+
+@keyframes favourite-selected-beat {
+  30% {
+    transform: scale(1.4);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes favourite-unselected-beat {
+  30% {
+    transform: scale(1.4);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

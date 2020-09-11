@@ -14,5 +14,6 @@ namespace BookCart.Interfaces
         List<Categories> GetCategories();
         List<Book> GetSimilarBooks(int bookId);
         List<CartItemDto> GetBooksAvailableInCart(string cartId);
+        List<Book> GetBooksAvailableInWishlist(string wishlistID);
     }
 }

@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 $color-hover: #777777;
 
 .image-card {
@@ -31,5 +31,17 @@ $color-hover: #777777;
 }
 
 .on-book-card-hover {
-   @include mat-elevation(8,$color-hover,16);
+  @include mat-elevation(8, $color-hover, 16);
+}
+
+.favourite {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  padding: 5px;
 }

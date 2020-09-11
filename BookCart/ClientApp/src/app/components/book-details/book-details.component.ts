@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Book } from 'src/app/models/book';
 import { BookService } from 'src/app/services/book.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { User } from 'src/app/models/user';
+import { SubscriptionService } from 'src/app/services/subscription.service';
 
 @Component({
   selector: 'app-book-details',
@@ -14,8 +16,12 @@ export class BookDetailsComponent implements OnInit {
 
   bookId;
   BookDetails$: Observable<Book>;
+  userData$: Observable<User>;
 
-  constructor(private bookService: BookService, private route: ActivatedRoute, private router: Router) {
+  constructor(
+    private bookService: BookService,
+    private route: ActivatedRoute,
+    private subscriptionService: SubscriptionService) {
     this.bookId = this.route.snapshot.paramMap.get('id');
   }
 
@@ -26,6 +32,7 @@ export class BookDetailsComponent implements OnInit {
         this.getBookDetails();
       }
     );
+    this.userData$ = this.subscriptionService.userData;
   }
 
   getBookDetails() {

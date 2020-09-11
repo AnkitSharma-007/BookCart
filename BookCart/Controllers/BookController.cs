@@ -41,7 +41,7 @@ namespace BookCart.Controllers
         [HttpGet]
         public async Task<List<Book>> Get()
         {
-            return await Task.FromResult(_bookService.GetAllBooks());
+            return await Task.FromResult(_bookService.GetAllBooks()).ConfigureAwait(true) ;
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace BookCart.Controllers
         [Route("GetCategoriesList")]
         public async Task<IEnumerable<Categories>> CategoryDetails()
         {
-            return await Task.FromResult(_bookService.GetCategories());
+            return await Task.FromResult(_bookService.GetCategories()).ConfigureAwait(true) ;
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace BookCart.Controllers
         [Route("GetSimilarBooks/{bookId}")]
         public async Task<List<Book>> SimilarBooks(int bookId)
         {
-            return await Task.FromResult(_bookService.GetSimilarBooks(bookId));
+            return await Task.FromResult(_bookService.GetSimilarBooks(bookId)).ConfigureAwait(true) ;
         }
 
         /// <summary>

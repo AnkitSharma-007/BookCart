@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +7,6 @@ import { Subject } from 'rxjs';
 export class UserService {
 
   baseURL: string;
-
-  cartItemcount$ = new Subject<any>();
 
   constructor(private http: HttpClient) {
     this.baseURL = '/api/user/';
@@ -20,7 +17,7 @@ export class UserService {
   }
 
   getCartItemCount(userId: number) {
-    return this.http.get(this.baseURL + userId);
+    return this.http.get<number>(this.baseURL + userId);
   }
 
   validateUserName(userName: string) {

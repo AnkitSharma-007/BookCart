@@ -67,5 +67,19 @@ namespace BookCart.DataAccess
                 return false;
             }
         }
+
+        public bool isUserExists(int userId)
+        {
+            string user = _dbContext.UserMaster.FirstOrDefault(x => x.UserId == userId)?.ToString();
+
+            if (user != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

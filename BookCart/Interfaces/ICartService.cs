@@ -1,7 +1,4 @@
-﻿using BookCart.Dto;
-using System.Collections.Generic;
-
-namespace BookCart.Interfaces
+﻿namespace BookCart.Interfaces
 {
     public interface ICartService
     {

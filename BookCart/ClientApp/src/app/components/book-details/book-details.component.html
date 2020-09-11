@@ -29,7 +29,11 @@
                     <td>{{book.price | currency : 'INR'}}</td>
                 </tr>
             </table>
-            <app-addtocart [bookId]="bookId"></app-addtocart>
+            <div fxLayoutGap="10px grid">
+                <app-addtocart class="mr-2" [bookId]="bookId"></app-addtocart>
+                <app-addtowishlist *ngIf="(userData$ | async).isLoggedIn" [bookId]="bookId" [showButton]="true">
+                </app-addtowishlist>
+            </div>
         </div>
     </div>
 </div>

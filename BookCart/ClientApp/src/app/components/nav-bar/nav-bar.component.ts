@@ -4,42 +4,46 @@ import { UserType } from 'src/app/models/usertype';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { UserService } from 'src/app/services/user.service';
-import { OverlayContainer } from '@angular/cdk/overlay';
 import { SubscriptionService } from 'src/app/services/subscription.service';
+import { Observable } from 'rxjs';
+import { WishlistService } from 'src/app/services/wishlist.service';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss']
 })
-export class NavBarComponent implements OnDestroy {
+export class NavBarComponent implements OnInit, OnDestroy {
 
-  cartItemCount: number;
   userId;
   userDataSubscription: any;
   userData = new User();
   userType = UserType;
+  wishListCount$: Observable<number>;
+  cartItemCount$: Observable<number>;
 
   constructor(
     private router: Router,
     private authService: AuthenticationService,
     private userService: UserService,
-    public overlayContainer: OverlayContainer,
-    private subscriptionService: SubscriptionService) {
+    private subscriptionService: SubscriptionService,
+    private wishlistService: WishlistService) {
+
+    this.userId = localStorage.getItem('userId');
+    this.wishlistService.getWishlistItems(this.userId).subscribe();
+    this.userService.getCartItemCount(this.userId).subscribe((data: number) => {
+      this.subscriptionService.cartItemcount$.next(data);
+    });
+  }
+
+  ngOnInit() {
 
     this.userDataSubscription = this.subscriptionService.userData.asObservable().subscribe(data => {
       this.userData = data;
     });
 
-    this.userId = localStorage.getItem('userId');
-
-    this.userService.getCartItemCount(this.userId).subscribe((data: number) => {
-      this.cartItemCount = data;
-    });
-
-    this.userService.cartItemcount$.subscribe(data => {
-      this.cartItemCount = data;
-    });
+    this.cartItemCount$ = this.subscriptionService.cartItemcount$;
+    this.wishListCount$ = this.subscriptionService.wishlistItemcount$;
   }
 
   ngOnDestroy() {
@@ -52,5 +56,4 @@ export class NavBarComponent implements OnDestroy {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
-
 }

@@ -11,6 +11,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { WishlistComponent } from './components/wishlist/wishlist.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -22,6 +23,7 @@ const appRoutes: Routes = [
   { path: 'shopping-cart', component: ShoppingcartComponent },
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   { path: 'myorders', component: MyOrdersComponent, canActivate: [AuthGuard] },
+  { path: 'wishlist', component: WishlistComponent, canActivate: [AuthGuard] },
   {
     path: 'admin/books',
     loadChildren: () => import('./admin/admin.module').then(mod => mod.AdminModule),

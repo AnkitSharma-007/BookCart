@@ -26,7 +26,7 @@ namespace BookCart.Controllers
         [HttpGet("{userId}")]
         public async Task<List<OrdersDto>> Get(int userId)
         {
-            return await Task.FromResult(_orderService.GetOrderList(userId));
+            return await Task.FromResult(_orderService.GetOrderList(userId)).ConfigureAwait(true) ;
         }
     }
 }

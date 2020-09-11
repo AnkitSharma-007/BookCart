@@ -14,7 +14,6 @@ export class AuthenticationService {
 
   constructor(
     private http: HttpClient,
-    private userService: UserService,
     private subscriptionService: SubscriptionService) { }
 
   login(user) {
@@ -25,7 +24,7 @@ export class AuthenticationService {
           localStorage.setItem('authToken', response.token);
           this.setUserDetails();
           localStorage.setItem('userId', response.userDetails.userId);
-          this.userService.cartItemcount$.next(response.carItemCount);
+          this.subscriptionService.cartItemcount$.next(response.carItemCount);
         }
         return response;
       }));
@@ -47,8 +46,7 @@ export class AuthenticationService {
 
   logout() {
     localStorage.clear();
-    this.subscriptionService.userData.next(new User());
-    this.userService.cartItemcount$.next(0);
+    this.resetSubscription();
     this.setTempUserId();
   }
 
@@ -61,5 +59,12 @@ export class AuthenticationService {
 
   generateTempUserId() {
     return Math.floor(Math.random() * (99999 - 11111 + 1) + 12345);
+  }
+
+  resetSubscription() {
+    this.subscriptionService.userData.next(new User());
+    this.subscriptionService.wishlistItem$.next([]);
+    this.subscriptionService.wishlistItemcount$.next(0);
+    this.subscriptionService.cartItemcount$.next(0);
   }
 }

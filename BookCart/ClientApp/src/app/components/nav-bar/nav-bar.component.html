@@ -8,10 +8,13 @@
         <div>
             <app-search></app-search>
         </div>
-        <!-- <span class="spacer"></span> -->
         <div>
+            <button mat-icon-button *ngIf="userData.isLoggedIn" [routerLinkActive]='["link-active"]'
+                [routerLink]='["/wishlist"]'>
+                <mat-icon matBadge="{{wishListCount$ | async}}" matBadgeColor="warn">favorite</mat-icon>
+            </button>
             <button mat-icon-button [routerLinkActive]='["link-active"]' [routerLink]='["/shopping-cart"]'>
-                <mat-icon matBadge="{{cartItemCount}}" matBadgeColor="warn">shopping_cart</mat-icon>
+                <mat-icon matBadge="{{cartItemCount$ | async}}" matBadgeColor="warn">shopping_cart</mat-icon>
             </button>
             <button mat-button *ngIf="!userData.isLoggedIn" [routerLinkActive]='["link-active"]'
                 [routerLink]='["/login"]'>Login</button>

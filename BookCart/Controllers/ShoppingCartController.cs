@@ -43,7 +43,7 @@ namespace BookCart.Controllers
         public async Task<List<CartItemDto>> Get(int userId)
         {
             string cartid = _cartService.GetCartId(userId);
-            return await Task.FromResult(_bookService.GetBooksAvailableInCart(cartid));
+            return await Task.FromResult(_bookService.GetBooksAvailableInCart(cartid)).ConfigureAwait(true) ;
         }
 
         /// <summary>

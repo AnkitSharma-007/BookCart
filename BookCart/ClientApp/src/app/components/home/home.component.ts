@@ -22,7 +22,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
-    private subscriptionService: SubscriptionService) { }
+    private subscriptionService: SubscriptionService) {
+  }
 
   ngOnInit() {
     this.isLoading = true;

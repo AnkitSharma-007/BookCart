@@ -1,4 +1,4 @@
-Scaffold-DbContext "Your connection string" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables Categories, UserType, UserMaster, Book, Cart, CartItems, CustomerOrders, CustomerOrderDetails -force
+Scaffold-DbContext "Your connection string" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables Categories, UserType, UserMaster, Book, Cart, CartItems, CustomerOrders, CustomerOrderDetails, Wishlist, WishlistItems -force
 
 ---------------------------------------------------------------------------------------
 CREATE TABLE Categories (  
@@ -13,7 +13,7 @@ INSERT INTO Categories VALUES('Mystery');
 INSERT INTO Categories VALUES('Fantasy');  
 INSERT INTO Categories VALUES('Romance'); 
 GO
------------------------------------------------------------------------
+--------------------------------------------------------------------------
 CREATE TABLE UserType (  
 UserTypeID int IDENTITY(1,1) PRIMARY KEY,  
 UserTypeName varchar(20) NOT NULL   
@@ -23,7 +23,7 @@ GO
 INSERT INTO UserType VALUES('Admin');  
 INSERT INTO UserType VALUES('User'); 
 GO
--------------------------------------------------------------------------
+--------------------------------------------------------------------------
 CREATE TABLE UserMaster(  
 UserID int IDENTITY(1,1) PRIMARY KEY,  
 FirstName varchar(20) NOT NULL ,
@@ -36,7 +36,7 @@ UserTypeID int NOT NULL,
 GO
 
 INSERT INTO UserMaster VALUES('Ankit','Sharma','adminuser','qwerty','Male',1); -- Add the record for Admin user.
---------------------------------------------------------------------------
+---------------------------------------------------------------------------
 CREATE TABLE Book(
 BookID int IDENTITY(1,1) PRIMARY KEY,  
 Title varchar(100) NOT NULL ,  
@@ -46,14 +46,14 @@ Price decimal(10, 2) NOT NULL ,
 CoverFileName varchar(100) NULL
 )
 GO
---------------------------------------------------------------------------
+---------------------------------------------------------------------------
 CREATE TABLE Cart(
 CartId varchar(36) PRIMARY KEY ,
 UserID int NOT NULL,
 DateCreated datetime NOT NULL
 )
 GO
----------------------------------------------------------------------
+---------------------------------------------------------------------------
 CREATE TABLE CartItems(
 CartItemId int IDENTITY(1,1) Primary Key,
 CartId varchar(36) NOT NULL,
@@ -61,7 +61,7 @@ ProductId int NOT NULL,
 Quantity int NOT NULL,
 )
 GO
----------------------------------------------------------------------
+---------------------------------------------------------------------------
 CREATE TABLE CustomerOrders(
 OrderId varchar(20) PRIMARY KEY ,
 UserID int NOT NULL,
@@ -69,13 +69,27 @@ DateCreated datetime NOT NULL,
 CartTotal Decimal(10,2) NOT NULL
 )
 GO
--------------------------------------------------------------------
+---------------------------------------------------------------------------
 CREATE TABLE CustomerOrderDetails(
 OrderDetailsId int IDENTITY(1,1) Primary Key,
 OrderId varchar(20) NOT NULL,
 ProductId int NOT NULL,
 Quantity int NOT NULL,
 Price decimal(10,2) NOT NULL
+)
+GO
+---------------------------------------------------------------------------
+CREATE TABLE Wishlist(
+WishlistId varchar(36) PRIMARY KEY,
+UserID int NOT NULL,
+DateCreated datetime NOT NULL
+)
+GO
+---------------------------------------------------------------------------
+CREATE TABLE WishlistItems(
+WishlistItemId int IDENTITY(1,1) Primary Key,
+WishlistId varchar(36) NOT NULL,
+ProductId int NOT NULL
 )
 GO
 

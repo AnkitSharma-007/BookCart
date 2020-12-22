@@ -38,7 +38,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     CommonModule,
-    RouterModule.forRoot(appRoutes, { scrollPositionRestoration: 'top' }),
+    RouterModule.forRoot(appRoutes, { scrollPositionRestoration: 'top', relativeLinkResolution: 'legacy' }),
   ],
 
   exports: [

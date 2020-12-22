@@ -29,21 +29,26 @@
             "styles": [
               "src/styles.scss",
               {
-                "input": "src/main.scss"
+                "input": "src/main.scss",
+                "inject": true
               },
-              {"inject":false,
+              {
+                "inject": true,
                 "input": "src/assets/pink-bluegrey.css",
                 "bundleName": "pink-bluegrey"
               },
-              {"inject":false,
+              {
+                "inject": true,
                 "input": "src/assets/deeppurple-amber.css",
                 "bundleName": "deeppurple-amber"
               },
-              {"inject":false,
+              {
+                "inject": true,
                 "input": "src/assets/indigo-pink.css",
                 "bundleName": "indigo-pink"
               },
-              {"inject":false,
+              {
+                "inject": true,
                 "input": "src/assets/purple-green.css",
                 "bundleName": "purple-green"
               }
@@ -61,7 +66,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -111,21 +115,26 @@
             "styles": [
               "src/styles.scss",
               {
-                "input": "src/main.scss"
+                "input": "src/main.scss",
+                "inject": true
               },
-              {"inject":false,
+              {
+                "inject": true,
                 "input": "src/assets/pink-bluegrey.css",
                 "bundleName": "pink-bluegrey"
               },
-              {"inject":false,
+              {
+                "inject": true,
                 "input": "src/assets/deeppurple-amber.css",
                 "bundleName": "deeppurple-amber"
               },
-              {"inject":false,
+              {
+                "inject": true,
                 "input": "src/assets/indigo-pink.css",
                 "bundleName": "indigo-pink"
               },
-              {"inject":false,
+              {
+                "inject": true,
                 "input": "src/assets/purple-green.css",
                 "bundleName": "purple-green"
               }

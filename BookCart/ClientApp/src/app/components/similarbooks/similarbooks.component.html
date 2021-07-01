@@ -5,9 +5,9 @@
         </div>
     </div>
     <ng-container *ngIf="SimilarBook$ | async as books; else loading">
-        <div class="docs-example-viewer-body">
+        <div class="d-flex justify-content-start p-2">
             <div class="card-deck-container">
-                <div *ngFor="let book of books" class="card-item">
+                <div *ngFor="let book of books" class="p-1">
                     <app-book-card [book]="book"></app-book-card>
                 </div>
             </div>

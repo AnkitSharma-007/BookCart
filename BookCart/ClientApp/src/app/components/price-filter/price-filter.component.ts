@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { BookService } from 'src/app/services/book.service';
-import { map } from 'rxjs/operators';
 import { Book } from 'src/app/models/book';
 
 @Component({

@@ -40,6 +40,10 @@ export class SearchComponent implements OnInit {
     }
   }
 
+  cancelSearch(){
+    this.router.navigate(['/']);
+  }
+
   private loadBookData() {
     this.bookService.books$.subscribe(
       (data: Book[]) => {
@@ -73,4 +77,6 @@ export class SearchComponent implements OnInit {
     return this.books?.filter(option => option.title.toLowerCase().includes(filterValue)
       || option.author.toLowerCase().includes(filterValue));
   }
+
+
 }

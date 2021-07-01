@@ -1,25 +1,25 @@
-<div class="row">
-    <div class="col-md-3">
-        <div class="filter-container">
-            <app-book-filter [category]="category"></app-book-filter>
-            <app-price-filter (priceValue)="filterPrice($event)"></app-price-filter>
-        </div>
+<div class="row no-gutters pt-3">
+  <div class="col-md-3 col-sm-12">
+    <div class="filter-container">
+      <app-book-filter [category]="category"></app-book-filter>
+      <app-price-filter (priceValue)="filterPrice($event)"></app-price-filter>
     </div>
-    <div class="col">
-        <div *ngIf="books?.length>0; else nodata" class="card-deck-container">
-            <div *ngFor="let book of books" class="card-item">
-                <app-book-card [book]="book"></app-book-card>
-            </div>
-        </div>
-        <ng-template #nodata>
-            <div class="nodata d-flex justify-content-center">
-                <h1 *ngIf="!isLoading">
-                    No books found.
-                </h1>
-            </div>
-        </ng-template>
-        <div *ngIf="isLoading" class="spinner-container">
-            <mat-spinner></mat-spinner>
-        </div>
+  </div>
+  <div class="col mb-3">
+    <div *ngIf="books?.length>0; else nodata" class="d-flex justify-content-start card-deck-container mb-4">
+      <div *ngFor="let book of books" class="p-1">
+        <app-book-card [book]="book"></app-book-card>
+      </div>
     </div>
+    <ng-template #nodata>
+      <div class="d-flex justify-content-center mt-4">
+        <h1 class="display-4" *ngIf="!isLoading">
+          No books found.
+        </h1>
+      </div>
+    </ng-template>
+    <div *ngIf="isLoading" class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  </div>
 </div>

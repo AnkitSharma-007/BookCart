@@ -17,28 +17,27 @@ export class ThemePickerComponent implements OnInit {
     {
       primary: '#673AB7',
       accent: '#FFC107',
+      displayName: 'Deep Purple & Amber',
       name: 'deeppurple-amber',
-      isDark: false
     },
     {
       primary: '#3F51B5',
       accent: '#E91E63',
+      displayName: 'Indigo & Pink',
       name: 'indigo-pink',
-      isDark: false,
-      isDefault: true
     },
     {
       primary: '#E91E63',
       accent: '#607D8B',
+      displayName: 'Pink & Blue-grey',
       name: 'pink-bluegrey',
-      isDark: true
     },
     {
       primary: '#9C27B0',
       accent: '#4CAF50',
+      displayName: 'Purple & Green',
       name: 'purple-green',
-      isDark: true
-    }
+    },
   ];
 
   constructor(public themeService: ThemeService) { }
@@ -48,18 +47,11 @@ export class ThemePickerComponent implements OnInit {
   }
 
   installTheme(themeName: string) {
-    this.currentTheme = this.themes.find(x => x.name === themeName);
+    this.currentTheme = this.themes.find(theme => theme.name === themeName);
     if (!this.currentTheme) {
       return;
     }
 
-    if (this.currentTheme.isDefault) {
-      this.themeService.removeStyle('theme');
-    } else {
-      this.themeService.setStyle(
-        'theme',
-        `/assets/${this.currentTheme.name}.css`
-      );
-    }
+    this.themeService.setStyle('theme', `${this.currentTheme.name}.css`);
   }
 }

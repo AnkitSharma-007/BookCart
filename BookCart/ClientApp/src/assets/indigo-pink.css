@@ -584,27 +584,30 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   color: rgba(0, 0, 0, 0.87);
   border-color: transparent; }
 
-.mat-calendar-body-disabled > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected),
+.mat-calendar-body-disabled > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  color: rgba(0, 0, 0, 0.38); }
+
 .mat-form-field-disabled .mat-date-range-input-separator {
   color: rgba(0, 0, 0, 0.38); }
 
-.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected),
-.cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected),
-.cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
   background-color: rgba(0, 0, 0, 0.04); }
 
 .mat-calendar-body-in-preview {
   color: rgba(0, 0, 0, 0.24); }
 
-.mat-calendar-body-today:not(.mat-calendar-body-selected) {
+.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
   border-color: rgba(0, 0, 0, 0.38); }
 
-.mat-calendar-body-disabled > .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+.mat-calendar-body-disabled > .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
   border-color: rgba(0, 0, 0, 0.18); }
 
 .mat-calendar-body-in-range::before {
   background: rgba(63, 81, 181, 0.2); }
 
+.mat-calendar-body-comparison-identical,
 .mat-calendar-body-in-comparison-range::before {
   background: rgba(249, 171, 0, 0.2); }
 
@@ -616,9 +619,11 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
 [dir='rtl'] .mat-calendar-body-comparison-bridge-start::before {
   background: linear-gradient(to left, rgba(63, 81, 181, 0.2) 50%, rgba(249, 171, 0, 0.2) 50%); }
 
+.mat-calendar-body-in-range > .mat-calendar-body-comparison-identical,
 .mat-calendar-body-in-comparison-range.mat-calendar-body-in-range::after {
   background: #a8dab5; }
 
+.mat-calendar-body-comparison-identical.mat-calendar-body-selected,
 .mat-calendar-body-in-comparison-range > .mat-calendar-body-selected {
   background: #46a35e; }
 
@@ -638,6 +643,7 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   color: rgba(0, 0, 0, 0.87); }
   .mat-datepicker-content.mat-accent .mat-calendar-body-in-range::before {
     background: rgba(255, 64, 129, 0.2); }
+  .mat-datepicker-content.mat-accent .mat-calendar-body-comparison-identical,
   .mat-datepicker-content.mat-accent .mat-calendar-body-in-comparison-range::before {
     background: rgba(249, 171, 0, 0.2); }
   .mat-datepicker-content.mat-accent .mat-calendar-body-comparison-bridge-start::before,
@@ -646,8 +652,10 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   .mat-datepicker-content.mat-accent .mat-calendar-body-comparison-bridge-end::before,
   .mat-datepicker-content.mat-accent [dir='rtl'] .mat-calendar-body-comparison-bridge-start::before {
     background: linear-gradient(to left, rgba(255, 64, 129, 0.2) 50%, rgba(249, 171, 0, 0.2) 50%); }
+  .mat-datepicker-content.mat-accent .mat-calendar-body-in-range > .mat-calendar-body-comparison-identical,
   .mat-datepicker-content.mat-accent .mat-calendar-body-in-comparison-range.mat-calendar-body-in-range::after {
     background: #a8dab5; }
+  .mat-datepicker-content.mat-accent .mat-calendar-body-comparison-identical.mat-calendar-body-selected,
   .mat-datepicker-content.mat-accent .mat-calendar-body-in-comparison-range > .mat-calendar-body-selected {
     background: #46a35e; }
   .mat-datepicker-content.mat-accent .mat-calendar-body-selected {
@@ -659,6 +667,7 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
     box-shadow: inset 0 0 0 1px white; }
   .mat-datepicker-content.mat-warn .mat-calendar-body-in-range::before {
     background: rgba(244, 67, 54, 0.2); }
+  .mat-datepicker-content.mat-warn .mat-calendar-body-comparison-identical,
   .mat-datepicker-content.mat-warn .mat-calendar-body-in-comparison-range::before {
     background: rgba(249, 171, 0, 0.2); }
   .mat-datepicker-content.mat-warn .mat-calendar-body-comparison-bridge-start::before,
@@ -667,8 +676,10 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   .mat-datepicker-content.mat-warn .mat-calendar-body-comparison-bridge-end::before,
   .mat-datepicker-content.mat-warn [dir='rtl'] .mat-calendar-body-comparison-bridge-start::before {
     background: linear-gradient(to left, rgba(244, 67, 54, 0.2) 50%, rgba(249, 171, 0, 0.2) 50%); }
+  .mat-datepicker-content.mat-warn .mat-calendar-body-in-range > .mat-calendar-body-comparison-identical,
   .mat-datepicker-content.mat-warn .mat-calendar-body-in-comparison-range.mat-calendar-body-in-range::after {
     background: #a8dab5; }
+  .mat-datepicker-content.mat-warn .mat-calendar-body-comparison-identical.mat-calendar-body-selected,
   .mat-datepicker-content.mat-warn .mat-calendar-body-in-comparison-range > .mat-calendar-body-selected {
     background: #46a35e; }
   .mat-datepicker-content.mat-warn .mat-calendar-body-selected {
@@ -916,7 +927,8 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
 .mat-menu-item {
   background: transparent;
   color: rgba(0, 0, 0, 0.87); }
-  .mat-menu-item[disabled], .mat-menu-item[disabled]::after {
+  .mat-menu-item[disabled], .mat-menu-item[disabled]::after,
+  .mat-menu-item[disabled] .mat-icon-no-color {
     color: rgba(0, 0, 0, 0.38); }
 
 .mat-menu-item .mat-icon-no-color,
@@ -1231,6 +1243,24 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
 .mat-step-header .mat-step-icon-state-done,
 .mat-step-header .mat-step-icon-state-edit {
   background-color: #3f51b5;
+  color: white; }
+
+.mat-step-header.mat-accent .mat-step-icon {
+  color: white; }
+
+.mat-step-header.mat-accent .mat-step-icon-selected,
+.mat-step-header.mat-accent .mat-step-icon-state-done,
+.mat-step-header.mat-accent .mat-step-icon-state-edit {
+  background-color: #ff4081;
+  color: white; }
+
+.mat-step-header.mat-warn .mat-step-icon {
+  color: white; }
+
+.mat-step-header.mat-warn .mat-step-icon-selected,
+.mat-step-header.mat-warn .mat-step-icon-state-done,
+.mat-step-header.mat-warn .mat-step-icon-state-edit {
+  background-color: #f44336;
   color: white; }
 
 .mat-step-header .mat-step-icon-state-error {

@@ -15,12 +15,14 @@ export class ThemeService {
 
   // Remove the stylesheet with the specified key.
 
-  removeStyle(key: string) {
-    const existingLinkElement = getExistingLinkElementByKey(key);
-    if (existingLinkElement) {
-      document.head.removeChild(existingLinkElement);
-    }
-  }
+  // commented for future reference.
+
+  // removeStyle(key: string) {
+  //   const existingLinkElement = getExistingLinkElementByKey(key);
+  //   if (existingLinkElement) {
+  //     document.head.removeChild(existingLinkElement);
+  //   }
+  // }
 }
 
 function getLinkElementForKey(key: string) {

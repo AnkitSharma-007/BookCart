@@ -1,6 +1,6 @@
 # BookCart
 
-An e-commerce application for an online book store created with ASP.NET Core 6.0 and Angular 11, using SQL Server as database.
+An e-commerce application for an online book store created with ASP.NET Core 6.0 and Angular, using SQL Server as database.
 
 # Concepts Covered
 
@@ -33,7 +33,7 @@ An e-commerce application for an online book store created with ASP.NET Core 6.0
 # Steps to run the app
 1. Clone the Repo
 2. Scaffold the database using the [DBScript](https://github.com/AnkitSharma-007/BookCart/blob/master/DBScript/BookDB.txt)
-3. Put your connection string in [appsettings.json](https://github.com/AnkitSharma-007/BookCart/blob/master/BookCart/appsettings.json) file.
+3. Put your own connection string in [appsettings.json](https://github.com/AnkitSharma-007/BookCart/blob/master/BookCart/appsettings.json) file.
 4. Build and launch the application from Visual Studio.
 
 # Live Demo

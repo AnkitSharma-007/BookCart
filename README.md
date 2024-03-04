@@ -42,3 +42,11 @@ An e-commerce application for an online book store created with ASP.NET Core 6.0
 # Licenese
 [MIT](https://github.com/AnkitSharma-007/BookCart/blob/master/LICENSE)
 
+# See Also
+
+- https://github.com/AnkitSharma-007/MovieApp
+- https://github.com/AnkitSharma-007/blogging-app-with-Angular-CloudFirestore
+- https://github.com/AnkitSharma-007/angular-graphql
+- https://github.com/AnkitSharma-007/angular-forms-validation
+- https://github.com/AnkitSharma-007/Smart-Angular-App-Using-Azure-Cognitive-Services
+

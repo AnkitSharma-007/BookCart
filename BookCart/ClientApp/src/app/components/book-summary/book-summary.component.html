@@ -1,0 +1,28 @@
+<mat-card class="mt-4">
+  <mat-card-content class="row g-0 d-flex p-3">
+    <div class="col-md-5 col-sm-12">
+      <button
+        class="btn-gemini"
+        color="primary"
+        mat-raised-button
+        (click)="fetchSummaryFromGemini()"
+      >
+        <span
+          ><img
+            class="gemini-icon"
+            src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg"
+        /></span>
+        Generate book plot summary using Google Gemini
+      </button>
+    </div>
+
+    <ng-container *ngIf="showLoader; else showSummary">
+      <div class="d-flex justify-content-center mt-4">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+    </ng-container>
+    <ng-template #showSummary>
+      <p class="mt-4" *ngIf="bookSummary.length > 0">{{ bookSummary }}</p>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

@@ -1,21 +1,19 @@
-<div class="docs-example-viewer-wrapper">
-    <div class="docs-example-viewer-title mat-elevation-z2">
-        <div class="docs-example-viewer-title-spacer">
-            <h2>Similar Books</h2>
+<mat-card class="my-4">
+  <mat-card-header class="mat-elevation-z2 custom-card-header">
+    <mat-card-title class="mat-h1"> Similar Books </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="p-3">
+    <ng-container *ngIf="similarBooks$ | async as books; else loading">
+      <div class="d-flex justify-content-start flex-wrap">
+        <div *ngFor="let book of books" class="p-1">
+          <app-book-card [book]="book"></app-book-card>
         </div>
-    </div>
-    <ng-container *ngIf="SimilarBook$ | async as books; else loading">
-        <div class="d-flex justify-content-start p-2">
-            <div class="card-deck-container">
-                <div *ngFor="let book of books" class="p-1">
-                    <app-book-card [book]="book"></app-book-card>
-                </div>
-            </div>
-        </div>
+      </div>
     </ng-container>
-    <ng-template #loading>
-        <div class="spinner-container">
-            <mat-spinner></mat-spinner>
-        </div>
-    </ng-template>
-</div>
+  </mat-card-content>
+  <ng-template #loading>
+    <div class="d-flex align-items-center justify-content-center">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+</mat-card>

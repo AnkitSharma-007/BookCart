@@ -1,28 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { Book } from 'src/app/models/book';
-import { SubscriptionService } from 'src/app/services/subscription.service';
-import { Observable, Subject } from 'rxjs';
-import { WishlistService } from 'src/app/services/wishlist.service';
-import { SnackbarService } from 'src/app/services/snackbar.service';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit } from "@angular/core";
+import { Book } from "src/app/models/book";
+import { SubscriptionService } from "src/app/services/subscription.service";
+import { Observable, Subject } from "rxjs";
+import { WishlistService } from "src/app/services/wishlist.service";
+import { SnackbarService } from "src/app/services/snackbar.service";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
-  selector: 'app-wishlist',
-  templateUrl: './wishlist.component.html',
-  styleUrls: ['./wishlist.component.scss']
+  selector: "app-wishlist",
+  templateUrl: "./wishlist.component.html",
+  styleUrls: ["./wishlist.component.scss"],
 })
 export class WishlistComponent implements OnInit {
-
   wishlistItems$: Observable<Book[]>;
   isLoading: boolean;
   userId;
+  displayedColumns: string[] = ["image", "title", "price", "cart", "wishlist"];
   private unsubscribe$ = new Subject<void>();
 
   constructor(
     private subscriptionService: SubscriptionService,
     private wishlistService: WishlistService,
-    private snackBarService: SnackbarService) {
-    this.userId = localStorage.getItem('userId');
+    private snackBarService: SnackbarService
+  ) {
+    this.userId = localStorage.getItem("userId");
   }
 
   ngOnInit(): void {
@@ -36,15 +37,17 @@ export class WishlistComponent implements OnInit {
   }
 
   clearWishlist() {
-    this.wishlistService.clearWishlist(this.userId)
+    this.wishlistService
+      .clearWishlist(this.userId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
-        result => {
+        (result) => {
           this.subscriptionService.wishlistItemcount$.next(result);
-          this.snackBarService.showSnackBar('Wishlist cleared!!!');
-          // this.getShoppingCartItems();
-        }, error => {
-          console.log('Error ocurred while deleting wishlist item : ', error);
-        });
+          this.snackBarService.showSnackBar("Wishlist cleared!!!");
+        },
+        (error) => {
+          console.log("Error ocurred while deleting wishlist item : ", error);
+        }
+      );
   }
 }

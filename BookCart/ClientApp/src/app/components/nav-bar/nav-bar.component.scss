@@ -1,29 +1,30 @@
-$color-white: #ffffff;
-
 .spacer {
   flex-grow: 1;
 }
 
 a {
-  text-decoration: none;
-  color: $color-white;
-}
-
-.github-link {
-  font-size: 16px;
+  color: #ffffff;
 }
 
 .fa-github {
-  font-size: 20px;
-}
-
-mat-toolbar-row {
-  justify-content: space-between;
-  align-items: center;
+  font-size: 16px;
 }
 
 .brand-title {
   button {
     font-size: 18px;
   }
+}
+
+mat-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.swagger-icon {
+  height: 22px;
+  width: 22px;
 }

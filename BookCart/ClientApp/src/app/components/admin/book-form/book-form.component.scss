@@ -1,40 +1,16 @@
-$color-white: #ffffff;
-$color-upload: #26a69a;
-
-.left-div {
-  float: left;
-  width: 75%;
-  padding: 0 10px 0 0;
-}
-
-.right-div {
-  float: left;
-  width: 25%;
-  padding: 10px;
-}
-
-.image-card {
-  padding: 10px 10px 0 10px;
-}
-
 .preview-image {
-  max-height: 300px;
-  max-width: 140px;
+  max-height: 350px;
+  max-width: 200px;
+  border: 2px dashed #ababab;
 }
 
-.upload-btn-wrapper {
-  position: relative;
-  display: inline-block;
+input[type="file"] {
+  display: none;
 }
 
-.btn-upload {
-  color: $color-white;
-  background-color: $color-upload;
-}
-
-.upload-btn-wrapper input[type="file"] {
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
+.custom-file-upload {
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #00a7a7;
+  border-radius: 4px;
 }

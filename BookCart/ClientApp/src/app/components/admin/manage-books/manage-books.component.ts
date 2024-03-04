@@ -1,53 +1,65 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { Book } from 'src/app/models/book';
-import { BookService } from 'src/app/services/book.service';
-import { SnackbarService } from 'src/app/services/snackbar.service';
-import { DeleteBookComponent } from '../delete-book/delete-book.component';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, ViewChild, OnDestroy } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { Book } from "src/app/models/book";
+import { BookService } from "src/app/services/book.service";
+import { SnackbarService } from "src/app/services/snackbar.service";
+import { DeleteBookComponent } from "../delete-book/delete-book.component";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
-  selector: 'app-manage-books',
-  templateUrl: './manage-books.component.html',
-  styleUrls: ['./manage-books.component.scss']
+  selector: "app-manage-books",
+  templateUrl: "./manage-books.component.html",
+  styleUrls: ["./manage-books.component.scss"],
 })
-export class ManageBooksComponent implements OnInit, OnDestroy {
+export class ManageBooksComponent implements OnDestroy {
+  @ViewChild(MatSort) set matSort(sort: MatSort) {
+    this.dataSource.sort = sort;
+  }
 
-  displayedColumns: string[] = ['id', 'title', 'author', 'category', 'price', 'operation'];
+  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
+    this.dataSource.paginator = paginator;
+  }
+
+  displayedColumns: string[] = [
+    "id",
+    "title",
+    "author",
+    "category",
+    "price",
+    "operation",
+  ];
 
   dataSource = new MatTableDataSource<Book>();
-
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-
   private unsubscribe$ = new Subject<void>();
+
   constructor(
     private bookService: BookService,
     public dialog: MatDialog,
-    private snackBarService: SnackbarService) {
-  }
-
-  ngOnInit() {
+    private snackBarService: SnackbarService
+  ) {
     this.getAllBookData();
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   getAllBookData() {
-    this.bookService.getAllBooks()
+    this.bookService
+      .getAllBooks()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((data: Book[]) => {
-        this.dataSource.data = Object.values(data);
-      }, error => {
-        console.log('Error ocurred while fetching book details : ', error);
-      });
+      .subscribe(
+        (data: Book[]) => {
+          this.dataSource.data = Object.values(data);
+        },
+        (error) => {
+          console.log("Error ocurred while fetching book details : ", error);
+        }
+      );
   }
 
-  applyFilter(filterValue: string) {
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
@@ -56,17 +68,18 @@ export class ManageBooksComponent implements OnInit, OnDestroy {
 
   deleteConfirm(id: number): void {
     const dialogRef = this.dialog.open(DeleteBookComponent, {
-      data: id
+      data: id,
     });
 
-    dialogRef.afterClosed()
+    dialogRef
+      .afterClosed()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(result => {
+      .subscribe((result) => {
         if (result === 1) {
           this.getAllBookData();
-          this.snackBarService.showSnackBar('Data deleted successfully');
+          this.snackBarService.showSnackBar("Data deleted successfully");
         } else {
-          this.snackBarService.showSnackBar('Error occurred!! Try again');
+          this.snackBarService.showSnackBar("Error occurred!! Try again");
         }
       });
   }

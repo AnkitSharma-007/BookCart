@@ -1,32 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
-@import "~bootstrap/dist/css/bootstrap.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "../node_modules/bootstrap/scss/bootstrap";
 
 body {
   font-size: 16px;
+  margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   line-height: 1.5;
   font-kerning: normal;
+  background: #fafafa;
 }
 
 .container {
   padding-top: 60px;
-}
-
-.docs-example-viewer-title {
-  align-content: center;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  padding: 8px 20px;
-  color: #ffffff;
-}
-
-.docs-example-viewer-title-spacer {
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: space-between;
 }
 
 .docs-example-viewer-body {
@@ -54,46 +41,21 @@ button.active:focus {
   outline-style: none !important;
 }
 
-.docs-navbar-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-
-  > .mat-button {
-    &:last-child {
-      margin-left: auto;
-    }
-  }
-}
-
-app-nav-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-}
-
 // start: style the scrollbar
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px grey;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #b30000;
+  border-radius: 8px;
 }
 // end: style the scrollbar
-
-.spinner-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 h1,
 h2,
@@ -101,4 +63,13 @@ h3,
 h4,
 h5 {
   margin-bottom: 0;
+}
+
+.custom-card-header {
+  background: #ff4081;
+  color: #fff;
+}
+
+a {
+  text-decoration: none;
 }

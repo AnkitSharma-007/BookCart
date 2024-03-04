@@ -22,36 +22,8 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss",
-              {
-                "input": "src/main.scss",
-                "inject": true
-              },
-              {
-                "inject": true,
-                "input": "src/assets/pink-bluegrey.css",
-                "bundleName": "pink-bluegrey"
-              },
-              {
-                "inject": true,
-                "input": "src/assets/deeppurple-amber.css",
-                "bundleName": "deeppurple-amber"
-              },
-              {
-                "inject": true,
-                "input": "src/assets/indigo-pink.css",
-                "bundleName": "indigo-pink"
-              },
-              {
-                "inject": true,
-                "input": "src/assets/purple-green.css",
-                "bundleName": "purple-green"
-              }
-            ],
+            "assets": ["src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -115,36 +87,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss",
-              {
-                "input": "src/main.scss",
-                "inject": true
-              },
-              {
-                "inject": true,
-                "input": "src/assets/pink-bluegrey.css",
-                "bundleName": "pink-bluegrey"
-              },
-              {
-                "inject": true,
-                "input": "src/assets/deeppurple-amber.css",
-                "bundleName": "deeppurple-amber"
-              },
-              {
-                "inject": true,
-                "input": "src/assets/indigo-pink.css",
-                "bundleName": "indigo-pink"
-              },
-              {
-                "inject": true,
-                "input": "src/assets/purple-green.css",
-                "bundleName": "purple-green"
-              }
-            ],
+            "assets": ["src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         },

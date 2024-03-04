@@ -1,16 +1,6 @@
-@import "~@angular/material/theming";
-$color-hover: #777777;
-
-.image-card {
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-}
-
 .preview-image {
-  max-height: 250px;
-  max-width: 200px;
-  cursor: pointer;
+  height: 260px;
+  width: 200px;
 }
 
 .book-card {
@@ -20,18 +10,9 @@ $color-hover: #777777;
 }
 
 .card-title {
-  cursor: pointer;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-}
-
-.mat-card-content {
-  margin-bottom: 0;
-}
-
-.on-book-card-hover {
-  @include mat-elevation(8, $color-hover, 16);
 }
 
 .favourite {
@@ -44,4 +25,12 @@ $color-hover: #777777;
   width: 35px;
   border-radius: 50%;
   padding: 5px;
+}
+
+.on-book-card-hover {
+  box-shadow: 0 8px 8px 8px rgba(0, 0, 0, 0.2), 0 8px 8px 0 rgba(0, 0, 0, 0.14),
+    0 8px 8px 0 rgba(0, 0, 0, 0.12);
+  transform: translate3d(0, 0, 0);
+  transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }

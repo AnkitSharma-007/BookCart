@@ -1,14 +1,13 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { BookService } from 'src/app/services/book.service';
-import { Book } from 'src/app/models/book';
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { BookService } from "src/app/services/book.service";
+import { Book } from "src/app/models/book";
 
 @Component({
-  selector: 'app-price-filter',
-  templateUrl: './price-filter.component.html',
-  styleUrls: ['./price-filter.component.scss']
+  selector: "app-price-filter",
+  templateUrl: "./price-filter.component.html",
+  styleUrls: ["./price-filter.component.scss"],
 })
 export class PriceFilterComponent implements OnInit {
-
   @Output()
   priceValue = new EventEmitter<number>(true);
 
@@ -18,30 +17,28 @@ export class PriceFilterComponent implements OnInit {
   step = 100;
   thumbLabel = true;
 
-  constructor(private bookService: BookService) { }
+  constructor(private bookService: BookService) {}
 
   ngOnInit(): void {
     this.setPriceFilterProperties();
   }
 
   setPriceFilterProperties() {
-    this.bookService.books$.pipe().subscribe(
-      (data: Book[]) => {
-        this.setMinValue(data);
-        this.setMaxValue(data);
-      }
-    );
+    this.bookService.books$.pipe().subscribe((data: Book[]) => {
+      this.setMinValue(data);
+      this.setMaxValue(data);
+    });
   }
 
   formatLabel(value: number) {
     if (value >= 1000) {
-      return Math.round(value / 1000) + 'k';
+      return Math.round(value / 1000) + "k";
     }
     return value;
   }
 
-  onChange(event) {
-    this.priceValue.emit(event.value);
+  onChange() {
+    this.priceValue.emit(this.value);
   }
 
   setMinValue(book: Book[]) {

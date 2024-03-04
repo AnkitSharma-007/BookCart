@@ -1,101 +1,155 @@
-<div class="docs-example-viewer-wrapper">
-    <div class="docs-example-viewer-title mat-elevation-z2">
-        <div class="docs-example-viewer-title-spacer">
-            <h2>Check Out</h2>
-        </div>
+<mat-card class="my-4">
+  <mat-card-header class="custom-card-header mat-elevation-z2">
+    <mat-card-title class="mat-h1">Check Out </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="p-2">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-card-content>
+          <mat-card-title> Shipping address </mat-card-title>
+          <form [formGroup]="checkOutForm" (ngSubmit)="placeOrder()">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Name</mat-label>
+              <input
+                matInput
+                placeholder="Name"
+                formControlName="name"
+                required
+              />
+              <mat-error
+                *ngIf="
+                  checkoutFormControl.name.touched &&
+                  checkoutFormControl.name.invalid
+                "
+                >Name is required</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Address Line 1</mat-label>
+              <input
+                matInput
+                placeholder="Address Line 1"
+                formControlName="addressLine1"
+                required
+              />
+              <mat-error
+                *ngIf="
+                  checkoutFormControl.addressLine1.touched &&
+                  checkoutFormControl.addressLine1.invalid
+                "
+                >Address is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Address Line 2</mat-label>
+              <input
+                matInput
+                placeholder="Address Line 2"
+                formControlName="addressLine2"
+                required
+              />
+              <mat-error
+                *ngIf="
+                  checkoutFormControl.addressLine2.touched &&
+                  checkoutFormControl.addressLine2.invalid
+                "
+                >Address is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Pincode</mat-label>
+              <input
+                matInput
+                placeholder="Pincode"
+                formControlName="pincode"
+                required
+              />
+              <mat-error
+                *ngIf="
+                  checkoutFormControl.pincode.touched &&
+                  checkoutFormControl.pincode.hasError('required')
+                "
+                >Pincode is required
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  checkoutFormControl.pincode.touched &&
+                  checkoutFormControl.pincode.hasError('pattern')
+                "
+              >
+                Pincode must have 6 digits only and cannot start with 0
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>State</mat-label>
+              <input
+                matInput
+                placeholder="State"
+                formControlName="state"
+                required
+              />
+              <mat-error
+                *ngIf="
+                  checkoutFormControl.state.touched &&
+                  checkoutFormControl.state.invalid
+                "
+                >State is required</mat-error
+              >
+            </mat-form-field>
+            <mat-card-actions align="end" class="p-0">
+              <button type="submit" mat-raised-button color="primary">
+                Place Order
+              </button>
+              <button
+                class="ms-2"
+                mat-raised-button
+                color="warn"
+                [routerLink]="['/shopping-cart']"
+              >
+                Cancel
+              </button>
+            </mat-card-actions>
+          </form>
+        </mat-card-content>
+      </div>
+      <div class="col-md-6">
+        <mat-card-content>
+          <mat-card-title> Order Summary </mat-card-title>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of checkOutItems.orderDetails">
+                <td>
+                  {{ item.book.title }}
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.book.price | currency : "INR" }}</td>
+                <td>
+                  {{ item.book.price * item.quantity | currency : "INR" }}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot class="table">
+              <tr>
+                <td></td>
+                <td></td>
+                <th>Grand Total</th>
+                <th>{{ totalPrice | currency : "INR" }}</th>
+              </tr>
+            </tfoot>
+          </table>
+        </mat-card-content>
+      </div>
     </div>
-    <div class="docs-example-viewer-body">
-        <div class="left-div">
-            <mat-card class="mat-elevation-z4">
-                <mat-card-title>
-                    Shipping address
-                </mat-card-title>
-                <mat-divider></mat-divider>
-                <mat-card-content>
-                    <form [formGroup]="checkOutForm" (ngSubmit)="placeOrder()">
-                        <mat-form-field class="full-width">
-                            <input matInput placeholder="Name" formControlName="name" required>
-                            <mat-error *ngIf="name.touched && name.invalid">Name is required</mat-error>
-                        </mat-form-field>
-
-                        <mat-form-field class="full-width">
-                            <input matInput placeholder="Address Line 1" formControlName="addressLine1" required>
-                            <mat-error *ngIf="addressLine1.touched && addressLine1.invalid">Address is required
-                            </mat-error>
-                        </mat-form-field>
-
-                        <mat-form-field class="full-width">
-                            <input matInput placeholder="Address Line 2" formControlName="addressLine2" required>
-                            <mat-error *ngIf="addressLine2.touched && addressLine2.invalid">Address is required
-                            </mat-error>
-                        </mat-form-field>
-
-                        <mat-form-field class="full-width">
-                            <input matInput placeholder="Pincode" formControlName="pincode" required>
-                            <mat-error *ngIf="pincode.touched && pincode.hasError('required')">Pincode is required
-                            </mat-error>
-                            <mat-error *ngIf="pincode.touched && pincode.hasError('pattern')">
-                                Pincode must have 6 digits only and cannot start with 0
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="full-width">
-                            <input matInput placeholder="State" formControlName="state" required>
-                            <mat-error *ngIf="state.touched && state.invalid">State is required</mat-error>
-                        </mat-form-field>
-                        <mat-card-actions align="right">
-                            <div fxFlex></div>
-                            <button type="submit" mat-raised-button color="primary">Place Order</button>
-                            <button type="button" mat-raised-button color="warn"
-                                [routerLink]='["/shopping-cart"]'>CANCEL</button>
-                        </mat-card-actions>
-
-                    </form>
-                </mat-card-content>
-            </mat-card>
-        </div>
-        <div class="right-div">
-            <ng-template #emptycart>
-                <mat-card class="mat-elevation-z4">
-                    <mat-card-title>
-                        Shopping cart is empty
-                    </mat-card-title>
-                    <mat-card-content>
-                        <button mat-raised-button color="primary" [routerLink]='["/"]'>Continue shopping</button>
-                    </mat-card-content>
-                </mat-card>
-            </ng-template>
-            <mat-card *ngIf="checkOutItems && checkOutItems.orderDetails.length>0; else emptycart"
-                class="mat-elevation-z4">
-                <mat-card-title>
-                    Order Summary
-                </mat-card-title>
-                <mat-card-content>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Quantity</th>
-                                <th>MRP</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tr *ngFor="let item of checkOutItems.orderDetails">
-                            <td><a [routerLink]="['/books/details/',item.book.bookId]">{{item.book.title}}</a></td>
-                            <td>{{item.quantity}}</td>
-                            <td>{{item.book.price| currency : 'INR'}}</td>
-                            <td>{{ item.book.price * item.quantity | currency : 'INR'}}</td>
-                        </tr>
-                    </table>
-                    <tfoot class="table">
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <td>Grand Total</td>
-                            <th>{{totalPrice| currency : 'INR' }}</th>
-                        </tr>
-                    </tfoot>
-                </mat-card-content>
-            </mat-card>
-        </div>
-    </div>
-</div>
+  </mat-card-content>
+</mat-card>

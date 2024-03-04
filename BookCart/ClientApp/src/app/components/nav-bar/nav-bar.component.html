@@ -1,45 +1,89 @@
-<mat-toolbar color="primary" class="docs-navbar-header mat-elevation-z2">
-    <mat-toolbar-row>
-        <div class="brand-title">
-            <button mat-button [routerLink]='["/"]'>
-                <mat-icon>book</mat-icon> Book Cart
-            </button>
-        </div>
-        <div>
-            <app-search></app-search>
-        </div>
-        <div>
-            <button mat-icon-button *ngIf="userData.isLoggedIn" [routerLinkActive]='["link-active"]'
-                [routerLink]='["/wishlist"]'>
-                <mat-icon matBadge="{{wishListCount$ | async}}" matBadgeColor="warn">favorite</mat-icon>
-            </button>
-            <button mat-icon-button [routerLinkActive]='["link-active"]' [routerLink]='["/shopping-cart"]'>
-                <mat-icon matBadge="{{cartItemCount$ | async}}" matBadgeColor="warn">shopping_cart</mat-icon>
-            </button>
-            <button mat-button *ngIf="!userData.isLoggedIn" [routerLinkActive]='["link-active"]'
-                [routerLink]='["/login"]'>Login</button>
-            <button mat-button *ngIf="userData.userTypeId==userType.admin" [routerLink]='["/admin/books"]'>Admin
-                Panel</button>
+<mat-toolbar color="primary" class="mat-elevation-z4">
+  <mat-toolbar-row class="justify-content-between">
+    <div class="brand-title">
+      <button mat-flat-button color="primary" [routerLink]="['/']">
+        <mat-icon>book</mat-icon> Book Cart
+      </button>
+    </div>
+    <div>
+      <app-search></app-search>
+    </div>
+    <div class="d-flex align-items-center">
+      <button
+        mat-icon-button
+        *ngIf="userData.isLoggedIn"
+        [routerLinkActive]="['link-active']"
+        [routerLink]="['/wishlist']"
+      >
+        <mat-icon matBadge="{{ wishListCount$ | async }}" matBadgeColor="warn"
+          >favorite</mat-icon
+        >
+      </button>
+      <button
+        mat-icon-button
+        [routerLinkActive]="['link-active']"
+        [routerLink]="['/shopping-cart']"
+      >
+        <mat-icon matBadge="{{ cartItemCount$ | async }}" matBadgeColor="warn"
+          >shopping_cart</mat-icon
+        >
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        *ngIf="!userData.isLoggedIn"
+        [routerLinkActive]="['link-active']"
+        [routerLink]="['/login']"
+        matTooltip="Login"
+      >
+        Login
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        *ngIf="userData.userTypeId == userType.admin"
+        [routerLink]="['/admin/books']"
+        matTooltip="Admin panel"
+      >
+        Admin Panel
+      </button>
 
-            <ng-container *ngIf="userData.isLoggedIn">
-                <button mat-button [matMenuTriggerFor]="menu">
-                    <mat-icon>account_circle</mat-icon> {{userData.username}} <mat-icon>arrow_drop_down</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item [routerLink]='["/myorders"]'>My Orders</button>
-                    <button mat-menu-item (click)=logout()>Logout</button>
-                </mat-menu>
-            </ng-container>
-            <app-theme-picker></app-theme-picker>
-            <button mat-button>
-                <a class="github-link" href="/swagger/index.html" target="_blank">
-                    <span><img src="https://static1.smartbear.co/swagger/media/assets/swagger_fav.png" /></span>
-                    Swagger
-                </a>
-            </button>
-            <button mat-button><a class="github-link" href="https://github.com/AnkitSharma-007/bookcart"
-                    target="_blank"><i class="fa fa-github"></i> GitHub</a>
-            </button>
-        </div>
-    </mat-toolbar-row>
+      <ng-container *ngIf="userData.isLoggedIn">
+        <a mat-flat-button color="primary" [matMenuTriggerFor]="menu">
+          <mat-icon>account_circle</mat-icon>
+          <span> {{ userData.username }}</span>
+          <mat-icon>arrow_drop_down</mat-icon>
+        </a>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item [routerLink]="['/myorders']">My Orders</button>
+          <button mat-menu-item (click)="logout()">Logout</button>
+        </mat-menu>
+      </ng-container>
+
+      <a
+        mat-flat-button
+        color="primary"
+        href="/swagger/index.html"
+        target="_blank"
+        matTooltip="API details"
+      >
+        <span
+          ><img
+            class="swagger-icon"
+            src="https://static1.smartbear.co/swagger/media/assets/swagger_fav.png"
+        /></span>
+        Swagger
+      </a>
+
+      <a
+        mat-flat-button
+        color="primary"
+        href="https://github.com/AnkitSharma-007/bookcart"
+        target="_blank"
+        matTooltip="GitHub"
+        ><i class="fa fa-github"></i>
+        GitHub
+      </a>
+    </div>
+  </mat-toolbar-row>
 </mat-toolbar>

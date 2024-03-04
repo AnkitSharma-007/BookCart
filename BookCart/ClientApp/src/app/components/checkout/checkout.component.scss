@@ -1,16 +1,12 @@
-.left-div {
-    float: left;
-    width: 50%;
-  }
-  
-  .right-div {
-    float: left;
-    width: 50%;
-    margin-left: 10px;
-  }
-  
-  td,
-  th {
-    width: 20%;
-  }
-  
+th,
+td {
+  border-top: 0;
+  border-bottom: 1px solid #dee2e6;
+  width: 20%;
+  padding: 20px;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+  width: 40%;
+}

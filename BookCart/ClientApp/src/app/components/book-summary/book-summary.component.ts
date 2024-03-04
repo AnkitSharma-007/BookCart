@@ -21,7 +21,7 @@ export class BookSummaryComponent {
   showLoader = false;
 
   MODEL_NAME = "gemini-1.0-pro";
-  API_KEY = "AIzaSyB88VzQVRWpEl5UKPUvzVZ8dIlYR-FV8gg";
+  API_KEY = "Your_API_Key_Here";
   generationConfig = {
     temperature: 0.9,
     topK: 1,

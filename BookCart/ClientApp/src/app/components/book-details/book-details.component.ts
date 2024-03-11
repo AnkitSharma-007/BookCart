@@ -10,7 +10,7 @@ import { SubscriptionService } from "src/app/services/subscription.service";
   styleUrls: ["./book-details.component.scss"],
 })
 export class BookDetailsComponent {
-  userData$ = this.subscriptionService.userData.asObservable();
+  userData$ = this.subscriptionService.userData$.asObservable();
 
   private readonly queryParams$ = this.activatedRoute.paramMap;
   private readonly book$ = this.bookService.books$;

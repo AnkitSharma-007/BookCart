@@ -53,7 +53,7 @@
                 required
               >
                 <mat-option
-                  *ngFor="let category of categoryList"
+                  *ngFor="let category of categoryList | async"
                   [value]="category.categoryName"
                 >
                   {{ category.categoryName }}
@@ -103,7 +103,7 @@
                 mat-raised-button
                 color="warn"
                 class="ms-2"
-                (click)="cancel()"
+                (click)="navigateToAdminPanel()"
               >
                 Cancel
               </button>

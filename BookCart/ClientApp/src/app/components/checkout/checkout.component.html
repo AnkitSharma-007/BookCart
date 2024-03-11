@@ -118,36 +118,44 @@
       <div class="col-md-6">
         <mat-card-content>
           <mat-card-title> Order Summary </mat-card-title>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of checkOutItems.orderDetails">
-                <td>
-                  {{ item.book.title }}
-                </td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.book.price | currency : "INR" }}</td>
-                <td>
-                  {{ item.book.price * item.quantity | currency : "INR" }}
-                </td>
-              </tr>
-            </tbody>
-            <tfoot class="table">
-              <tr>
-                <td></td>
-                <td></td>
-                <th>Grand Total</th>
-                <th>{{ totalPrice | currency : "INR" }}</th>
-              </tr>
-            </tfoot>
-          </table>
+          <div
+            class="d-flex justify-content-center"
+            *ngIf="showLoader; else cartItems"
+          >
+            <mat-spinner></mat-spinner>
+          </div>
+          <ng-template #cartItems>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of checkOutItems.orderDetails">
+                  <td>
+                    {{ item.book.title }}
+                  </td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.book.price | currency : "INR" }}</td>
+                  <td>
+                    {{ item.book.price * item.quantity | currency : "INR" }}
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot class="table">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <th>Grand Total</th>
+                  <th>{{ totalPrice | currency : "INR" }}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </ng-template>
         </mat-card-content>
       </div>
     </div>

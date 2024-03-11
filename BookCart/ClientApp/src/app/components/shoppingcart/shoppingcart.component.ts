@@ -44,19 +44,19 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
     this.cartService
       .getCartItems(this.userId)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (result: ShoppingCart[]) => {
+      .subscribe({
+        next: (result: ShoppingCart[]) => {
           this.cartItems = result;
           this.getTotalPrice();
           this.isLoading = false;
         },
-        (error) => {
+        error: (error) => {
           console.log(
             "Error ocurred while fetching shopping cart item : ",
             error
           );
-        }
-      );
+        },
+      });
   }
 
   getTotalPrice() {
@@ -70,64 +70,64 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
     this.cartService
       .removeCartItems(this.userId, bookId)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (result) => {
+      .subscribe({
+        next: (result) => {
           this.subscriptionService.cartItemcount$.next(result);
           this.getShoppingCartItems();
           this.snackBarService.showSnackBar("Product removed from cart");
         },
-        (error) => {
+        error: (error) => {
           console.log("Error ocurred while deleting cart item : ", error);
-        }
-      );
+        },
+      });
   }
 
   addToCart(bookId: number) {
     this.cartService
       .addBookToCart(this.userId, bookId)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (result) => {
+      .subscribe({
+        next: (result) => {
           this.subscriptionService.cartItemcount$.next(result);
           this.getShoppingCartItems();
           this.snackBarService.showSnackBar("One item added to cart");
         },
-        (error) => {
+        error: (error) => {
           console.log("Error ocurred while addToCart data : ", error);
-        }
-      );
+        },
+      });
   }
 
   deleteOneCartItem(bookId: number) {
     this.cartService
       .deleteOneCartItem(this.userId, bookId)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (result) => {
+      .subscribe({
+        next: (result) => {
           this.subscriptionService.cartItemcount$.next(result);
           this.snackBarService.showSnackBar("One item removed from cart");
           this.getShoppingCartItems();
         },
-        (error) => {
+        error: (error) => {
           console.log("Error ocurred while fetching book data : ", error);
-        }
-      );
+        },
+      });
   }
 
   clearCart() {
     this.cartService
       .clearCart(this.userId)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (result) => {
+      .subscribe({
+        next: (result) => {
           this.subscriptionService.cartItemcount$.next(result);
           this.snackBarService.showSnackBar("Cart cleared!!!");
           this.getShoppingCartItems();
         },
-        (error) => {
+        error: (error) => {
           console.log("Error ocurred while deleting cart item : ", error);
-        }
-      );
+        },
+      });
   }
 
   ngOnDestroy() {

@@ -58,15 +58,15 @@ export class UserRegistrationComponent implements OnDestroy {
       this.userService
         .registerUser(this.registrationForm.value)
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.router.navigate(["/login"]);
           },
-          (error) => {
+          error: (error) => {
             this.snackBarService.showSnackBar("Error occurred!! Try again");
             console.log("Error ocurred while adding book data : ", error);
-          }
-        );
+          },
+        });
     }
   }
 

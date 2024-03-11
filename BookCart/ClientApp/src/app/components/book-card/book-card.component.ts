@@ -12,7 +12,7 @@ export class BookCardComponent {
   book: Book;
 
   isActive = false;
-  userData$ = this.subscriptionService.userData;
+  userData$ = this.subscriptionService.userData$;
 
   constructor(private subscriptionService: SubscriptionService) {}
 }

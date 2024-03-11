@@ -19,6 +19,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   userId;
   totalPrice: number;
   checkOutItems = new Order();
+  showLoader = false;
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -55,26 +56,34 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   getCheckOutItems() {
+    this.showLoader = true;
     this.cartService
       .getCartItems(this.userId)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (result: ShoppingCart[]) => {
-          this.checkOutItems.orderDetails = result;
-          this.getTotalPrice();
+      .subscribe({
+        next: (result: ShoppingCart[]) => {
+          const checkedOutItemCount = result.length;
+          if (checkedOutItemCount > 0) {
+            this.checkOutItems.orderDetails = result;
+            this.getTotalPrice();
+          } else {
+            this.checkOutForm.disable();
+          }
+          this.showLoader = false;
         },
-        (error) => {
+        error: (error) => {
           console.log(
             "Error ocurred while fetching shopping cart item : ",
             error
           );
-        }
-      );
+          this.showLoader = false;
+        },
+      });
   }
 
   getTotalPrice() {
     this.totalPrice = 0;
-    this.checkOutItems.orderDetails.forEach((item) => {
+    this.checkOutItems.orderDetails.map((item) => {
       this.totalPrice += item.book.price * item.quantity;
     });
     this.checkOutItems.cartTotal = this.totalPrice;
@@ -85,16 +94,16 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.checkOutService
         .placeOrder(this.userId, this.checkOutItems)
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          (result) => {
+        .subscribe({
+          next: (result) => {
             this.subscriptionService.cartItemcount$.next(result);
             this.router.navigate(["/myorders"]);
             this.snackBarService.showSnackBar("Order placed successfully!!!");
           },
-          (error) => {
+          error: (error) => {
             console.log("Error ocurred while placing order : ", error);
-          }
-        );
+          },
+        });
     }
   }
 

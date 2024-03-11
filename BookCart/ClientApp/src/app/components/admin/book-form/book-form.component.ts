@@ -5,6 +5,7 @@ import { BookService } from "src/app/services/book.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { SnackbarService } from "src/app/services/snackbar.service";
 
 @Component({
   selector: "app-book-form",
@@ -19,14 +20,15 @@ export class BookFormComponent implements OnInit, OnDestroy {
   coverImagePath;
   bookId;
   files;
-  categoryList: [];
+  categoryList = this.bookService.categories$;
   private unsubscribe$ = new Subject<void>();
 
   constructor(
     private bookService: BookService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackbarService
   ) {
     this.bookForm = this.fb.group({
       bookId: 0,
@@ -42,36 +44,12 @@ export class BookFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.bookService.categories$.pipe(takeUntil(this.unsubscribe$)).subscribe(
-      (categoryData: []) => {
-        this.categoryList = categoryData;
-      },
-      (error) => {
-        console.log("Error ocurred while fetching category List : ", error);
-      }
-    );
-
-    this.route.params.subscribe((params) => {
+    this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe((params) => {
       if (params.id) {
         this.bookId = +params.id;
         this.fetchBookData();
       }
     });
-  }
-
-  fetchBookData() {
-    this.formTitle = "Edit";
-    this.bookService
-      .getBookById(this.bookId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (result: Book) => {
-          this.setBookFormData(result);
-        },
-        (error) => {
-          console.log("Error ocurred while fetching book data : ", error);
-        }
-      );
   }
 
   onFormSubmit() {
@@ -92,40 +70,70 @@ export class BookFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  editBookDetails() {
-    this.bookService
-      .updateBookDetails(this.formData)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        () => {
-          this.router.navigate(["/admin/books"]);
-        },
-        (error) => {
-          console.log("Error ocurred while updating book data : ", error);
-        }
-      );
+  uploadImage(event) {
+    this.files = event.target.files;
+    const reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = (myevent: ProgressEvent) => {
+      this.coverImagePath = (myevent.target as FileReader).result;
+    };
   }
 
-  saveBookDetails() {
-    this.bookService
-      .addBook(this.formData)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        () => {
-          this.router.navigate(["/admin/books"]);
-        },
-        (error) => {
-          this.bookForm.reset();
-          console.log("Error ocurred while adding book data : ", error);
-        }
-      );
-  }
-
-  cancel() {
+  navigateToAdminPanel() {
     this.router.navigate(["/admin/books"]);
   }
 
-  setBookFormData(bookFormData) {
+  private fetchBookData() {
+    this.formTitle = "Edit";
+    this.bookService
+      .getBookById(this.bookId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (result: Book) => {
+          this.setBookFormData(result);
+        },
+        error: (error) => {
+          console.log("Error ocurred while fetching book data : ", error);
+        },
+      });
+  }
+
+  private editBookDetails() {
+    this.bookService
+      .updateBookDetails(this.formData)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.snackBarService.showSnackBar(
+            "The book data is updated successfully."
+          );
+          this.navigateToAdminPanel();
+        },
+        error: (error) => {
+          console.log("Error ocurred while updating book data : ", error);
+        },
+      });
+  }
+
+  private saveBookDetails() {
+    this.bookService
+      .addBook(this.formData)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.snackBarService.showSnackBar(
+            "The book data is added successfully."
+          );
+          this.navigateToAdminPanel();
+        },
+        error: (error) => {
+          this.bookForm.reset();
+          console.log("Error ocurred while adding book data : ", error);
+        },
+      });
+  }
+
+  private setBookFormData(bookFormData) {
     this.bookForm.setValue({
       bookId: bookFormData.bookId,
       title: bookFormData.title,
@@ -134,15 +142,6 @@ export class BookFormComponent implements OnInit, OnDestroy {
       price: bookFormData.price,
     });
     this.coverImagePath = "/Upload/" + bookFormData.coverFileName;
-  }
-
-  uploadImage(event) {
-    this.files = event.target.files;
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    reader.onload = (myevent: ProgressEvent) => {
-      this.coverImagePath = (myevent.target as FileReader).result;
-    };
   }
 
   ngOnDestroy() {

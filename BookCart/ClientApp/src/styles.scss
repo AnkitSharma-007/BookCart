@@ -16,31 +16,6 @@ body {
   padding-top: 60px;
 }
 
-.docs-example-viewer-body {
-  padding: 15px;
-  align-content: center;
-  align-items: center;
-  display: flex;
-}
-
-.docs-example-viewer-wrapper {
-  border: 0;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);
-  margin: 1em auto;
-  border-radius: 4px;
-}
-
-.full-width {
-  width: 100%;
-}
-
-button:focus,
-button:active:focus,
-button.active:focus {
-  outline: none !important;
-  outline-style: none !important;
-}
-
 // start: style the scrollbar
 ::-webkit-scrollbar {
   width: 8px;
@@ -56,14 +31,6 @@ button.active:focus {
   border-radius: 8px;
 }
 // end: style the scrollbar
-
-h1,
-h2,
-h3,
-h4,
-h5 {
-  margin-bottom: 0;
-}
 
 .custom-card-header {
   background: #ff4081;

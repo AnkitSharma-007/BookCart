@@ -5,7 +5,7 @@ import { AuthenticationService } from "src/app/services/authentication.service";
 import { SubscriptionService } from "src/app/services/subscription.service";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { User } from "src/app/models/user";
-import { takeUntil } from "rxjs/operators";
+import { switchMap, takeUntil } from "rxjs/operators";
 import { WishlistService } from "src/app/services/wishlist.service";
 import { Subject } from "rxjs";
 
@@ -19,6 +19,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   userId;
   private unsubscribe$ = new Subject<void>();
 
+  loginForm = new FormGroup({
+    username: new FormControl("", Validators.required),
+    password: new FormControl("", Validators.required),
+  });
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -28,17 +33,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     private wishlistService: WishlistService
   ) {}
 
-  loginForm = new FormGroup({
-    username: new FormControl("", Validators.required),
-    password: new FormControl("", Validators.required),
-  });
-
   protected get loginFormControl() {
     return this.loginForm.controls;
   }
 
   ngOnInit() {
-    this.subscriptionService.userData
+    this.subscriptionService.userData$
       .asObservable()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data: User) => {
@@ -48,45 +48,28 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   login() {
     if (this.loginForm.valid) {
-      const returnUrl =
-        this.route.snapshot.queryParamMap.get("returnUrl") || "/";
+      // This logic needs refactoring as the UI is not smooth after login.
       this.authenticationService
         .login(this.loginForm.value)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          () => {
-            this.setShoppingCart();
-            this.setWishlist();
-            this.router.navigate([returnUrl]);
-          },
-          () => {
-            this.loginForm.reset();
-            this.loginForm.setErrors({
-              invalidLogin: true,
-            });
-          }
-        );
+        .pipe(
+          switchMap(() => {
+            return this.cartService.setCart(
+              this.authenticationService.oldUserId,
+              this.userId
+            );
+          }),
+          switchMap((cartItemcount) => {
+            this.subscriptionService.cartItemcount$.next(cartItemcount);
+            return this.wishlistService.getWishlistItems(this.userId);
+          }),
+          switchMap(() => this.route.queryParams),
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe((params) => {
+          const returnUrl = params["returnUrl"] || "/";
+          this.router.navigate([returnUrl]);
+        });
     }
-  }
-
-  setShoppingCart() {
-    this.cartService
-      .setCart(this.authenticationService.oldUserId, this.userId)
-      .subscribe(
-        (result) => {
-          this.subscriptionService.cartItemcount$.next(result);
-        },
-        (error) => {
-          console.log("Error ocurred while setting shopping cart : ", error);
-        }
-      );
-  }
-
-  setWishlist() {
-    this.wishlistService
-      .getWishlistItems(this.userId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe();
   }
 
   ngOnDestroy() {

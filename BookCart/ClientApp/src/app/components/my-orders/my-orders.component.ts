@@ -52,20 +52,20 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
     this.orderService
       .myOrderDetails(this.userId)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (result: Order[]) => {
+      .subscribe({
+        next: (result: Order[]) => {
           if (result != null) {
             this.dataSource.data = Object.values(result);
             this.isLoading = false;
           }
         },
-        (error) => {
+        error: (error) => {
           console.log(
             "Error ocurred while fetching my order details : ",
             error
           );
-        }
-      );
+        },
+      });
   }
 
   applyFilter(event: Event) {

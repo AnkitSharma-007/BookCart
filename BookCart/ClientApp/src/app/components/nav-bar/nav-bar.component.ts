@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { UserService } from "src/app/services/user.service";
 import { SubscriptionService } from "src/app/services/subscription.service";
-import { Observable, ReplaySubject, takeUntil } from "rxjs";
+import { ReplaySubject, takeUntil } from "rxjs";
 import { WishlistService } from "src/app/services/wishlist.service";
 
 @Component({
@@ -15,11 +15,10 @@ import { WishlistService } from "src/app/services/wishlist.service";
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   userId;
-  userDataSubscription: any;
   userData = new User();
   userType = UserType;
-  wishListCount$: Observable<number>;
-  cartItemCount$: Observable<number>;
+  cartItemCount$ = this.subscriptionService.cartItemcount$;
+  wishListCount$ = this.subscriptionService.wishlistItemcount$;
 
   private destroyed$ = new ReplaySubject<void>(1);
 
@@ -44,14 +43,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscriptionService.userData
+    this.subscriptionService.userData$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         this.userData = data;
       });
-
-    this.cartItemCount$ = this.subscriptionService.cartItemcount$;
-    this.wishListCount$ = this.subscriptionService.wishlistItemcount$;
   }
 
   ngOnDestroy() {

@@ -38,7 +38,7 @@ export class ManageBooksComponent implements OnDestroy {
 
   constructor(
     private bookService: BookService,
-    public dialog: MatDialog,
+    private dialog: MatDialog,
     private snackBarService: SnackbarService
   ) {
     this.getAllBookData();
@@ -48,14 +48,14 @@ export class ManageBooksComponent implements OnDestroy {
     this.bookService
       .getAllBooks()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (data: Book[]) => {
+      .subscribe({
+        next: (data) => {
           this.dataSource.data = Object.values(data);
         },
-        (error) => {
+        error: (error) => {
           console.log("Error ocurred while fetching book details : ", error);
-        }
-      );
+        },
+      });
   }
 
   applyFilter(event: Event) {

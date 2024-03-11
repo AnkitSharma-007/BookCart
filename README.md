@@ -1,6 +1,6 @@
 # BookCart
 
-An e-commerce application for an online book store created with ASP.NET Core 6.0 and Angular, using SQL Server as database.
+An e-commerce application for an online book store created with ASP.NET Core and Angular, using SQL Server as database.
 
 # Concepts Covered
 
@@ -22,13 +22,12 @@ An e-commerce application for an online book store created with ASP.NET Core 6.0
  - Reactive forms
  - Form validation (inbuilt and custom)
  - Pipes
- - Dynamic themes
 
 # Prerequisites
 - Visual Studio 2022 
 - SQL Server 
-- .NET Core 6.0 SDK or above
-- Node.Js V12.0 or above
+- .NET Core 8.0 SDK or above
+- Node.Js V16.0 or above
 
 # Steps to run the app
 1. Clone the Repo

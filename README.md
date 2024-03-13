@@ -2,6 +2,14 @@
 
 An e-commerce application for an online book store created with ASP.NET Core and Angular, using SQL Server as database.
 
+# Google Gemini integration
+
+
+
+https://github.com/AnkitSharma-007/BookCart/assets/33789321/f2ee777e-24b8-48ba-93c7-638cdbab25a6
+
+
+
 # Concepts Covered
 
 ### ASP .NET Core

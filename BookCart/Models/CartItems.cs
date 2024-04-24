@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BookCart.Models
+﻿namespace BookCart.Models
 {
     public partial class CartItems
     {

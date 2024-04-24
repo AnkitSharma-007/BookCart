@@ -1,15 +1,14 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class UserService {
-
   baseURL: string;
 
   constructor(private http: HttpClient) {
-    this.baseURL = '/api/user/';
+    this.baseURL = "/api/user/";
   }
 
   registerUser(userdetails) {
@@ -21,6 +20,6 @@ export class UserService {
   }
 
   validateUserName(userName: string) {
-    return this.http.get(this.baseURL + 'validateUserName/' + userName);
+    return this.http.get(this.baseURL + "validateUserName/" + userName);
   }
 }

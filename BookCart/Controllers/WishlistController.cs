@@ -29,7 +29,7 @@ namespace BookCart.Controllers
         [HttpGet("{userId}")]
         public async Task<List<Book>> Get(int userId)
         {
-            return await Task.FromResult(GetUserWishlist(userId)).ConfigureAwait(true);
+            return await GetUserWishlist(userId);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace BookCart.Controllers
         public async Task<List<Book>> Post(int userId, int bookId)
         {
             _wishlistService.ToggleWishlistItem(userId, bookId);
-            return await Task.FromResult(GetUserWishlist(userId)).ConfigureAwait(true);
+            return await GetUserWishlist(userId);
         }
 
         /// <summary>
@@ -59,9 +59,9 @@ namespace BookCart.Controllers
             return _wishlistService.ClearWishlist(userId);
         }
 
-        List<Book> GetUserWishlist(int userId)
+        async Task<List<Book>> GetUserWishlist(int userId)
         {
-            bool user = _userService.isUserExists(userId);
+            bool user = await _userService.isUserExists(userId);
             if (user)
             {
                 string Wishlistid = _wishlistService.GetWishlistId(userId);

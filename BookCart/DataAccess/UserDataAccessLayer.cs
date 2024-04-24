@@ -1,7 +1,10 @@
-﻿using BookCart.Interfaces;
+﻿using BookCart.Dto;
+using BookCart.Interfaces;
 using BookCart.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BookCart.DataAccess
 {
@@ -14,9 +17,9 @@ namespace BookCart.DataAccess
             _dbContext = dbContext;
         }
 
-        public UserMaster AuthenticateUser(UserMaster loginCredentials)
+        public AuthenticatedUser AuthenticateUser(UserLogin loginCredentials)
         {
-            UserMaster user = new UserMaster();
+            AuthenticatedUser authenticatedUser = new();
 
             var userDetails = _dbContext.UserMaster.FirstOrDefault(
                 u => u.Username == loginCredentials.Username && u.Password == loginCredentials.Password
@@ -25,28 +28,31 @@ namespace BookCart.DataAccess
             if (userDetails != null)
             {
 
-                user = new UserMaster
+                authenticatedUser = new AuthenticatedUser
                 {
                     Username = userDetails.Username,
                     UserId = userDetails.UserId,
                     UserTypeId = userDetails.UserTypeId
                 };
-                return user;
             }
-            else
-            {
-                return userDetails;
-            }
+            return authenticatedUser;
         }
 
-        public int RegisterUser(UserMaster userData)
+        public async Task<bool> RegisterUser(UserMaster userData)
         {
+            bool isUserNameAvailable = CheckUserNameAvailabity(userData.Username);
             try
             {
-                userData.UserTypeId = 2;
-                _dbContext.UserMaster.Add(userData);
-                _dbContext.SaveChanges();
-                return 1;
+                if (isUserNameAvailable)
+                {
+                    await _dbContext.UserMaster.AddAsync(userData);
+                    await _dbContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch
             {
@@ -54,32 +60,18 @@ namespace BookCart.DataAccess
             }
         }
 
-        public bool CheckUserAvailabity(string userName)
+        public bool CheckUserNameAvailabity(string userName)
         {
-            string user = _dbContext.UserMaster.FirstOrDefault(x => x.Username == userName)?.ToString();
+            UserMaster user = _dbContext.UserMaster.FirstOrDefault(x => x.Username == userName);
 
-            if (user != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return user == null;
         }
 
-        public bool isUserExists(int userId)
+        public async Task<bool> isUserExists(int userId)
         {
-            string user = _dbContext.UserMaster.FirstOrDefault(x => x.UserId == userId)?.ToString();
+            UserMaster user = await _dbContext.UserMaster.FirstOrDefaultAsync(x => x.UserId == userId);
 
-            if (user != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return user != null;
         }
     }
 }

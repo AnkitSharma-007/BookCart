@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BookCart.Dto;
 using BookCart.Interfaces;
 using BookCart.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -29,25 +30,25 @@ namespace BookCart.Controllers
         /// <param name="login"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Login([FromBody]UserMaster login)
+        public IActionResult Login([FromBody] UserLogin login)
         {
             IActionResult response = Unauthorized();
-            UserMaster user = _userService.AuthenticateUser(login);
+            AuthenticatedUser authenticatedUser = _userService.AuthenticateUser(login);
 
-            if (user != null)
+            if (!string.IsNullOrEmpty(authenticatedUser.Username))
             {
-                var tokenString = GenerateJSONWebToken(user);
+                var tokenString = GenerateJSONWebToken(authenticatedUser);
                 response = Ok(new
                 {
                     token = tokenString,
-                    userDetails = user,
+                    userDetails = authenticatedUser,
                 });
             }
 
             return response;
         }
 
-        string GenerateJSONWebToken(UserMaster userInfo)
+        string GenerateJSONWebToken(AuthenticatedUser userInfo)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

@@ -37,17 +37,34 @@ namespace BookCart.Controllers
         [Route("validateUserName/{userName}")]
         public bool ValidateUserName(string userName)
         {
-            return _userService.CheckUserAvailabity(userName);
+            return _userService.CheckUserNameAvailabity(userName);
         }
 
         /// <summary>
         /// Register a new user
         /// </summary>
-        /// <param name="userData"></param>
+        /// <param name="registrationData"></param>
         [HttpPost]
-        public void Post([FromBody] UserMaster userData)
+        public ActionResult Post([FromBody] UserRegistration registrationData)
         {
-            _userService.RegisterUser(userData);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            UserMaster user = new()
+            {
+                FirstName = registrationData.FirstName,
+                LastName = registrationData.LastName,
+                Username = registrationData.Username,
+                Password = registrationData.Password,
+                Gender = registrationData.Gender,
+                UserTypeId = 2
+            };
+
+            _userService.RegisterUser(user);
+
+            return Ok();
         }
     }
 }

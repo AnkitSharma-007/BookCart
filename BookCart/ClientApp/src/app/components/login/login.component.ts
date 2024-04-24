@@ -65,9 +65,18 @@ export class LoginComponent implements OnInit, OnDestroy {
           switchMap(() => this.route.queryParams),
           takeUntil(this.unsubscribe$)
         )
-        .subscribe((params) => {
-          const returnUrl = params["returnUrl"] || "/";
-          this.router.navigate([returnUrl]);
+        .subscribe({
+          next: (params) => {
+            const returnUrl = params["returnUrl"] || "/";
+            this.router.navigate([returnUrl]);
+          },
+          error: (error) => {
+            console.error("Error occurred while login : ", error);
+            this.loginForm.reset();
+            this.loginForm.setErrors({
+              invalidLogin: true,
+            });
+          },
         });
     }
   }

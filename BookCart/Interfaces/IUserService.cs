@@ -1,13 +1,15 @@
-﻿using BookCart.Models;
+﻿using BookCart.Dto;
+using BookCart.Models;
+using System.Threading.Tasks;
 
 namespace BookCart.Interfaces
 {
     public interface IUserService
     {
-        UserMaster AuthenticateUser(UserMaster loginCredentials);
-        int RegisterUser(UserMaster userData);
-        bool CheckUserAvailabity(string userName);
+        AuthenticatedUser AuthenticateUser(UserLogin loginCredentials);
+        Task<bool> RegisterUser(UserMaster userData);
+        bool CheckUserNameAvailabity(string userName);
 
-        bool isUserExists(int userId);
+        Task<bool> isUserExists(int userId);
     }
 }

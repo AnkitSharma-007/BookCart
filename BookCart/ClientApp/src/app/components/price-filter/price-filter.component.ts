@@ -1,13 +1,20 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from "@angular/core";
 import { BookService } from "src/app/services/book.service";
 import { Book } from "src/app/models/book";
+import { ReplaySubject, takeUntil } from "rxjs";
 
 @Component({
   selector: "app-price-filter",
   templateUrl: "./price-filter.component.html",
   styleUrls: ["./price-filter.component.scss"],
 })
-export class PriceFilterComponent implements OnInit {
+export class PriceFilterComponent implements OnInit, OnDestroy {
   @Output()
   priceValue = new EventEmitter<number>(true);
 
@@ -16,6 +23,7 @@ export class PriceFilterComponent implements OnInit {
   value: number;
   step = 100;
   thumbLabel = true;
+  private destroyed$ = new ReplaySubject<void>(1);
 
   constructor(private bookService: BookService) {}
 
@@ -24,17 +32,19 @@ export class PriceFilterComponent implements OnInit {
   }
 
   setPriceFilterProperties() {
-    this.bookService.books$.pipe().subscribe((data: Book[]) => {
-      this.setMinValue(data);
-      this.setMaxValue(data);
-    });
+    this.bookService.books$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data: Book[]) => {
+        this.setMinValue(data);
+        this.setMaxValue(data);
+      });
   }
 
   formatLabel(value: number) {
     if (value >= 1000) {
       return Math.round(value / 1000) + "k";
     }
-    return value;
+    return value as unknown as string;
   }
 
   onChange() {
@@ -51,5 +61,10 @@ export class PriceFilterComponent implements OnInit {
     this.value = this.max = book.reduce((prev, curr) => {
       return prev.price > curr.price ? prev : curr;
     }).price;
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

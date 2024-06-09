@@ -2,7 +2,11 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 
 import { AppComponent } from "./app.component";
 import { AddtocartComponent } from "./components/addtocart/addtocart.component";
@@ -31,44 +35,50 @@ import { WishlistComponent } from "./components/wishlist/wishlist.component";
 import { BookSummaryComponent } from "./components/book-summary/book-summary.component";
 import { CommonModule } from "@angular/common";
 
-@NgModule({ declarations: [
-        AppComponent,
-        AddtocartComponent,
-        BookCardComponent,
-        BookDetailsComponent,
-        BookFilterComponent,
-        CheckoutComponent,
-        LoginComponent,
-        MyOrdersComponent,
-        UserRegistrationComponent,
-        HomeComponent,
-        NavBarComponent,
-        ShoppingcartComponent,
-        SimilarbooksComponent,
-        PageNotFoundComponent,
-        PriceFilterComponent,
-        SearchComponent,
-        AddtowishlistComponent,
-        WishlistComponent,
-        BookSummaryComponent,
-    ],
-    bootstrap: [AppComponent], imports: [CommonModule,
-        NgMaterialModule,
-        BrowserModule,
-        ReactiveFormsModule,
-        FormsModule,
-        BrowserAnimationsModule,
-        AppRoutingModule], providers: [
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: HttpInterceptorService,
-            multi: true,
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: ErrorInterceptorService,
-            multi: true,
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-    ] })
+@NgModule({
+  declarations: [
+    AppComponent,
+    AddtocartComponent,
+    BookCardComponent,
+    BookDetailsComponent,
+    BookFilterComponent,
+    CheckoutComponent,
+    LoginComponent,
+    MyOrdersComponent,
+    UserRegistrationComponent,
+    HomeComponent,
+    NavBarComponent,
+    ShoppingcartComponent,
+    SimilarbooksComponent,
+    PageNotFoundComponent,
+    PriceFilterComponent,
+    SearchComponent,
+    AddtowishlistComponent,
+    WishlistComponent,
+    BookSummaryComponent,
+  ],
+  bootstrap: [AppComponent],
+  imports: [
+    CommonModule,
+    NgMaterialModule,
+    BrowserModule,
+    ReactiveFormsModule,
+    FormsModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptorService,
+      multi: true,
+    },
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
+})
 export class AppModule {}

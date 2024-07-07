@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
-    <SpaProxyServerUrl>https://localhost:44424</SpaProxyServerUrl>
+    <SpaProxyServerUrl>https://localhost:53424</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>BookCart</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -51,7 +51,7 @@
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
       <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
-        <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+        <RelativePath>wwwroot\%(FileName)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </ResolvedFileToPublish>

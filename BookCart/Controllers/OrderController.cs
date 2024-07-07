@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using BookCart.Dto;
+﻿using BookCart.Dto;
 using BookCart.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +24,7 @@ namespace BookCart.Controllers
         [HttpGet("{userId}")]
         public async Task<List<OrdersDto>> Get(int userId)
         {
-            return await Task.FromResult(_orderService.GetOrderList(userId)).ConfigureAwait(true) ;
+            return await Task.FromResult(_orderService.GetOrderList(userId)).ConfigureAwait(true);
         }
     }
 }

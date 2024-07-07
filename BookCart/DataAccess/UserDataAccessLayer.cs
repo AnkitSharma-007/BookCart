@@ -2,20 +2,12 @@
 using BookCart.Interfaces;
 using BookCart.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BookCart.DataAccess
 {
-    public class UserDataAccessLayer : IUserService
+    public class UserDataAccessLayer(BookDBContext dbContext) : IUserService
     {
-        readonly BookDBContext _dbContext;
-
-        public UserDataAccessLayer(BookDBContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        readonly BookDBContext _dbContext = dbContext;
 
         public AuthenticatedUser AuthenticateUser(UserLogin loginCredentials)
         {

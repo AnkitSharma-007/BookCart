@@ -1,36 +1,33 @@
-import { Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { Router } from "@angular/router";
-import { HttpRequest, HttpHandler, HttpEvent } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
+import {
+  HttpRequest,
+  HttpHandlerFn,
+  HttpErrorResponse,
+  HttpInterceptorFn,
+} from "@angular/common/http";
 import { catchError } from "rxjs/operators";
 import { AuthenticationService } from "../services/authentication.service";
+import { throwError } from "rxjs";
 
-@Injectable({
-  providedIn: "root",
-})
-export class ErrorInterceptorService {
-  constructor(
-    private authService: AuthenticationService,
-    private router: Router
-  ) {}
-
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
-      catchError((err) => {
-        console.log(err);
-        if (err.status === 401) {
-          this.authService.logout();
-          if (!request.url.includes("login")) {
-            location.reload();
-          }
-        } else if (err.status === 404) {
-          this.router.navigate(["not-found"]);
+export const ErrorInterceptorService: HttpInterceptorFn = (
+  request: HttpRequest<unknown>,
+  next: HttpHandlerFn
+) => {
+  const authService = inject(AuthenticationService);
+  const router = inject(Router);
+  return next(request).pipe(
+    catchError((error: HttpErrorResponse) => {
+      console.log(error);
+      if (error.status === 401) {
+        authService.logout();
+        if (!request.url.includes("login")) {
+          location.reload();
         }
-        return throwError(() => err.message);
-      })
-    );
-  }
-}
+      } else if (error.status === 404) {
+        router.navigate(["not-found"]);
+      }
+      return throwError(() => error.message);
+    })
+  );
+};

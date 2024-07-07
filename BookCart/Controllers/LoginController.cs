@@ -1,14 +1,11 @@
-﻿using System;
+﻿using BookCart.Dto;
+using BookCart.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BookCart.Dto;
-using BookCart.Interfaces;
-using BookCart.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace BookCart.Controllers
 {

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using BookCart.Interfaces;
+﻿using BookCart.Interfaces;
 using BookCart.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace BookCart.Controllers
 {
@@ -41,7 +35,7 @@ namespace BookCart.Controllers
         [HttpGet]
         public async Task<List<Book>> Get()
         {
-            return await Task.FromResult(_bookService.GetAllBooks()).ConfigureAwait(true) ;
+            return await Task.FromResult(_bookService.GetAllBooks()).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -53,7 +47,7 @@ namespace BookCart.Controllers
         public IActionResult Get(int id)
         {
             Book book = _bookService.GetBookData(id);
-            if(book!=null)
+            if (book != null)
             {
                 return Ok(book);
             }
@@ -68,7 +62,7 @@ namespace BookCart.Controllers
         [Route("GetCategoriesList")]
         public async Task<IEnumerable<Categories>> CategoryDetails()
         {
-            return await Task.FromResult(_bookService.GetCategories()).ConfigureAwait(true) ;
+            return await Task.FromResult(_bookService.GetCategories()).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -80,7 +74,7 @@ namespace BookCart.Controllers
         [Route("GetSimilarBooks/{bookId}")]
         public async Task<List<Book>> SimilarBooks(int bookId)
         {
-            return await Task.FromResult(_bookService.GetSimilarBooks(bookId)).ConfigureAwait(true) ;
+            return await Task.FromResult(_bookService.GetSimilarBooks(bookId)).ConfigureAwait(true);
         }
 
         /// <summary>

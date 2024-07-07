@@ -1,9 +1,6 @@
 ﻿using BookCart.Dto;
 using BookCart.Interfaces;
 using BookCart.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace BookCart.DataAccess

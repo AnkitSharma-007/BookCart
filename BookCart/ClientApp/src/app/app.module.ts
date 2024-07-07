@@ -2,11 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
-import {
-  HTTP_INTERCEPTORS,
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
+import { provideHttpClient, withInterceptors } from "@angular/common/http";
 
 import { AppComponent } from "./app.component";
 import { AddtocartComponent } from "./components/addtocart/addtocart.component";
@@ -68,17 +64,9 @@ import { CommonModule } from "@angular/common";
     AppRoutingModule,
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpInterceptorService,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorInterceptorService,
-      multi: true,
-    },
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(
+      withInterceptors([HttpInterceptorService, ErrorInterceptorService])
+    ),
   ],
 })
 export class AppModule {}

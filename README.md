@@ -35,7 +35,7 @@ https://github.com/AnkitSharma-007/BookCart/assets/33789321/f2ee777e-24b8-48ba-9
 - Visual Studio 2022 
 - SQL Server 
 - .NET Core 8.0 SDK or above
-- Node.Js V16.0 or above
+- Node.Js V18.0 or above
 
 # Steps to run the app
 1. Clone the Repo
@@ -46,7 +46,7 @@ https://github.com/AnkitSharma-007/BookCart/assets/33789321/f2ee777e-24b8-48ba-9
 # Live Demo
 [https://bookcart.azurewebsites.net/](https://bookcart.azurewebsites.net/)
 
-# Licenese
+# License
 [MIT](https://github.com/AnkitSharma-007/BookCart/blob/master/LICENSE)
 
 # See Also

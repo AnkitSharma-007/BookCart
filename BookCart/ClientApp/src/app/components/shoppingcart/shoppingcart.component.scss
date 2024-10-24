@@ -7,6 +7,10 @@ td:last-child {
   width: 20%;
 }
 
+tr:last-child td {
+  border-bottom: 1px solid #0000001f;
+}
+
 img {
   width: 50%;
 }

@@ -2,25 +2,25 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Book } from "src/app/models/book";
 import { ActivatedRoute } from "@angular/router";
 import { BookService } from "src/app/services/book.service";
-import { switchMap } from "rxjs/operators";
+import { switchMap, takeUntil } from "rxjs/operators";
 import { SubscriptionService } from "src/app/services/subscription.service";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { BookCardComponent } from "../book-card/book-card.component";
-
 import { PriceFilterComponent } from "../price-filter/price-filter.component";
 import { BookFilterComponent } from "../book-filter/book-filter.component";
+import { ReplaySubject } from "rxjs";
 
 @Component({
-    selector: "app-home",
-    templateUrl: "./home.component.html",
-    styleUrls: ["./home.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-home",
+  templateUrl: "./home.component.html",
+  styleUrls: ["./home.component.scss"],
+  standalone: true,
+  imports: [
     BookFilterComponent,
     PriceFilterComponent,
     BookCardComponent,
-    MatProgressSpinner
-],
+    MatProgressSpinner,
+  ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public books: Book[];
@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   priceRange = Number.MAX_SAFE_INTEGER;
   isLoading: boolean;
   searchItem: string;
+  private destroyed$ = new ReplaySubject<void>(1);
 
   constructor(
     private route: ActivatedRoute,
@@ -47,7 +48,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         switchMap((data: Book[]) => {
           this.filteredProducts = data;
           return this.route.queryParams;
-        })
+        }),
+        takeUntil(this.destroyed$)
       )
       .subscribe((params) => {
         this.category = params.category;

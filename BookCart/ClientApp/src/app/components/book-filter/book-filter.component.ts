@@ -2,11 +2,25 @@ import { Component, Input } from "@angular/core";
 import { BookService } from "src/app/services/book.service";
 import { catchError } from "rxjs/operators";
 import { EMPTY } from "rxjs";
+import { MatDivider } from "@angular/material/divider";
+import { NgFor, AsyncPipe, LowerCasePipe } from "@angular/common";
+import { RouterLink } from "@angular/router";
+import { MatNavList, MatListItem } from "@angular/material/list";
 
 @Component({
-  selector: "app-book-filter",
-  templateUrl: "./book-filter.component.html",
-  styleUrls: ["./book-filter.component.scss"],
+    selector: "app-book-filter",
+    templateUrl: "./book-filter.component.html",
+    styleUrls: ["./book-filter.component.scss"],
+    standalone: true,
+    imports: [
+        MatNavList,
+        MatListItem,
+        RouterLink,
+        NgFor,
+        MatDivider,
+        AsyncPipe,
+        LowerCasePipe,
+    ],
 })
 export class BookFilterComponent {
   @Input()

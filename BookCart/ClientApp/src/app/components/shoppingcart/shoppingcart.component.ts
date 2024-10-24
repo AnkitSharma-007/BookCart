@@ -5,11 +5,44 @@ import { SnackbarService } from "src/app/services/snackbar.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { SubscriptionService } from "src/app/services/subscription.service";
+import { MatIcon } from "@angular/material/icon";
+import { MatTooltip } from "@angular/material/tooltip";
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from "@angular/material/table";
+import { RouterLink } from "@angular/router";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/material/card";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { NgIf, CurrencyPipe } from "@angular/common";
 
 @Component({
-  selector: "app-shoppingcart",
-  templateUrl: "./shoppingcart.component.html",
-  styleUrls: ["./shoppingcart.component.scss"],
+    selector: "app-shoppingcart",
+    templateUrl: "./shoppingcart.component.html",
+    styleUrls: ["./shoppingcart.component.scss"],
+    standalone: true,
+    imports: [
+        NgIf,
+        MatProgressSpinner,
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        MatButton,
+        RouterLink,
+        MatTable,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCellDef,
+        MatCell,
+        MatTooltip,
+        MatIconButton,
+        MatIcon,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        CurrencyPipe,
+    ],
 })
 export class ShoppingcartComponent implements OnInit, OnDestroy {
   public cartItems: ShoppingCart[];

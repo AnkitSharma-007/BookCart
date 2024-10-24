@@ -23,7 +23,7 @@
     "@angular/platform-browser": "^18.0.2",
     "@angular/platform-browser-dynamic": "^18.0.2",
     "@angular/router": "^18.0.2",
-    "@google/generative-ai": "^0.2.1",
+    "@google/generative-ai": "^0.15.0",
     "bootstrap": "^5.2.3",
     "run-script-os": "^1.1.6",
     "rxjs": "~7.5.0",

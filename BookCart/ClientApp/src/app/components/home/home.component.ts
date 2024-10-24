@@ -4,11 +4,25 @@ import { ActivatedRoute } from "@angular/router";
 import { BookService } from "src/app/services/book.service";
 import { switchMap } from "rxjs/operators";
 import { SubscriptionService } from "src/app/services/subscription.service";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { BookCardComponent } from "../book-card/book-card.component";
+import { NgIf, NgFor } from "@angular/common";
+import { PriceFilterComponent } from "../price-filter/price-filter.component";
+import { BookFilterComponent } from "../book-filter/book-filter.component";
 
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
+    selector: "app-home",
+    templateUrl: "./home.component.html",
+    styleUrls: ["./home.component.scss"],
+    standalone: true,
+    imports: [
+        BookFilterComponent,
+        PriceFilterComponent,
+        NgIf,
+        NgFor,
+        BookCardComponent,
+        MatProgressSpinner,
+    ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public books: Book[];

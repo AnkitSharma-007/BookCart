@@ -8,11 +8,27 @@ import {
 import { BookService } from "src/app/services/book.service";
 import { Book } from "src/app/models/book";
 import { ReplaySubject, takeUntil } from "rxjs";
+import { CurrencyPipe } from "@angular/common";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { MatSlider, MatSliderThumb } from "@angular/material/slider";
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/material/card";
 
 @Component({
-  selector: "app-price-filter",
-  templateUrl: "./price-filter.component.html",
-  styleUrls: ["./price-filter.component.scss"],
+    selector: "app-price-filter",
+    templateUrl: "./price-filter.component.html",
+    styleUrls: ["./price-filter.component.scss"],
+    standalone: true,
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        MatSlider,
+        MatSliderThumb,
+        ReactiveFormsModule,
+        FormsModule,
+        CurrencyPipe,
+    ],
 })
 export class PriceFilterComponent implements OnInit, OnDestroy {
   @Output()

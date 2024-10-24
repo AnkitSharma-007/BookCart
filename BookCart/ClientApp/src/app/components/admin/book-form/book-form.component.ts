@@ -1,16 +1,46 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
 import { Book } from "src/app/models/book";
 import { BookService } from "src/app/services/book.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { SnackbarService } from "src/app/services/snackbar.service";
+import { MatIcon } from "@angular/material/icon";
+import { MatButton } from "@angular/material/button";
+import { MatOption } from "@angular/material/core";
+import { MatSelect } from "@angular/material/select";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MatInput } from "@angular/material/input";
+import { MatFormField, MatLabel, MatError, MatPrefix } from "@angular/material/form-field";
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, MatCardImage } from "@angular/material/card";
 
 @Component({
-  selector: "app-book-form",
-  templateUrl: "./book-form.component.html",
-  styleUrls: ["./book-form.component.scss"],
+    selector: "app-book-form",
+    templateUrl: "./book-form.component.html",
+    styleUrls: ["./book-form.component.scss"],
+    standalone: true,
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        NgIf,
+        MatError,
+        MatSelect,
+        NgFor,
+        MatOption,
+        MatPrefix,
+        MatCardActions,
+        MatButton,
+        MatCardImage,
+        MatIcon,
+        AsyncPipe,
+    ],
 })
 export class BookFormComponent implements OnInit, OnDestroy {
   private formData = new FormData();

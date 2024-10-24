@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Order } from "src/app/models/order";
-import { FormBuilder, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
+import { Router, RouterLink } from "@angular/router";
 import { CartService } from "src/app/services/cart.service";
 import { CheckoutService } from "src/app/services/checkout.service";
 import { ShoppingCart } from "src/app/models/shoppingcart";
@@ -9,11 +9,36 @@ import { SnackbarService } from "src/app/services/snackbar.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { SubscriptionService } from "src/app/services/subscription.service";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { MatButton } from "@angular/material/button";
+import { NgIf, NgFor, CurrencyPipe } from "@angular/common";
+import { MatInput } from "@angular/material/input";
+import { MatFormField, MatLabel, MatError } from "@angular/material/form-field";
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } from "@angular/material/card";
 
 @Component({
-  selector: "app-checkout",
-  templateUrl: "./checkout.component.html",
-  styleUrls: ["./checkout.component.scss"],
+    selector: "app-checkout",
+    templateUrl: "./checkout.component.html",
+    styleUrls: ["./checkout.component.scss"],
+    standalone: true,
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        NgIf,
+        MatError,
+        MatCardActions,
+        MatButton,
+        RouterLink,
+        MatProgressSpinner,
+        NgFor,
+        CurrencyPipe,
+    ],
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
   userId;

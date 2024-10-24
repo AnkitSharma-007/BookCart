@@ -4,11 +4,17 @@ import {
   HarmBlockThreshold,
   HarmCategory,
 } from "@google/generative-ai";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { NgIf } from "@angular/common";
+import { MatButton } from "@angular/material/button";
+import { MatCard, MatCardContent } from "@angular/material/card";
 
 @Component({
   selector: "app-book-summary",
   templateUrl: "./book-summary.component.html",
   styleUrls: ["./book-summary.component.scss"],
+  standalone: true,
+  imports: [MatCard, MatCardContent, MatButton, NgIf, MatProgressSpinner],
 })
 export class BookSummaryComponent {
   geminiInput = "";
@@ -20,13 +26,15 @@ export class BookSummaryComponent {
   }
   showLoader = false;
 
-  MODEL_NAME = "gemini-1.0-pro";
-  API_KEY = "Your_API_Key_Here";
+  MODEL_NAME = "gemini-1.5-flash";
+  API_KEY = "YOUR_API_KEY_HERE";
+
   generationConfig = {
-    temperature: 0.9,
-    topK: 1,
-    topP: 1,
-    maxOutputTokens: 2048,
+    temperature: 1,
+    topP: 0.95,
+    topK: 64,
+    maxOutputTokens: 8192,
+    responseMimeType: "text/plain",
   };
   safetySettings = [
     {
@@ -57,17 +65,22 @@ export class BookSummaryComponent {
 
     try {
       this.showLoader = true;
+      this.bookSummary = "";
       const parts = [{ text: this.geminiInput }];
 
-      const result = await model.generateContent({
+      const result = await model.generateContentStream({
         contents: [{ role: "user", parts }],
         generationConfig: this.generationConfig,
         safetySettings: this.safetySettings,
       });
 
-      this.bookSummary = result.response.text();
-      console.log(this.bookSummary);
       this.showLoader = false;
+
+      for await (const chunk of result.stream) {
+        const chunkText = chunk.text();
+        this.bookSummary = this.bookSummary.concat(chunkText);
+        console.log(chunkText);
+      }
     } catch (e) {
       console.log("An error Occurred: ", e);
     }

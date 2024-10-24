@@ -8,8 +8,8 @@ describe('SimilarbooksComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SimilarbooksComponent ]
-    })
+    imports: [SimilarbooksComponent]
+})
     .compileComponents();
   }));
 

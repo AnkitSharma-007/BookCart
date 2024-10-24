@@ -1,18 +1,43 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { CartService } from "src/app/services/cart.service";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { SubscriptionService } from "src/app/services/subscription.service";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from "@angular/forms";
 import { User } from "src/app/models/user";
 import { switchMap, takeUntil } from "rxjs/operators";
 import { WishlistService } from "src/app/services/wishlist.service";
 import { Subject } from "rxjs";
+import { MatIcon } from "@angular/material/icon";
+import { MatInput } from "@angular/material/input";
+import { MatError, MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
+import { NgIf } from "@angular/common";
+import { MatButton } from "@angular/material/button";
+import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from "@angular/material/card";
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
+    selector: "app-login",
+    templateUrl: "./login.component.html",
+    styleUrls: ["./login.component.scss"],
+    standalone: true,
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatButton,
+        RouterLink,
+        NgIf,
+        MatCardSubtitle,
+        MatError,
+        MatCardContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatIcon,
+        MatSuffix,
+        MatCardActions,
+    ],
 })
 export class LoginComponent implements OnInit, OnDestroy {
   showPassword = true;

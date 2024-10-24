@@ -3,14 +3,27 @@ import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
 import { BookService } from "src/app/services/book.service";
 import { Book } from "src/app/models/book";
-import { FormControl } from "@angular/forms";
+import { FormControl, ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { SubscriptionService } from "src/app/services/subscription.service";
+import { MatOption } from "@angular/material/core";
+import { NgFor, AsyncPipe } from "@angular/common";
+import { MatAutocompleteTrigger, MatAutocomplete } from "@angular/material/autocomplete";
 
 @Component({
-  selector: "app-search",
-  templateUrl: "./search.component.html",
-  styleUrls: ["./search.component.scss"],
+    selector: "app-search",
+    templateUrl: "./search.component.html",
+    styleUrls: ["./search.component.scss"],
+    standalone: true,
+    imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        NgFor,
+        MatOption,
+        AsyncPipe,
+    ],
 })
 export class SearchComponent implements OnInit {
   public books: Book[];

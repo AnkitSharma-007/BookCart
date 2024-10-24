@@ -4,11 +4,19 @@ import { SubscriptionService } from "src/app/services/subscription.service";
 import { SnackbarService } from "src/app/services/snackbar.service";
 import { Book } from "src/app/models/book";
 import { Subject, takeUntil } from "rxjs";
+import { MatButton } from "@angular/material/button";
+import { NgIf, NgClass } from "@angular/common";
 
 @Component({
-  selector: "app-addtowishlist",
-  templateUrl: "./addtowishlist.component.html",
-  styleUrls: ["./addtowishlist.component.scss"],
+    selector: "app-addtowishlist",
+    templateUrl: "./addtowishlist.component.html",
+    styleUrls: ["./addtowishlist.component.scss"],
+    standalone: true,
+    imports: [
+        NgIf,
+        MatButton,
+        NgClass,
+    ],
 })
 export class AddtowishlistComponent implements OnChanges, OnDestroy {
   @Input()

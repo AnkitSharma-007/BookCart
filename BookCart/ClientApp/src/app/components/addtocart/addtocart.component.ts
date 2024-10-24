@@ -3,11 +3,15 @@ import { Subject, takeUntil } from "rxjs";
 import { CartService } from "src/app/services/cart.service";
 import { SnackbarService } from "src/app/services/snackbar.service";
 import { SubscriptionService } from "src/app/services/subscription.service";
+import { MatIcon } from "@angular/material/icon";
+import { MatButton } from "@angular/material/button";
 
 @Component({
-  selector: "app-addtocart",
-  templateUrl: "./addtocart.component.html",
-  styleUrls: ["./addtocart.component.scss"],
+    selector: "app-addtocart",
+    templateUrl: "./addtocart.component.html",
+    styleUrls: ["./addtocart.component.scss"],
+    standalone: true,
+    imports: [MatButton, MatIcon],
 })
 export class AddtocartComponent implements OnDestroy {
   @Input()

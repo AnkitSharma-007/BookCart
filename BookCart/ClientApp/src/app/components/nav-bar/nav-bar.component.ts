@@ -1,17 +1,44 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { User } from "src/app/models/user";
 import { UserType } from "src/app/models/usertype";
-import { Router } from "@angular/router";
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { UserService } from "src/app/services/user.service";
 import { SubscriptionService } from "src/app/services/subscription.service";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { WishlistService } from "src/app/services/wishlist.service";
+import { MatMenuTrigger, MatMenu, MatMenuItem } from "@angular/material/menu";
+import { MatTooltip } from "@angular/material/tooltip";
+import { MatBadge } from "@angular/material/badge";
+import { NgIf, AsyncPipe } from "@angular/common";
+import { SearchComponent } from "../search/search.component";
+import { MatIcon } from "@angular/material/icon";
+import { MatButton, MatIconButton, MatAnchor } from "@angular/material/button";
+import { MatToolbar, MatToolbarRow } from "@angular/material/toolbar";
 
 @Component({
-  selector: "app-nav-bar",
-  templateUrl: "./nav-bar.component.html",
-  styleUrls: ["./nav-bar.component.scss"],
+    selector: "app-nav-bar",
+    templateUrl: "./nav-bar.component.html",
+    styleUrls: ["./nav-bar.component.scss"],
+    standalone: true,
+    imports: [
+        MatToolbar,
+        MatToolbarRow,
+        MatButton,
+        RouterLink,
+        MatIcon,
+        SearchComponent,
+        NgIf,
+        MatIconButton,
+        RouterLinkActive,
+        MatBadge,
+        MatTooltip,
+        MatAnchor,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        AsyncPipe,
+    ],
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   userId;

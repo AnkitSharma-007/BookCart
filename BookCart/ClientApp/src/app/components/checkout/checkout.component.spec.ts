@@ -8,8 +8,8 @@ describe('CheckoutComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CheckoutComponent ]
-    })
+    imports: [CheckoutComponent]
+})
     .compileComponents();
   }));
 

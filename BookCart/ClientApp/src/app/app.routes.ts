@@ -1,13 +1,6 @@
 import { Routes } from "@angular/router";
-import { BookDetailsComponent } from "./components/book-details/book-details.component";
-import { CheckoutComponent } from "./components/checkout/checkout.component";
 import { HomeComponent } from "./components/home/home.component";
-import { LoginComponent } from "./components/login/login.component";
-import { MyOrdersComponent } from "./components/my-orders/my-orders.component";
 import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
-import { ShoppingcartComponent } from "./components/shoppingcart/shoppingcart.component";
-import { UserRegistrationComponent } from "./components/user-registration/user-registration.component";
-import { WishlistComponent } from "./components/wishlist/wishlist.component";
 import { AdminAuthGuard } from "./guards/admin-auth.guard";
 import { AuthGuard } from "./guards/auth.guard";
 
@@ -15,13 +8,58 @@ export const APP_ROUTES: Routes = [
   { path: "", component: HomeComponent, pathMatch: "full" },
   { path: "filter", component: HomeComponent },
   { path: "search", component: HomeComponent },
-  { path: "login", component: LoginComponent },
-  { path: "register", component: UserRegistrationComponent },
-  { path: "books/details/:id", component: BookDetailsComponent },
-  { path: "shopping-cart", component: ShoppingcartComponent },
-  { path: "checkout", component: CheckoutComponent, canActivate: [AuthGuard] },
-  { path: "myorders", component: MyOrdersComponent, canActivate: [AuthGuard] },
-  { path: "wishlist", component: WishlistComponent, canActivate: [AuthGuard] },
+  {
+    path: "login",
+    loadComponent: () =>
+      import("./components/login/login.component").then(
+        (c) => c.LoginComponent
+      ),
+  },
+  {
+    path: "register",
+    loadComponent: () =>
+      import("./components/user-registration/user-registration.component").then(
+        (c) => c.UserRegistrationComponent
+      ),
+  },
+  {
+    path: "books/details/:id",
+    loadComponent: () =>
+      import("./components/book-details/book-details.component").then(
+        (c) => c.BookDetailsComponent
+      ),
+  },
+  {
+    path: "shopping-cart",
+    loadComponent: () =>
+      import("./components/shoppingcart/shoppingcart.component").then(
+        (c) => c.ShoppingcartComponent
+      ),
+  },
+  {
+    path: "checkout",
+    loadComponent: () =>
+      import("./components/checkout/checkout.component").then(
+        (c) => c.CheckoutComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "myorders",
+    loadComponent: () =>
+      import("./components/my-orders/my-orders.component").then(
+        (c) => c.MyOrdersComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "wishlist",
+    loadComponent: () =>
+      import("./components/wishlist/wishlist.component").then(
+        (c) => c.WishlistComponent
+      ),
+    canActivate: [AuthGuard],
+  },
   {
     path: "admin/books",
     loadChildren: () => import("./admin.routes").then((m) => m.ADMIN_ROUTES),

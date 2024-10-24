@@ -8,7 +8,7 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { MatRadioGroup, MatRadioButton } from "@angular/material/radio";
 import { MatIcon } from "@angular/material/icon";
-import { NgIf } from "@angular/common";
+
 import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel, MatError, MatSuffix } from "@angular/material/form-field";
 import { MatButton } from "@angular/material/button";
@@ -20,24 +20,23 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } 
     styleUrls: ["./user-registration.component.scss"],
     standalone: true,
     imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatButton,
-        RouterLink,
-        MatCardContent,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        NgIf,
-        MatError,
-        MatIcon,
-        MatSuffix,
-        MatRadioGroup,
-        MatRadioButton,
-        MatCardActions,
-    ],
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatButton,
+    RouterLink,
+    MatCardContent,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatError,
+    MatIcon,
+    MatSuffix,
+    MatRadioGroup,
+    MatRadioButton,
+    MatCardActions
+],
 })
 export class UserRegistrationComponent implements OnDestroy {
   showPassword = true;

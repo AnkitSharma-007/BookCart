@@ -5,7 +5,7 @@ import { catchError, takeUntil } from "rxjs/operators";
 import { EMPTY, Subject } from "rxjs";
 import { MatButton } from "@angular/material/button";
 import { CdkScrollable } from "@angular/cdk/scrolling";
-import { NgIf, AsyncPipe, CurrencyPipe } from "@angular/common";
+import { AsyncPipe, CurrencyPipe } from "@angular/common";
 
 @Component({
     selector: "app-delete-book",
@@ -13,16 +13,15 @@ import { NgIf, AsyncPipe, CurrencyPipe } from "@angular/common";
     styleUrls: ["./delete-book.component.scss"],
     standalone: true,
     imports: [
-        NgIf,
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        MatDialogActions,
-        MatButton,
-        MatDialogClose,
-        AsyncPipe,
-        CurrencyPipe,
-    ],
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+    AsyncPipe,
+    CurrencyPipe
+],
 })
 export class DeleteBookComponent implements OnDestroy {
   bookData$ = this.bookService.getBookById(this.bookid).pipe(

@@ -10,7 +10,7 @@ import { WishlistService } from "src/app/services/wishlist.service";
 import { MatMenuTrigger, MatMenu, MatMenuItem } from "@angular/material/menu";
 import { MatTooltip } from "@angular/material/tooltip";
 import { MatBadge } from "@angular/material/badge";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { SearchComponent } from "../search/search.component";
 import { MatIcon } from "@angular/material/icon";
 import { MatButton, MatIconButton, MatAnchor } from "@angular/material/button";
@@ -22,23 +22,22 @@ import { MatToolbar, MatToolbarRow } from "@angular/material/toolbar";
     styleUrls: ["./nav-bar.component.scss"],
     standalone: true,
     imports: [
-        MatToolbar,
-        MatToolbarRow,
-        MatButton,
-        RouterLink,
-        MatIcon,
-        SearchComponent,
-        NgIf,
-        MatIconButton,
-        RouterLinkActive,
-        MatBadge,
-        MatTooltip,
-        MatAnchor,
-        MatMenuTrigger,
-        MatMenu,
-        MatMenuItem,
-        AsyncPipe,
-    ],
+    MatToolbar,
+    MatToolbarRow,
+    MatButton,
+    RouterLink,
+    MatIcon,
+    SearchComponent,
+    MatIconButton,
+    RouterLinkActive,
+    MatBadge,
+    MatTooltip,
+    MatAnchor,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    AsyncPipe
+],
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   userId;

@@ -11,7 +11,7 @@ import { takeUntil } from "rxjs/operators";
 import { SubscriptionService } from "src/app/services/subscription.service";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatButton } from "@angular/material/button";
-import { NgIf, NgFor, CurrencyPipe } from "@angular/common";
+import { CurrencyPipe } from "@angular/common";
 import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel, MatError } from "@angular/material/form-field";
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } from "@angular/material/card";
@@ -22,23 +22,21 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } 
     styleUrls: ["./checkout.component.scss"],
     standalone: true,
     imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatCardContent,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        NgIf,
-        MatError,
-        MatCardActions,
-        MatButton,
-        RouterLink,
-        MatProgressSpinner,
-        NgFor,
-        CurrencyPipe,
-    ],
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatError,
+    MatCardActions,
+    MatButton,
+    RouterLink,
+    MatProgressSpinner,
+    CurrencyPipe
+],
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
   userId;

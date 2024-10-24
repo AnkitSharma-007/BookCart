@@ -12,7 +12,7 @@ import { RouterLink } from "@angular/router";
 import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/material/card";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { NgIf, CurrencyPipe } from "@angular/common";
+import { CurrencyPipe } from "@angular/common";
 
 @Component({
     selector: "app-shoppingcart",
@@ -20,29 +20,28 @@ import { NgIf, CurrencyPipe } from "@angular/common";
     styleUrls: ["./shoppingcart.component.scss"],
     standalone: true,
     imports: [
-        NgIf,
-        MatProgressSpinner,
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatCardContent,
-        MatButton,
-        RouterLink,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCellDef,
-        MatCell,
-        MatTooltip,
-        MatIconButton,
-        MatIcon,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        CurrencyPipe,
-    ],
+    MatProgressSpinner,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatButton,
+    RouterLink,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatTooltip,
+    MatIconButton,
+    MatIcon,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    CurrencyPipe
+],
 })
 export class ShoppingcartComponent implements OnInit, OnDestroy {
   public cartItems: ShoppingCart[];

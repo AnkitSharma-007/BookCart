@@ -11,7 +11,7 @@ import { Subject } from "rxjs";
 import { MatIcon } from "@angular/material/icon";
 import { MatInput } from "@angular/material/input";
 import { MatError, MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
-import { NgIf } from "@angular/common";
+
 import { MatButton } from "@angular/material/button";
 import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from "@angular/material/card";
 
@@ -21,23 +21,22 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, 
     styleUrls: ["./login.component.scss"],
     standalone: true,
     imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatButton,
-        RouterLink,
-        NgIf,
-        MatCardSubtitle,
-        MatError,
-        MatCardContent,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatIcon,
-        MatSuffix,
-        MatCardActions,
-    ],
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatButton,
+    RouterLink,
+    MatCardSubtitle,
+    MatError,
+    MatCardContent,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatIcon,
+    MatSuffix,
+    MatCardActions
+],
 })
 export class LoginComponent implements OnInit, OnDestroy {
   showPassword = true;

@@ -2,18 +2,20 @@
   <mat-card class="my-4 w-50">
     <mat-card-header
       class="mat-elevation-z2 custom-card-header justify-content-between"
-    >
+      >
       <mat-card-title class="mat-h1"> Login </mat-card-title>
       <div>
         <span class="mat-h4">New User? </span>
         <button mat-raised-button [routerLink]="['/register']">Register</button>
       </div>
     </mat-card-header>
-    <mat-card-header *ngIf="loginForm.errors">
-      <mat-card-subtitle>
-        <mat-error>Username or Password is incorrect.</mat-error>
-      </mat-card-subtitle>
-    </mat-card-header>
+    @if (loginForm.errors) {
+      <mat-card-header>
+        <mat-card-subtitle>
+          <mat-error>Username or Password is incorrect.</mat-error>
+        </mat-card-subtitle>
+      </mat-card-header>
+    }
     <mat-card-content class="p-3">
       <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
         <mat-form-field class="w-100 mt-1" appearance="outline">
@@ -23,40 +25,42 @@
             placeholder="Username"
             formControlName="username"
             required
-          />
-          <mat-error
-            *ngIf="
-                  loginFormControl.username.touched &&
-                  loginFormControl.username.errors?.['required']
-                "
-            >Username is required</mat-error
-          >
-        </mat-form-field>
+            />
+            @if (
+              loginFormControl.username.touched &&
+              loginFormControl.username.errors?.['required']
+              ) {
+              <mat-error
+                >Username is required</mat-error
+                >
+            }
+          </mat-form-field>
 
-        <mat-form-field class="w-100 mt-1" appearance="outline">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            placeholder="Password"
-            formControlName="password"
-            [type]="showPassword ? 'password' : 'text'"
-            required
-          />
-          <mat-icon matSuffix (click)="showPassword = !showPassword">{{
-            showPassword ? "visibility_off" : "visibility"
-          }}</mat-icon>
-          <mat-error
-            *ngIf="
-                  loginFormControl.password.touched &&
-                  loginFormControl.password.errors?.['required']
-                "
-            >Password is required</mat-error
-          >
-        </mat-form-field>
-        <mat-card-actions align="end" class="p-0">
-          <button mat-raised-button color="primary">Login</button>
-        </mat-card-actions>
-      </form>
-    </mat-card-content>
-  </mat-card>
-</div>
+          <mat-form-field class="w-100 mt-1" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              placeholder="Password"
+              formControlName="password"
+              [type]="showPassword ? 'password' : 'text'"
+              required
+              />
+              <mat-icon matSuffix (click)="showPassword = !showPassword">{{
+                showPassword ? "visibility_off" : "visibility"
+              }}</mat-icon>
+              @if (
+                loginFormControl.password.touched &&
+                loginFormControl.password.errors?.['required']
+                ) {
+                <mat-error
+                  >Password is required</mat-error
+                  >
+              }
+            </mat-form-field>
+            <mat-card-actions align="end" class="p-0">
+              <button mat-raised-button color="primary">Login</button>
+            </mat-card-actions>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>

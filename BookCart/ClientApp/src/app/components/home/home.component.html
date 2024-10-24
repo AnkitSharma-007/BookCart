@@ -6,24 +6,29 @@
     </div>
   </div>
   <div class="col mb-3">
-    <div
-      *ngIf="books?.length > 0; else nodata"
-      class="d-flex justify-content-start card-deck-container mb-4"
-    >
-      <div *ngFor="let book of books" class="p-1">
-        <app-book-card [book]="book"></app-book-card>
+    @if (books?.length > 0) {
+      <div
+        class="d-flex justify-content-start card-deck-container mb-4"
+        >
+        @for (book of books; track book) {
+          <div class="p-1">
+            <app-book-card [book]="book"></app-book-card>
+          </div>
+        }
       </div>
-    </div>
-    <ng-template #nodata>
+    } @else {
       <div class="d-flex justify-content-center mt-4">
-        <h1 class="display-4" *ngIf="!isLoading">No books found.</h1>
+        @if (!isLoading) {
+          <h1 class="display-4">No books found.</h1>
+        }
       </div>
-    </ng-template>
-    <div
-      *ngIf="isLoading"
-      class="d-flex align-items-center justify-content-center"
-    >
-      <mat-spinner></mat-spinner>
-    </div>
+    }
+    @if (isLoading) {
+      <div
+        class="d-flex align-items-center justify-content-center"
+        >
+        <mat-spinner></mat-spinner>
+      </div>
+    }
   </div>
 </div>

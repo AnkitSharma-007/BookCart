@@ -12,7 +12,7 @@ import { takeUntil } from "rxjs/operators";
 import { MatIcon } from "@angular/material/icon";
 import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
-import { NgIf, CurrencyPipe } from "@angular/common";
+import { CurrencyPipe } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/material/card";
@@ -23,34 +23,33 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/m
     styleUrls: ["./manage-books.component.scss"],
     standalone: true,
     imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatButton,
-        RouterLink,
-        NgIf,
-        MatCardContent,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatTable,
-        MatSort,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatSortHeader,
-        MatCellDef,
-        MatCell,
-        MatIconButton,
-        MatIcon,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        MatNoDataRow,
-        MatPaginator,
-        CurrencyPipe,
-    ],
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatButton,
+    RouterLink,
+    MatCardContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatIcon,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatNoDataRow,
+    MatPaginator,
+    CurrencyPipe
+],
 })
 export class ManageBooksComponent implements OnDestroy {
   @ViewChild(MatSort) set matSort(sort: MatSort) {

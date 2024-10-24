@@ -3,7 +3,7 @@ import { Book } from "src/app/models/book";
 import { SubscriptionService } from "src/app/services/subscription.service";
 import { AddtocartComponent } from "../addtocart/addtocart.component";
 import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
-import { NgIf, AsyncPipe, CurrencyPipe } from "@angular/common";
+import { AsyncPipe, CurrencyPipe } from "@angular/common";
 import { MatTooltip } from "@angular/material/tooltip";
 import { RouterLink } from "@angular/router";
 import { MatCard, MatCardImage, MatCardContent } from "@angular/material/card";
@@ -14,17 +14,16 @@ import { MatCard, MatCardImage, MatCardContent } from "@angular/material/card";
     styleUrls: ["./book-card.component.scss"],
     standalone: true,
     imports: [
-        MatCard,
-        RouterLink,
-        MatTooltip,
-        MatCardImage,
-        MatCardContent,
-        NgIf,
-        AddtowishlistComponent,
-        AddtocartComponent,
-        AsyncPipe,
-        CurrencyPipe,
-    ],
+    MatCard,
+    RouterLink,
+    MatTooltip,
+    MatCardImage,
+    MatCardContent,
+    AddtowishlistComponent,
+    AddtocartComponent,
+    AsyncPipe,
+    CurrencyPipe
+],
 })
 export class BookCardComponent {
   @Input()

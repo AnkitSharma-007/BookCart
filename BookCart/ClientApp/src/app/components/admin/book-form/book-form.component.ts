@@ -10,7 +10,7 @@ import { MatIcon } from "@angular/material/icon";
 import { MatButton } from "@angular/material/button";
 import { MatOption } from "@angular/material/core";
 import { MatSelect } from "@angular/material/select";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel, MatError, MatPrefix } from "@angular/material/form-field";
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, MatCardImage } from "@angular/material/card";
@@ -21,26 +21,24 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, M
     styleUrls: ["./book-form.component.scss"],
     standalone: true,
     imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatCardContent,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        NgIf,
-        MatError,
-        MatSelect,
-        NgFor,
-        MatOption,
-        MatPrefix,
-        MatCardActions,
-        MatButton,
-        MatCardImage,
-        MatIcon,
-        AsyncPipe,
-    ],
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatError,
+    MatSelect,
+    MatOption,
+    MatPrefix,
+    MatCardActions,
+    MatButton,
+    MatCardImage,
+    MatIcon,
+    AsyncPipe
+],
 })
 export class BookFormComponent implements OnInit, OnDestroy {
   private formData = new FormData();

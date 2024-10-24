@@ -3,25 +3,26 @@
   [class.on-book-card-hover]="isActive"
   (mouseover)="isActive = true"
   (mouseout)="isActive = false"
->
+  >
   <a
     [routerLink]="['/books/details/', book.bookId]"
     matTooltip="{{ book.title }}"
     aria-label="Book title"
     ><img
-      class="preview-image"
-      mat-card-image
-      src="/Upload/{{ book.coverFileName }}"
-      alt="Book cover image"
+    class="preview-image"
+    mat-card-image
+    src="/Upload/{{ book.coverFileName }}"
+    alt="Book cover image"
     />
   </a>
   <mat-card-content>
-    <div
-      *ngIf="(userData$ | async).isLoggedIn"
-      class="favourite mat-elevation-z8"
-    >
-      <app-addtowishlist [bookId]="book.bookId"></app-addtowishlist>
-    </div>
+    @if ((userData$ | async).isLoggedIn) {
+      <div
+        class="favourite mat-elevation-z8"
+        >
+        <app-addtowishlist [bookId]="book.bookId"></app-addtowishlist>
+      </div>
+    }
     <div class="card-title my-2">
       <a [routerLink]="['/books/details/', book.bookId]">
         <strong>{{ book.title }}</strong>

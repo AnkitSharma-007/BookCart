@@ -3,7 +3,7 @@ import { BookService } from "src/app/services/book.service";
 import { catchError } from "rxjs/operators";
 import { EMPTY } from "rxjs";
 import { MatDivider } from "@angular/material/divider";
-import { NgFor, AsyncPipe, LowerCasePipe } from "@angular/common";
+import { AsyncPipe, LowerCasePipe } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { MatNavList, MatListItem } from "@angular/material/list";
 
@@ -13,14 +13,13 @@ import { MatNavList, MatListItem } from "@angular/material/list";
     styleUrls: ["./book-filter.component.scss"],
     standalone: true,
     imports: [
-        MatNavList,
-        MatListItem,
-        RouterLink,
-        NgFor,
-        MatDivider,
-        AsyncPipe,
-        LowerCasePipe,
-    ],
+    MatNavList,
+    MatListItem,
+    RouterLink,
+    MatDivider,
+    AsyncPipe,
+    LowerCasePipe
+],
 })
 export class BookFilterComponent {
   @Input()

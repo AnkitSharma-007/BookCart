@@ -5,7 +5,6 @@ import {
   HarmCategory,
 } from "@google/generative-ai";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { NgIf } from "@angular/common";
 import { MatButton } from "@angular/material/button";
 import { MatCard, MatCardContent } from "@angular/material/card";
 
@@ -14,7 +13,7 @@ import { MatCard, MatCardContent } from "@angular/material/card";
   templateUrl: "./book-summary.component.html",
   styleUrls: ["./book-summary.component.scss"],
   standalone: true,
-  imports: [MatCard, MatCardContent, MatButton, NgIf, MatProgressSpinner],
+  imports: [MatCard, MatCardContent, MatButton, MatProgressSpinner],
 })
 export class BookSummaryComponent {
   geminiInput = "";

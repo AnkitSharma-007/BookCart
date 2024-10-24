@@ -17,7 +17,7 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { RouterLink } from "@angular/router";
 import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
-import { NgIf, NgFor, CurrencyPipe, DatePipe } from "@angular/common";
+import { CurrencyPipe, DatePipe } from "@angular/common";
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/material/card";
 
 @Component({
@@ -33,33 +33,31 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/m
     ],
     standalone: true,
     imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        NgIf,
-        MatCardContent,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCellDef,
-        MatCell,
-        NgFor,
-        RouterLink,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        MatNoDataRow,
-        MatPaginator,
-        MatProgressSpinner,
-        MatButton,
-        CurrencyPipe,
-        DatePipe,
-    ],
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    RouterLink,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatNoDataRow,
+    MatPaginator,
+    MatProgressSpinner,
+    MatButton,
+    CurrencyPipe,
+    DatePipe
+],
 })
 export class MyOrdersComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ["orderId", "orderedOn", "orderTotal"];

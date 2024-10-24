@@ -7,7 +7,7 @@ import { FormControl, ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { SubscriptionService } from "src/app/services/subscription.service";
 import { MatOption } from "@angular/material/core";
-import { NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { MatAutocompleteTrigger, MatAutocomplete } from "@angular/material/autocomplete";
 
 @Component({
@@ -16,14 +16,13 @@ import { MatAutocompleteTrigger, MatAutocomplete } from "@angular/material/autoc
     styleUrls: ["./search.component.scss"],
     standalone: true,
     imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MatAutocompleteTrigger,
-        MatAutocomplete,
-        NgFor,
-        MatOption,
-        AsyncPipe,
-    ],
+    ReactiveFormsModule,
+    FormsModule,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    MatOption,
+    AsyncPipe
+],
 })
 export class SearchComponent implements OnInit {
   public books: Book[];

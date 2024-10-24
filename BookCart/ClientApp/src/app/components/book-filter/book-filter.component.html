@@ -2,13 +2,14 @@
   <mat-list-item [class.active-category]="!category" routerLink="/">
     <a>All Categories</a>
   </mat-list-item>
-  <mat-list-item
-    [class.active-category]="category == (c.categoryName | lowercase)"
-    *ngFor="let c of categories$ | async"
-    routerLink="/filter"
-    [queryParams]="{ category: c.categoryName | lowercase }"
-  >
-    <a>{{ c.categoryName }}</a>
-    <mat-divider></mat-divider>
-  </mat-list-item>
+  @for (c of categories$ | async; track c) {
+    <mat-list-item
+      [class.active-category]="category == (c.categoryName | lowercase)"
+      routerLink="/filter"
+      [queryParams]="{ category: c.categoryName | lowercase }"
+      >
+      <a>{{ c.categoryName }}</a>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  }
 </mat-nav-list>

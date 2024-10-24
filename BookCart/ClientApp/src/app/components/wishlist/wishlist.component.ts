@@ -13,7 +13,7 @@ import { RouterLink } from "@angular/router";
 import { MatButton } from "@angular/material/button";
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/material/card";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { NgIf, AsyncPipe, CurrencyPipe } from "@angular/common";
+import { AsyncPipe, CurrencyPipe } from "@angular/common";
 
 @Component({
     selector: "app-wishlist",
@@ -21,30 +21,29 @@ import { NgIf, AsyncPipe, CurrencyPipe } from "@angular/common";
     styleUrls: ["./wishlist.component.scss"],
     standalone: true,
     imports: [
-        NgIf,
-        MatProgressSpinner,
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatCardContent,
-        MatButton,
-        RouterLink,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCellDef,
-        MatCell,
-        MatTooltip,
-        AddtocartComponent,
-        AddtowishlistComponent,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        AsyncPipe,
-        CurrencyPipe,
-    ],
+    MatProgressSpinner,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatButton,
+    RouterLink,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatTooltip,
+    AddtocartComponent,
+    AddtowishlistComponent,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    AsyncPipe,
+    CurrencyPipe
+],
 })
 export class WishlistComponent implements OnInit, OnDestroy {
   wishlistItems$: Observable<Book[]>;

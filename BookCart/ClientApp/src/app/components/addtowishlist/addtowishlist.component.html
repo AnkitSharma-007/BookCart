@@ -1,14 +1,12 @@
-<ng-container *ngIf="showButton; else showIcon">
+@if (showButton) {
   <button
     [ngClass]="{ wishlisted: toggle, 'not-wishlisted': !toggle }"
     mat-raised-button
     (click)="toggleValue()"
-  >
+    >
     {{ buttonText }}
   </button>
-</ng-container>
-
-<ng-template #showIcon>
+} @else {
   <span
     (click)="toggleValue()"
     [ngClass]="{
@@ -16,7 +14,8 @@
       'favourite-unselected': !toggle
     }"
     class="material-icons"
-  >
+    >
     favorite
   </span>
-</ng-template>
+}
+

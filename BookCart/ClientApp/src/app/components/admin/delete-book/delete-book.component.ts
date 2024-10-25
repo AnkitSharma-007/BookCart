@@ -1,42 +1,45 @@
-import { Component, Inject, OnDestroy } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from "@angular/material/dialog";
-import { BookService } from "src/app/services/book.service";
-import { catchError, takeUntil } from "rxjs/operators";
-import { EMPTY, Subject } from "rxjs";
-import { MatButton } from "@angular/material/button";
-import { CdkScrollable } from "@angular/cdk/scrolling";
 import { AsyncPipe, CurrencyPipe } from "@angular/common";
+import { Component, inject, OnDestroy } from "@angular/core";
+import { MatButton } from "@angular/material/button";
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from "@angular/material/dialog";
+import { EMPTY, ReplaySubject } from "rxjs";
+import { catchError, takeUntil } from "rxjs/operators";
+import { BookService } from "src/app/services/book.service";
 
 @Component({
-    selector: "app-delete-book",
-    templateUrl: "./delete-book.component.html",
-    styleUrls: ["./delete-book.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-delete-book",
+  templateUrl: "./delete-book.component.html",
+  styleUrls: ["./delete-book.component.scss"],
+  standalone: true,
+  imports: [
     MatDialogTitle,
-    CdkScrollable,
     MatDialogContent,
     MatDialogActions,
     MatButton,
     MatDialogClose,
     AsyncPipe,
-    CurrencyPipe
-],
+    CurrencyPipe,
+  ],
 })
 export class DeleteBookComponent implements OnDestroy {
+  private readonly bookService = inject(BookService);
+  private readonly dialogRef = inject(MatDialogRef<DeleteBookComponent>);
+  private readonly bookid = inject<number>(MAT_DIALOG_DATA);
+
   bookData$ = this.bookService.getBookById(this.bookid).pipe(
     catchError((error) => {
       console.log("Error ocurred while fetching book data : ", error);
       return EMPTY;
     })
   );
-  private unsubscribe$ = new Subject<void>();
-
-  constructor(
-    public dialogRef: MatDialogRef<DeleteBookComponent>,
-    @Inject(MAT_DIALOG_DATA) public bookid: number,
-    private bookService: BookService
-  ) {}
+  private destroyed$ = new ReplaySubject<void>(1);
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -45,7 +48,7 @@ export class DeleteBookComponent implements OnDestroy {
   confirmDelete(): void {
     this.bookService
       .deleteBook(this.bookid)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         error: (error) => {
           console.log("Error ocurred while fetching book data : ", error);
@@ -54,7 +57,7 @@ export class DeleteBookComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

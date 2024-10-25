@@ -1,28 +1,46 @@
-import { Component, ViewChild, OnDestroy } from "@angular/core";
+import { CurrencyPipe } from "@angular/common";
+import { Component, OnDestroy, ViewChild, inject } from "@angular/core";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from "@angular/material/card";
 import { MatDialog } from "@angular/material/dialog";
+import { MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatIcon } from "@angular/material/icon";
+import { MatInput } from "@angular/material/input";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort, MatSortHeader } from "@angular/material/sort";
-import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow } from "@angular/material/table";
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatNoDataRow,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from "@angular/material/table";
+import { RouterLink } from "@angular/router";
+import { ReplaySubject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { Book } from "src/app/models/book";
 import { BookService } from "src/app/services/book.service";
 import { SnackbarService } from "src/app/services/snackbar.service";
 import { DeleteBookComponent } from "../delete-book/delete-book.component";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { MatIcon } from "@angular/material/icon";
-import { MatInput } from "@angular/material/input";
-import { MatFormField, MatLabel } from "@angular/material/form-field";
-import { CurrencyPipe } from "@angular/common";
-import { RouterLink } from "@angular/router";
-import { MatButton, MatIconButton } from "@angular/material/button";
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/material/card";
 
 @Component({
-    selector: "app-manage-books",
-    templateUrl: "./manage-books.component.html",
-    styleUrls: ["./manage-books.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-manage-books",
+  templateUrl: "./manage-books.component.html",
+  styleUrls: ["./manage-books.component.scss"],
+  standalone: true,
+  imports: [
     MatCard,
     MatCardHeader,
     MatCardTitle,
@@ -48,10 +66,14 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/m
     MatRow,
     MatNoDataRow,
     MatPaginator,
-    CurrencyPipe
-],
+    CurrencyPipe,
+  ],
 })
 export class ManageBooksComponent implements OnDestroy {
+  private readonly bookService = inject(BookService);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBarService = inject(SnackbarService);
+
   @ViewChild(MatSort) set matSort(sort: MatSort) {
     this.dataSource.sort = sort;
   }
@@ -70,23 +92,19 @@ export class ManageBooksComponent implements OnDestroy {
   ];
 
   dataSource = new MatTableDataSource<Book>();
-  private unsubscribe$ = new Subject<void>();
+  private destroyed$ = new ReplaySubject<void>(1);
 
-  constructor(
-    private bookService: BookService,
-    private dialog: MatDialog,
-    private snackBarService: SnackbarService
-  ) {
+  constructor() {
     this.getAllBookData();
   }
 
   getAllBookData() {
     this.bookService
       .getAllBooks()
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (data) => {
-          this.dataSource.data = Object.values(data);
+          this.dataSource.data = data;
         },
         error: (error) => {
           console.log("Error ocurred while fetching book details : ", error);
@@ -109,7 +127,7 @@ export class ManageBooksComponent implements OnDestroy {
 
     dialogRef
       .afterClosed()
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((result) => {
         if (result === 1) {
           this.getAllBookData();
@@ -121,7 +139,7 @@ export class ManageBooksComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

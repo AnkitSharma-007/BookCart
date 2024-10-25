@@ -3,131 +3,125 @@
     <mat-card-title class="mat-h1">My Orders </mat-card-title>
   </mat-card-header>
   @if (dataSource && dataSource.data.length) {
-    <div>
-      <mat-card-content>
-        <mat-form-field class="w-100" appearance="outline">
-          <mat-label>Search</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Search" />
-        </mat-form-field>
-        <div table-container class="mat-elevation-z2">
-          <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
-            <ng-container matColumnDef="orderId">
-              <th mat-header-cell *matHeaderCellDef>Order Id</th>
-              <td mat-cell *matCellDef="let row">{{ row.orderId }}</td>
-            </ng-container>
-            <ng-container matColumnDef="orderedOn">
-              <th mat-header-cell *matHeaderCellDef>Ordered On</th>
-              <td mat-cell *matCellDef="let row">{{ row.orderDate | date }}</td>
-            </ng-container>
-            <ng-container matColumnDef="orderTotal">
-              <th mat-header-cell *matHeaderCellDef>Order Total</th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.cartTotal | currency : "INR" }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="expandedDetail">
-              <td
-                mat-cell
-                *matCellDef="let element"
-                [attr.colspan]="displayedColumns.length"
-                >
-                <div
-                  class="example-element-detail"
+  <div>
+    <mat-card-content>
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Search</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search" />
+      </mat-form-field>
+      <div table-container class="mat-elevation-z2">
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+          <ng-container matColumnDef="orderId">
+            <th mat-header-cell *matHeaderCellDef>Order Id</th>
+            <td mat-cell *matCellDef="let row">{{ row.orderId }}</td>
+          </ng-container>
+          <ng-container matColumnDef="orderedOn">
+            <th mat-header-cell *matHeaderCellDef>Ordered On</th>
+            <td mat-cell *matCellDef="let row">{{ row.orderDate | date }}</td>
+          </ng-container>
+          <ng-container matColumnDef="orderTotal">
+            <th mat-header-cell *matHeaderCellDef>Order Total</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.cartTotal | currency : "INR" }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="expandedDetail">
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [attr.colspan]="displayedColumns.length"
+            >
+              <div
+                class="example-element-detail"
                 [@detailExpand]="
                   element == expandedElement ? 'expanded' : 'collapsed'
                 "
-                  >
-                  <mat-card class="w-100">
-                    <mat-card-content>
-                      <table class="table mat-elevation-z2 details-table">
-                        <thead>
-                          <tr>
-                            <th>Title</th>
-                            <th>Quantity</th>
-                            <th>Amount Paid</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @for (order of element.orderDetails; track order) {
-                            <tr>
-                              <td>
-                                <a
+              >
+                <mat-card class="w-100">
+                  <mat-card-content>
+                    <table class="table mat-elevation-z2 details-table">
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>Quantity</th>
+                          <th>Amount Paid</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (order of element.orderDetails; track order) {
+                        <tr>
+                          <td>
+                            <a
                               [routerLink]="[
                                 '/books/details/',
                                 order.book.bookId
                               ]"
-                                  >{{ order.book.title }}</a
-                                  >
-                                </td>
-                                <td>{{ order.quantity }}</td>
-                                <td>
-                                  {{
-                                  order.book.price * order.quantity
-                                  | currency : "INR"
-                                  }}
-                                </td>
-                              </tr>
-                            }
-                          </tbody>
-                        </table>
-                      </mat-card-content>
-                    </mat-card>
-                  </div>
-                </td></ng-container
-                >
-                <tr
-                  mat-header-row
-                  *matHeaderRowDef="displayedColumns; sticky: true"
-                ></tr>
-                <tr
-                  mat-row
-                  *matRowDef="let element; columns: displayedColumns"
-                  class="example-element-row"
-                  [class.example-expanded-row]="expandedElement === element"
+                              >{{ order.book.title }}</a
+                            >
+                          </td>
+                          <td>{{ order.quantity }}</td>
+                          <td>
+                            {{
+                              order.book.price * order.quantity
+                                | currency : "INR"
+                            }}
+                          </td>
+                        </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </td></ng-container
+          >
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let element; columns: displayedColumns"
+            class="example-element-row"
+            [class.example-expanded-row]="expandedElement === element"
             (click)="
               expandedElement = expandedElement === element ? null : element
             "
-                ></tr>
-                <tr
-                  mat-row
-                  *matRowDef="let row; columns: ['expandedDetail']"
-                  class="example-detail-row"
-                ></tr>
-                <tr class="mat-row" *matNoDataRow>
-                  <td class="mat-cell" colspan="4">No data matching the filter</td>
-                </tr>
-              </table>
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
-            </div>
-          </mat-card-content>
-        </div>
-      } @else {
-        @if (isLoading) {
-          <div
-            class="d-flex align-items-center justify-content-center"
-            >
-            <mat-spinner></mat-spinner>
-          </div>
-        } @else {
-          @if (!isLoading) {
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>
-                  Looks like you have not placed any orders !!!
-                </mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  [routerLink]="['/']"
-                  class="mt-2"
-                  >
-                  Start shopping
-                </button>
-              </mat-card-content>
-            </mat-card>
-          }
-        }
-      }
-    </mat-card>
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['expandedDetail']"
+            class="example-detail-row"
+          ></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+      </div>
+    </mat-card-content>
+  </div>
+  } @else { @if (isLoading) {
+  <div class="d-flex align-items-center justify-content-center">
+    <mat-spinner></mat-spinner>
+  </div>
+  } @else { @if (!isLoading) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Looks like you have not placed any orders !!!
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <button
+        mat-raised-button
+        color="primary"
+        [routerLink]="['/']"
+        class="mt-2"
+      >
+        Start shopping
+      </button>
+    </mat-card-content>
+  </mat-card>
+  } } }
+</mat-card>

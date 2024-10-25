@@ -1,15 +1,12 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
 })
 export class UserService {
-  baseURL: string;
-
-  constructor(private http: HttpClient) {
-    this.baseURL = "/api/user/";
-  }
+  private readonly http = inject(HttpClient);
+  private readonly baseURL = "/api/user/";
 
   registerUser(userdetails) {
     return this.http.post(this.baseURL, userdetails);

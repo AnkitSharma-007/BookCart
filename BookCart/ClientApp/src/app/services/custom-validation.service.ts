@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { ValidatorFn, AbstractControl, FormControl } from "@angular/forms";
 import { UserService } from "./user.service";
+import { debounceTime } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class CustomValidationService {
-  debouncer: any;
-
-  constructor(private userService: UserService) {}
+  private userService = inject(UserService);
+  private debouncer: any;
 
   patternValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
@@ -35,6 +35,7 @@ export class CustomValidationService {
       this.debouncer = setTimeout(() => {
         this.userService
           .validateUserName(userControl.value)
+          .pipe(debounceTime(1000))
           .subscribe((result) => {
             if (result) {
               resolve(null);

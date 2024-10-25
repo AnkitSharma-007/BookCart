@@ -1,6 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
-
-@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../node_modules/bootstrap/dist/css/bootstrap-grid.min.css";
+@import "../node_modules/bootstrap/dist/css/bootstrap-reboot.min.css";
 
 body {
   font-size: 16px;
@@ -38,4 +37,12 @@ body {
 
 a {
   text-decoration: none;
+}
+
+.w-100 {
+  width: 100% 
+}
+
+.w-50 {
+  width: 50% 
 }

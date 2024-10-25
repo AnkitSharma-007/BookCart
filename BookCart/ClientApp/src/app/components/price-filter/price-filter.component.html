@@ -6,15 +6,15 @@
   </mat-card-header>
   <mat-card-content>
     <mat-slider
-      class="w-100 m-0"
+      class="m-0"
       [max]="max"
       [min]="min"
       [step]="step"
       [discrete]="thumbLabel"
       [displayWith]="formatLabel"
     >
-      <input matSliderThumb [(ngModel)]="value" (change)="onChange()"
-    /></mat-slider>
+      <input matSliderThumb [(ngModel)]="value" (change)="onChange()" />
+    </mat-slider>
   </mat-card-content>
   <mat-card-content>
     <div class="d-flex justify-content-between">

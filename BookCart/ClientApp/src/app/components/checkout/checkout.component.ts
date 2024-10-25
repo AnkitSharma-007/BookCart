@@ -14,14 +14,20 @@ import { MatButton } from "@angular/material/button";
 import { CurrencyPipe } from "@angular/common";
 import { MatInput } from "@angular/material/input";
 import { MatFormField, MatLabel, MatError } from "@angular/material/form-field";
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } from "@angular/material/card";
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardTitle,
+  MatCardContent,
+  MatCardActions,
+} from "@angular/material/card";
 
 @Component({
-    selector: "app-checkout",
-    templateUrl: "./checkout.component.html",
-    styleUrls: ["./checkout.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-checkout",
+  templateUrl: "./checkout.component.html",
+  styleUrls: ["./checkout.component.scss"],
+  standalone: true,
+  imports: [
     MatCard,
     MatCardHeader,
     MatCardTitle,
@@ -35,8 +41,8 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } 
     MatButton,
     RouterLink,
     MatProgressSpinner,
-    CurrencyPipe
-],
+    CurrencyPipe,
+  ],
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
   userId;
@@ -84,7 +90,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       .getCartItems(this.userId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: (result: ShoppingCart[]) => {
+        next: (result) => {
           const checkedOutItemCount = result.length;
           if (checkedOutItemCount > 0) {
             this.checkOutItems.orderDetails = result;

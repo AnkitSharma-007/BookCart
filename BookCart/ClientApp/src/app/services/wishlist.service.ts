@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
 import { Book } from "../models/book";
@@ -8,12 +8,9 @@ import { SubscriptionService } from "./subscription.service";
   providedIn: "root",
 })
 export class WishlistService {
-  private baseURL = "/api/Wishlist/";
-
-  constructor(
-    private http: HttpClient,
-    private subscriptionService: SubscriptionService
-  ) {}
+  private readonly http = inject(HttpClient);
+  private readonly subscriptionService = inject(SubscriptionService);
+  private readonly baseURL = "/api/Wishlist/";
 
   toggleWishlistItem(userId: number, bookId: number) {
     return this.http

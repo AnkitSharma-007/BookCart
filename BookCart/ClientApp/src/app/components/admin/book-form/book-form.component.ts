@@ -1,26 +1,37 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
+import { AsyncPipe } from "@angular/common";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MatButton } from "@angular/material/button";
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from "@angular/material/card";
+import { MatOption } from "@angular/material/core";
+import {
+  MatError,
+  MatFormField,
+  MatLabel,
+  MatPrefix,
+} from "@angular/material/form-field";
+import { MatIcon } from "@angular/material/icon";
+import { MatInput } from "@angular/material/input";
+import { MatSelect } from "@angular/material/select";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ReplaySubject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { Book } from "src/app/models/book";
 import { BookService } from "src/app/services/book.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
 import { SnackbarService } from "src/app/services/snackbar.service";
-import { MatIcon } from "@angular/material/icon";
-import { MatButton } from "@angular/material/button";
-import { MatOption } from "@angular/material/core";
-import { MatSelect } from "@angular/material/select";
-import { AsyncPipe } from "@angular/common";
-import { MatInput } from "@angular/material/input";
-import { MatFormField, MatLabel, MatError, MatPrefix } from "@angular/material/form-field";
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, MatCardImage } from "@angular/material/card";
 
 @Component({
-    selector: "app-book-form",
-    templateUrl: "./book-form.component.html",
-    styleUrls: ["./book-form.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-book-form",
+  templateUrl: "./book-form.component.html",
+  styleUrls: ["./book-form.component.scss"],
+  standalone: true,
+  imports: [
     MatCard,
     MatCardHeader,
     MatCardTitle,
@@ -35,44 +46,40 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions, M
     MatPrefix,
     MatCardActions,
     MatButton,
-    MatCardImage,
     MatIcon,
-    AsyncPipe
-],
+    AsyncPipe,
+  ],
 })
 export class BookFormComponent implements OnInit, OnDestroy {
-  private formData = new FormData();
-  bookForm: FormGroup;
+  private readonly bookService = inject(BookService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly snackBarService = inject(SnackbarService);
+  private readonly formData = new FormData();
+  private destroyed$ = new ReplaySubject<void>(1);
+
   book: Book = new Book();
   formTitle = "Add";
   coverImagePath;
   bookId;
   files;
   categoryList = this.bookService.categories$;
-  private unsubscribe$ = new Subject<void>();
 
-  constructor(
-    private bookService: BookService,
-    private route: ActivatedRoute,
-    private fb: FormBuilder,
-    private router: Router,
-    private snackBarService: SnackbarService
-  ) {
-    this.bookForm = this.fb.group({
-      bookId: 0,
-      title: ["", Validators.required],
-      author: ["", Validators.required],
-      category: ["", Validators.required],
-      price: ["", [Validators.required, Validators.min(0)]],
-    });
-  }
+  bookForm = this.fb.group({
+    bookId: 0,
+    title: ["", Validators.required],
+    author: ["", Validators.required],
+    category: ["", Validators.required],
+    price: ["", [Validators.required, Validators.min(0)]],
+  });
 
   protected get movieFormControl() {
     return this.bookForm.controls;
   }
 
   ngOnInit() {
-    this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe((params) => {
+    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
       if (params.id) {
         this.bookId = +params.id;
         this.fetchBookData();
@@ -115,7 +122,7 @@ export class BookFormComponent implements OnInit, OnDestroy {
     this.formTitle = "Edit";
     this.bookService
       .getBookById(this.bookId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (result: Book) => {
           this.setBookFormData(result);
@@ -129,7 +136,7 @@ export class BookFormComponent implements OnInit, OnDestroy {
   private editBookDetails() {
     this.bookService
       .updateBookDetails(this.formData)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: () => {
           this.snackBarService.showSnackBar(
@@ -146,7 +153,7 @@ export class BookFormComponent implements OnInit, OnDestroy {
   private saveBookDetails() {
     this.bookService
       .addBook(this.formData)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: () => {
           this.snackBarService.showSnackBar(
@@ -173,7 +180,7 @@ export class BookFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

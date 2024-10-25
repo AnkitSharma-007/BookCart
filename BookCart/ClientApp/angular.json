@@ -26,8 +26,14 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              {
+                "input": "src/styles.scss",
+                "bundleName": "appStyle"
+              },
+              {
+                "input": "@angular/material/prebuilt-themes/indigo-pink.css",
+                "bundleName": "materialStyle"
+              }
             ],
             "scripts": [],
             "browser": "src/main.ts"

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
 import { ShoppingCart } from "../models/shoppingcart";
@@ -7,12 +7,9 @@ import { ShoppingCart } from "../models/shoppingcart";
   providedIn: "root",
 })
 export class CartService {
+  private readonly http = inject(HttpClient);
+  private readonly baseURL = "/api/shoppingcart/";
   cartItemCount = 0;
-  baseURL: string;
-
-  constructor(private http: HttpClient) {
-    this.baseURL = "/api/shoppingcart/";
-  }
 
   addBookToCart(userId: number, bookId: number) {
     return this.http.post<number>(
@@ -22,7 +19,7 @@ export class CartService {
   }
 
   getCartItems(userId: number) {
-    return this.http.get(this.baseURL + userId).pipe(
+    return this.http.get<ShoppingCart[]>(this.baseURL + userId).pipe(
       map((response: ShoppingCart[]) => {
         this.cartItemCount = response.length;
         return response;

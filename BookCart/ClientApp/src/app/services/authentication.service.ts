@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { User } from "../models/user";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
@@ -8,12 +8,9 @@ import { SubscriptionService } from "./subscription.service";
   providedIn: "root",
 })
 export class AuthenticationService {
+  private readonly http = inject(HttpClient);
+  private readonly subscriptionService = inject(SubscriptionService);
   oldUserId;
-
-  constructor(
-    private http: HttpClient,
-    private subscriptionService: SubscriptionService
-  ) {}
 
   login(user) {
     return this.http.post<any>("/api/login", user).pipe(

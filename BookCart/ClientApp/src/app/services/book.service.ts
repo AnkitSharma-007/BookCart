@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { shareReplay, map } from "rxjs/operators";
 import { Book } from "../models/book";
@@ -8,9 +8,8 @@ import { Categories } from "../models/categories";
   providedIn: "root",
 })
 export class BookService {
-  private baseURL = "/api/book/";
-
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
+  private readonly baseURL = "/api/book/";
 
   categories$ = this.http
     .get<Categories[]>(this.baseURL + "GetCategoriesList")

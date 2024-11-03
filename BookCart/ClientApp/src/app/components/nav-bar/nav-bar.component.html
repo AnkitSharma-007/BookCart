@@ -9,84 +9,89 @@
       <app-search></app-search>
     </div>
     <div class="d-flex align-items-center">
-      @if (userData.isLoggedIn) {
-        <button
-          mat-icon-button
-          [routerLinkActive]="['link-active']"
-          [routerLink]="['/wishlist']"
-          >
-          <mat-icon matBadge="{{ wishListCount$ | async }}" matBadgeColor="warn"
-            >favorite</mat-icon
-            >
-          </button>
-        }
-        <button
-          mat-icon-button
-          [routerLinkActive]="['link-active']"
-          [routerLink]="['/shopping-cart']"
-          >
-          <mat-icon matBadge="{{ cartItemCount$ | async }}" matBadgeColor="warn"
-            >shopping_cart</mat-icon
-            >
-          </button>
-          @if (!userData.isLoggedIn) {
-            <button
-              mat-flat-button
-              color="primary"
-              [routerLinkActive]="['link-active']"
-              [routerLink]="['/login']"
-              matTooltip="Login"
-              >
-              Login
-            </button>
-          }
-          @if (userData.userTypeId == userType.admin) {
-            <button
-              mat-flat-button
-              color="primary"
-              [routerLink]="['/admin/books']"
-              matTooltip="Admin panel"
-              >
-              Admin Panel
-            </button>
-          }
+      @if((vm$ | async); as vm){ @if (vm.userData.isLoggedIn) {
+      <button
+        mat-icon-button
+        [routerLinkActive]="['link-active']"
+        [routerLink]="['/wishlist']"
+      >
+        <mat-icon
+          matBadge="{{ vm.wishListCount }}"
+          matBadgeColor="warn"
+          aria-hidden="false"
+          >favorite</mat-icon
+        >
+      </button>
+      }
 
-          @if (userData.isLoggedIn) {
-            <a mat-flat-button color="primary" [matMenuTriggerFor]="menu">
-              <mat-icon>account_circle</mat-icon>
-              <span> {{ userData.username }}</span>
-              <mat-icon>arrow_drop_down</mat-icon>
-            </a>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item [routerLink]="['/myorders']">My Orders</button>
-              <button mat-menu-item (click)="logout()">Logout</button>
-            </mat-menu>
-          }
+      <button
+        mat-icon-button
+        [routerLinkActive]="['link-active']"
+        [routerLink]="['/shopping-cart']"
+      >
+        <mat-icon
+          matBadge="{{ vm.cartItemCount }}"
+          matBadgeColor="warn"
+          aria-hidden="false"
+          >shopping_cart</mat-icon
+        >
+      </button>
 
-          <a
-            mat-flat-button
-            color="primary"
-            href="/swagger/index.html"
-            target="_blank"
-            matTooltip="API details"
-            >
-            <span
-              ><img
-              class="swagger-icon"
-              src="https://static1.smartbear.co/swagger/media/assets/swagger_fav.png"
-            /></span>
-            Swagger
-          </a>
+      @if (!vm.userData.isLoggedIn) {
+      <button
+        mat-flat-button
+        color="primary"
+        [routerLinkActive]="['link-active']"
+        [routerLink]="['/login']"
+        matTooltip="Login"
+      >
+        Login
+      </button>
+      } @if (vm.userData.userTypeId == userType.admin) {
+      <button
+        mat-flat-button
+        color="primary"
+        [routerLink]="['/admin/books']"
+        matTooltip="Admin panel"
+      >
+        Admin Panel
+      </button>
+      } @if (vm.userData.isLoggedIn) {
+      <a mat-flat-button color="primary" [matMenuTriggerFor]="menu">
+        <mat-icon>account_circle</mat-icon>
+        <span> {{ vm.userData.username }}</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </a>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="['/myorders']">My Orders</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
+      </mat-menu>
+      }}
 
-          <a
-            mat-flat-button
-            color="primary"
-            href="https://github.com/AnkitSharma-007/bookcart"
-            target="_blank"
-            matTooltip="GitHub"
-            ><i class="fa fa-github"></i>
-            GitHub
-          </a>
-        </div>
-      </mat-toolbar-row>
-    </mat-toolbar>
+      <a
+        mat-flat-button
+        color="primary"
+        href="/swagger/index.html"
+        target="_blank"
+        matTooltip="API details"
+      >
+        <span
+          ><img
+            class="swagger-icon"
+            src="https://static1.smartbear.co/swagger/media/assets/swagger_fav.png"
+        /></span>
+        Swagger
+      </a>
+
+      <a
+        mat-flat-button
+        color="primary"
+        href="https://github.com/AnkitSharma-007/bookcart"
+        target="_blank"
+        matTooltip="GitHub"
+        ><i class="fa fa-github"></i>
+        GitHub
+      </a>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

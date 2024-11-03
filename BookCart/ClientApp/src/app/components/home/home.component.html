@@ -7,28 +7,23 @@
   </div>
   <div class="col mb-3">
     @if (books?.length > 0) {
-      <div
-        class="d-flex justify-content-start card-deck-container mb-4"
-        >
-        @for (book of books; track book) {
-          <div class="p-1">
-            <app-book-card [book]="book"></app-book-card>
-          </div>
-        }
+    <div class="d-flex justify-content-start card-deck-container mb-4">
+      @for (book of books; track book) {
+      <div class="p-1">
+        <app-book-card [book]="book"></app-book-card>
       </div>
+      }
+    </div>
     } @else {
-      <div class="d-flex justify-content-center mt-4">
-        @if (!isLoading) {
-          <h1 class="display-4">No books found.</h1>
-        }
-      </div>
-    }
-    @if (isLoading) {
-      <div
-        class="d-flex align-items-center justify-content-center"
-        >
-        <mat-spinner></mat-spinner>
-      </div>
+    <div class="d-flex justify-content-center mt-4">
+      @if (!isLoading) {
+      <h1 class="display-4">No books found.</h1>
+      }
+    </div>
+    } @if (isLoading) {
+    <div class="d-flex align-items-center justify-content-center">
+      <mat-spinner></mat-spinner>
+    </div>
     }
   </div>
 </div>

@@ -1,26 +1,25 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Order } from "src/app/models/order";
-import { FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
-import { CartService } from "src/app/services/cart.service";
-import { CheckoutService } from "src/app/services/checkout.service";
-import { ShoppingCart } from "src/app/models/shoppingcart";
-import { SnackbarService } from "src/app/services/snackbar.service";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { SubscriptionService } from "src/app/services/subscription.service";
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { MatButton } from "@angular/material/button";
 import { CurrencyPipe } from "@angular/common";
-import { MatInput } from "@angular/material/input";
-import { MatFormField, MatLabel, MatError } from "@angular/material/form-field";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MatButton } from "@angular/material/button";
 import {
   MatCard,
+  MatCardActions,
+  MatCardContent,
   MatCardHeader,
   MatCardTitle,
-  MatCardContent,
-  MatCardActions,
 } from "@angular/material/card";
+import { MatError, MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatInput } from "@angular/material/input";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { Router, RouterLink } from "@angular/router";
+import { ReplaySubject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { Order } from "src/app/models/order";
+import { CartService } from "src/app/services/cart.service";
+import { CheckoutService } from "src/app/services/checkout.service";
+import { SnackbarService } from "src/app/services/snackbar.service";
+import { SubscriptionService } from "src/app/services/subscription.service";
 
 @Component({
   selector: "app-checkout",
@@ -45,22 +44,20 @@ import {
   ],
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
-  userId;
-  totalPrice: number;
-  checkOutItems = new Order();
-  showLoader = false;
-  private unsubscribe$ = new Subject<void>();
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly cartService = inject(CartService);
+  private readonly checkOutService = inject(CheckoutService);
+  private readonly snackBarService = inject(SnackbarService);
+  private readonly subscriptionService = inject(SubscriptionService);
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private cartService: CartService,
-    private checkOutService: CheckoutService,
-    private snackBarService: SnackbarService,
-    private subscriptionService: SubscriptionService
-  ) {
-    this.userId = localStorage.getItem("userId");
-  }
+  userId = localStorage.getItem("userId");
+  totalPrice = 0;
+  checkOutItems: Order = {
+    orderDetails: [],
+  };
+  showLoader = false;
+  private destroyed$ = new ReplaySubject<void>(1);
 
   checkOutForm = this.fb.group({
     name: ["", Validators.required],
@@ -87,8 +84,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getCheckOutItems() {
     this.showLoader = true;
     this.cartService
-      .getCartItems(this.userId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .getCartItems(Number(this.userId))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (result) => {
           const checkedOutItemCount = result.length;
@@ -121,8 +118,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   placeOrder() {
     if (this.checkOutForm.valid) {
       this.checkOutService
-        .placeOrder(this.userId, this.checkOutItems)
-        .pipe(takeUntil(this.unsubscribe$))
+        .placeOrder(Number(this.userId), this.checkOutItems)
+        .pipe(takeUntil(this.destroyed$))
         .subscribe({
           next: (result) => {
             this.subscriptionService.cartItemcount$.next(result);
@@ -137,7 +134,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

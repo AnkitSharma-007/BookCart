@@ -1,8 +1,8 @@
-import { ShoppingCart } from './shoppingcart';
+import { ShoppingCart } from "./shoppingcart";
 
-export class Order {
-    orderDetails: ShoppingCart[] = [];
-    cartTotal: number;
-    orderId: string;
-    orderDate: Date;
+export interface Order {
+  orderDetails: ShoppingCart[];
+  cartTotal?: number;
+  orderId?: string;
+  orderDate?: Date;
 }

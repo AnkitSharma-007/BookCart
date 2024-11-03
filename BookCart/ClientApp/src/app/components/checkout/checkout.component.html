@@ -15,178 +15,149 @@
                 placeholder="Name"
                 formControlName="name"
                 required
-                />
-                @if (
-                  checkoutFormControl.name.touched &&
-                  checkoutFormControl.name.invalid
-                  ) {
-                  <mat-error
-                    >Name is required</mat-error
-                    >
-                }
-              </mat-form-field>
+              />
+              @if ( checkoutFormControl.name.touched &&
+              checkoutFormControl.name.invalid ) {
+              <mat-error>Name is required</mat-error>
+              }
+            </mat-form-field>
 
-              <mat-form-field class="w-100" appearance="outline">
-                <mat-label>Address Line 1</mat-label>
-                <input
-                  matInput
-                  placeholder="Address Line 1"
-                  formControlName="addressLine1"
-                  required
-                  />
-                  @if (
-                    checkoutFormControl.addressLine1.touched &&
-                    checkoutFormControl.addressLine1.invalid
-                    ) {
-                    <mat-error
-                      >Address is required
-                    </mat-error>
-                  }
-                </mat-form-field>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Address Line 1</mat-label>
+              <input
+                matInput
+                placeholder="Address Line 1"
+                formControlName="addressLine1"
+                required
+              />
+              @if ( checkoutFormControl.addressLine1.touched &&
+              checkoutFormControl.addressLine1.invalid ) {
+              <mat-error>Address is required </mat-error>
+              }
+            </mat-form-field>
 
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label>Address Line 2</mat-label>
-                  <input
-                    matInput
-                    placeholder="Address Line 2"
-                    formControlName="addressLine2"
-                    required
-                    />
-                    @if (
-                      checkoutFormControl.addressLine2.touched &&
-                      checkoutFormControl.addressLine2.invalid
-                      ) {
-                      <mat-error
-                        >Address is required
-                      </mat-error>
-                    }
-                  </mat-form-field>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Address Line 2</mat-label>
+              <input
+                matInput
+                placeholder="Address Line 2"
+                formControlName="addressLine2"
+                required
+              />
+              @if ( checkoutFormControl.addressLine2.touched &&
+              checkoutFormControl.addressLine2.invalid ) {
+              <mat-error>Address is required </mat-error>
+              }
+            </mat-form-field>
 
-                  <mat-form-field class="w-100" appearance="outline">
-                    <mat-label>Pincode</mat-label>
-                    <input
-                      matInput
-                      placeholder="Pincode"
-                      formControlName="pincode"
-                      required
-                      />
-                      @if (
-                        checkoutFormControl.pincode.touched &&
-                        checkoutFormControl.pincode.hasError('required')
-                        ) {
-                        <mat-error
-                          >Pincode is required
-                        </mat-error>
-                      }
-                      @if (
-                        checkoutFormControl.pincode.touched &&
-                        checkoutFormControl.pincode.hasError('pattern')
-                        ) {
-                        <mat-error
-                          >
-                          Pincode must have 6 digits only and cannot start with 0
-                        </mat-error>
-                      }
-                    </mat-form-field>
-                    <mat-form-field class="w-100" appearance="outline">
-                      <mat-label>State</mat-label>
-                      <input
-                        matInput
-                        placeholder="State"
-                        formControlName="state"
-                        required
-                        />
-                        @if (
-                          checkoutFormControl.state.touched &&
-                          checkoutFormControl.state.invalid
-                          ) {
-                          <mat-error
-                            >State is required</mat-error
-                            >
-                        }
-                      </mat-form-field>
-                      <mat-card-actions align="end" class="p-0">
-                        <button
-                          type="submit"
-                          mat-raised-button
-                          color="primary"
-                          [disabled]="checkOutForm.disabled"
-                          >
-                          Place Order
-                        </button>
-                        <button
-                          class="ms-2"
-                          mat-raised-button
-                          color="warn"
-                          [routerLink]="['/shopping-cart']"
-                          >
-                          Cancel
-                        </button>
-                      </mat-card-actions>
-                    </form>
-                  </mat-card-content>
-                </div>
-                <div class="col-md-6">
-                  @if (showLoader) {
-                    <div class="d-flex justify-content-center">
-                      <mat-spinner></mat-spinner>
-                    </div>
-                  } @else {
-                    @if (checkOutItems.orderDetails.length > 0) {
-                      <mat-card-title> Order Summary </mat-card-title>
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th>Title</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @for (item of checkOutItems.orderDetails; track item) {
-                            <tr>
-                              <td>
-                                {{ item.book.title }}
-                              </td>
-                              <td>{{ item.quantity }}</td>
-                              <td>{{ item.book.price | currency : "INR" }}</td>
-                              <td>
-                                {{ item.book.price * item.quantity | currency : "INR" }}
-                              </td>
-                            </tr>
-                          }
-                        </tbody>
-                        <tfoot class="table">
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <th>Grand Total</th>
-                            <th>{{ totalPrice | currency : "INR" }}</th>
-                          </tr>
-                        </tfoot>
-                      </table>
-                    } @else {
-                      <mat-card-header class="d-flex justify-content-center">
-                        <mat-card-title>
-                          There are no items in your cart.
-                        </mat-card-title>
-                      </mat-card-header>
-                      <mat-card-content class="d-flex justify-content-center">
-                        <button
-                          mat-raised-button
-                          color="primary"
-                          [routerLink]="['/']"
-                          class="mt-2"
-                          >
-                          Start shopping
-                        </button>
-                      </mat-card-content>
-                    }
-                  }
-                  <mat-card-content>
-                  </mat-card-content>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Pincode</mat-label>
+              <input
+                matInput
+                placeholder="Pincode"
+                formControlName="pincode"
+                required
+              />
+              @if ( checkoutFormControl.pincode.touched &&
+              checkoutFormControl.pincode.hasError('required') ) {
+              <mat-error>Pincode is required </mat-error>
+              } @if ( checkoutFormControl.pincode.touched &&
+              checkoutFormControl.pincode.hasError('pattern') ) {
+              <mat-error>
+                Pincode must have 6 digits only and cannot start with 0
+              </mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>State</mat-label>
+              <input
+                matInput
+                placeholder="State"
+                formControlName="state"
+                required
+              />
+              @if ( checkoutFormControl.state.touched &&
+              checkoutFormControl.state.invalid ) {
+              <mat-error>State is required</mat-error>
+              }
+            </mat-form-field>
+            <mat-card-actions align="end" class="p-0">
+              <button
+                type="submit"
+                mat-raised-button
+                color="primary"
+                [disabled]="checkOutForm.disabled"
+              >
+                Place Order
+              </button>
+              <button
+                class="ms-2"
+                mat-raised-button
+                color="warn"
+                [routerLink]="['/shopping-cart']"
+              >
+                Cancel
+              </button>
+            </mat-card-actions>
+          </form>
+        </mat-card-content>
+      </div>
+      <div class="col-md-6">
+        @if (showLoader) {
+        <div class="d-flex justify-content-center">
+          <mat-spinner></mat-spinner>
+        </div>
+        } @else { @if (checkOutItems.orderDetails.length > 0) {
+        <mat-card-title> Order Summary </mat-card-title>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of checkOutItems.orderDetails; track item) {
+            <tr>
+              <td>
+                {{ item.book.title }}
+              </td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.book.price | currency : "INR" }}</td>
+              <td>
+                {{ item.book.price * item.quantity | currency : "INR" }}
+              </td>
+            </tr>
+            }
+          </tbody>
+          <tfoot class="table">
+            <tr>
+              <td></td>
+              <td></td>
+              <th>Grand Total</th>
+              <th>{{ totalPrice | currency : "INR" }}</th>
+            </tr>
+          </tfoot>
+        </table>
+        } @else {
+        <mat-card-header class="d-flex justify-content-center">
+          <mat-card-title> There are no items in your cart. </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="d-flex justify-content-center">
+          <button
+            mat-raised-button
+            color="primary"
+            [routerLink]="['/']"
+            class="mt-2"
+          >
+            Start shopping
+          </button>
+        </mat-card-content>
+        } }
+        <mat-card-content> </mat-card-content>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

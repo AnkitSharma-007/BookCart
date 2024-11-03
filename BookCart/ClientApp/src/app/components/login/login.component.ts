@@ -1,26 +1,43 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { CartService } from "src/app/services/cart.service";
-import { AuthenticationService } from "src/app/services/authentication.service";
-import { SubscriptionService } from "src/app/services/subscription.service";
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from "@angular/forms";
-import { User } from "src/app/models/user";
-import { switchMap, takeUntil } from "rxjs/operators";
-import { WishlistService } from "src/app/services/wishlist.service";
-import { Subject } from "rxjs";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
+import {
+  MatError,
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
 import { MatInput } from "@angular/material/input";
-import { MatError, MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { combineLatest, ReplaySubject } from "rxjs";
+import { switchMap, takeUntil } from "rxjs/operators";
+import { User } from "src/app/models/user";
+import { AuthenticationService } from "src/app/services/authentication.service";
+import { CartService } from "src/app/services/cart.service";
+import { SubscriptionService } from "src/app/services/subscription.service";
+import { WishlistService } from "src/app/services/wishlist.service";
 
 import { MatButton } from "@angular/material/button";
-import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from "@angular/material/card";
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle,
+} from "@angular/material/card";
 
 @Component({
-    selector: "app-login",
-    templateUrl: "./login.component.html",
-    styleUrls: ["./login.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.scss"],
+  standalone: true,
+  imports: [
     MatCard,
     MatCardHeader,
     MatCardTitle,
@@ -35,27 +52,25 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, 
     MatInput,
     MatIcon,
     MatSuffix,
-    MatCardActions
-],
+    MatCardActions,
+  ],
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private cartService = inject(CartService);
+  private authenticationService = inject(AuthenticationService);
+  private subscriptionService = inject(SubscriptionService);
+  private wishlistService = inject(WishlistService);
+
   showPassword = true;
   userId;
-  private unsubscribe$ = new Subject<void>();
+  private destroyed$ = new ReplaySubject<void>(1);
 
   loginForm = new FormGroup({
     username: new FormControl("", Validators.required),
     password: new FormControl("", Validators.required),
   });
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private cartService: CartService,
-    private authenticationService: AuthenticationService,
-    private subscriptionService: SubscriptionService,
-    private wishlistService: WishlistService
-  ) {}
 
   protected get loginFormControl() {
     return this.loginForm.controls;
@@ -64,7 +79,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptionService.userData$
       .asObservable()
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((data: User) => {
         this.userId = data.userId;
       });
@@ -77,17 +92,20 @@ export class LoginComponent implements OnInit, OnDestroy {
         .login(this.loginForm.value)
         .pipe(
           switchMap(() => {
-            return this.cartService.setCart(
-              this.authenticationService.oldUserId,
-              this.userId
-            );
+            return combineLatest([
+              this.cartService.setCart(
+                this.authenticationService.oldUserId,
+                this.userId
+              ),
+              this.wishlistService.getWishlistItems(this.userId),
+            ]);
           }),
-          switchMap((cartItemcount) => {
+          switchMap(([cartItemcount]) => {
             this.subscriptionService.cartItemcount$.next(cartItemcount);
             return this.wishlistService.getWishlistItems(this.userId);
           }),
           switchMap(() => this.route.queryParams),
-          takeUntil(this.unsubscribe$)
+          takeUntil(this.destroyed$)
         )
         .subscribe({
           next: (params) => {
@@ -106,7 +124,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

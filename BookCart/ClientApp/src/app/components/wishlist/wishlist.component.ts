@@ -8,19 +8,35 @@ import { takeUntil } from "rxjs/operators";
 import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
 import { AddtocartComponent } from "../addtocart/addtocart.component";
 import { MatTooltip } from "@angular/material/tooltip";
-import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from "@angular/material/table";
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from "@angular/material/table";
 import { RouterLink } from "@angular/router";
 import { MatButton } from "@angular/material/button";
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/material/card";
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardTitle,
+  MatCardContent,
+} from "@angular/material/card";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { AsyncPipe, CurrencyPipe } from "@angular/common";
 
 @Component({
-    selector: "app-wishlist",
-    templateUrl: "./wishlist.component.html",
-    styleUrls: ["./wishlist.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-wishlist",
+  templateUrl: "./wishlist.component.html",
+  styleUrls: ["./wishlist.component.scss"],
+  standalone: true,
+  imports: [
     MatProgressSpinner,
     MatCard,
     MatCardHeader,
@@ -42,8 +58,8 @@ import { AsyncPipe, CurrencyPipe } from "@angular/common";
     MatRowDef,
     MatRow,
     AsyncPipe,
-    CurrencyPipe
-],
+    CurrencyPipe,
+  ],
 })
 export class WishlistComponent implements OnInit, OnDestroy {
   wishlistItems$: Observable<Book[]>;

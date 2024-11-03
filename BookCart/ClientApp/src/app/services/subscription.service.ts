@@ -9,7 +9,7 @@ import { Book } from "../models/book";
 export class SubscriptionService {
   userData$ = new BehaviorSubject<User>(new User());
   searchItemValue$ = new BehaviorSubject<string>("");
-  wishlistItemcount$ = new Subject<number>();
+  wishlistItemcount$ = new BehaviorSubject<number>(0);
   wishlistItem$ = new BehaviorSubject<Book[]>([]);
-  cartItemcount$ = new Subject<number>();
+  cartItemcount$ = new BehaviorSubject<number>(0);
 }

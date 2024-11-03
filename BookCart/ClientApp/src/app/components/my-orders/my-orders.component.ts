@@ -6,7 +6,7 @@ import {
   trigger,
 } from "@angular/animations";
 import { CurrencyPipe, DatePipe } from "@angular/common";
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { MatButton } from "@angular/material/button";
 import {
   MatCard,
@@ -25,15 +25,15 @@ import {
   MatHeaderCell,
   MatHeaderCellDef,
   MatHeaderRow,
+  MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
   MatTableDataSource,
-  MatNoDataRow,
-  MatHeaderRowDef,
 } from "@angular/material/table";
 import { RouterLink } from "@angular/router";
-import { Subject } from "rxjs";
+import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Order } from "src/app/models/order";
 import { MyordersService } from "src/app/services/myorders.service";
@@ -81,29 +81,29 @@ import { MyordersService } from "src/app/services/myorders.service";
   ],
 })
 export class MyOrdersComponent implements OnInit, OnDestroy {
+  private readonly orderService = inject(MyordersService);
+
   displayedColumns: string[] = ["orderId", "orderedOn", "orderTotal"];
   dataSource = new MatTableDataSource<Order>();
   expandedElement: null;
+
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.dataSource.paginator = mp;
   }
-  userId;
-  isLoading: boolean;
-  private unsubscribe$ = new Subject<void>();
 
-  constructor(private orderService: MyordersService) {
-    this.userId = localStorage.getItem("userId");
-  }
+  userId = localStorage.getItem("userId");
+  isLoading: boolean;
+  private destroyed$ = new ReplaySubject<void>(1);
 
   ngOnInit() {
-    this.isLoading = true;
     this.getMyOrderDetails();
   }
 
   getMyOrderDetails() {
+    this.isLoading = true;
     this.orderService
-      .myOrderDetails(this.userId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .myOrderDetails(Number(this.userId))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (result) => {
           if (result != null) {
@@ -129,7 +129,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

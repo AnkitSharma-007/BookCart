@@ -1,6 +1,6 @@
-import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { map } from "rxjs/operators";
+import { inject, Injectable } from "@angular/core";
+import { map, tap } from "rxjs/operators";
 import { Book } from "../models/book";
 import { SubscriptionService } from "./subscription.service";
 
@@ -25,18 +25,16 @@ export class WishlistService {
 
   getWishlistItems(userId: number) {
     return this.http.get<Book[]>(this.baseURL + userId).pipe(
-      map((response) => {
+      tap((response) => {
         this.setWishlist(response);
-        return response;
       })
     );
   }
 
   clearWishlist(userId: number) {
     return this.http.delete<number>(this.baseURL + `${userId}`, {}).pipe(
-      map((response: number) => {
+      tap(() => {
         this.subscriptionService.wishlistItem$.next([]);
-        return response;
       })
     );
   }

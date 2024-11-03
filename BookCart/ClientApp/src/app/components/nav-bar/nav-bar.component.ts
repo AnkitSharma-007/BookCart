@@ -1,27 +1,27 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
+import { Component, inject } from "@angular/core";
+import { MatBadge } from "@angular/material/badge";
+import { MatAnchor, MatButton, MatIconButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
+import { MatToolbar, MatToolbarRow } from "@angular/material/toolbar";
+import { MatTooltip } from "@angular/material/tooltip";
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { combineLatestWith, map } from "rxjs";
 import { User } from "src/app/models/user";
 import { UserType } from "src/app/models/usertype";
-import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { AuthenticationService } from "src/app/services/authentication.service";
-import { UserService } from "src/app/services/user.service";
 import { SubscriptionService } from "src/app/services/subscription.service";
-import { ReplaySubject, takeUntil } from "rxjs";
+import { UserService } from "src/app/services/user.service";
 import { WishlistService } from "src/app/services/wishlist.service";
-import { MatMenuTrigger, MatMenu, MatMenuItem } from "@angular/material/menu";
-import { MatTooltip } from "@angular/material/tooltip";
-import { MatBadge } from "@angular/material/badge";
-import { AsyncPipe } from "@angular/common";
 import { SearchComponent } from "../search/search.component";
-import { MatIcon } from "@angular/material/icon";
-import { MatButton, MatIconButton, MatAnchor } from "@angular/material/button";
-import { MatToolbar, MatToolbarRow } from "@angular/material/toolbar";
 
 @Component({
-    selector: "app-nav-bar",
-    templateUrl: "./nav-bar.component.html",
-    styleUrls: ["./nav-bar.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-nav-bar",
+  templateUrl: "./nav-bar.component.html",
+  styleUrls: ["./nav-bar.component.scss"],
+  standalone: true,
+  imports: [
     MatToolbar,
     MatToolbarRow,
     MatButton,
@@ -36,53 +36,59 @@ import { MatToolbar, MatToolbarRow } from "@angular/material/toolbar";
     MatMenuTrigger,
     MatMenu,
     MatMenuItem,
-    AsyncPipe
-],
+    AsyncPipe,
+    NgTemplateOutlet,
+  ],
 })
-export class NavBarComponent implements OnInit, OnDestroy {
-  userId;
-  userData = new User();
+export class NavBarComponent {
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthenticationService);
+  private readonly userService = inject(UserService);
+  private readonly subscriptionService = inject(SubscriptionService);
+  private readonly wishlistService = inject(WishlistService);
+
+  userId = localStorage.getItem("userId");
   userType = UserType;
-  cartItemCount$ = this.subscriptionService.cartItemcount$;
-  wishListCount$ = this.subscriptionService.wishlistItemcount$;
+  userData$ = this.subscriptionService.userData$.asObservable();
+  cartItemCount$ = this.subscriptionService.cartItemcount$.asObservable();
+  getCartItemCount$ = this.userService.getCartItemCount(Number(this.userId));
+  wishListCount$ = this.subscriptionService.wishlistItemcount$.asObservable();
+  getWishlistItems$ = this.wishlistService.getWishlistItems(
+    Number(this.userId)
+  );
 
-  private destroyed$ = new ReplaySubject<void>(1);
+  vm$ = this.getCartItemCount$.pipe(
+    combineLatestWith(
+      this.userData$,
+      this.cartItemCount$,
+      this.wishListCount$,
+      this.getWishlistItems$
+    ),
+    map(([, userData, cartItemCount, wishListCount]) => {
+      let vm = new Vm();
 
-  constructor(
-    private router: Router,
-    private authService: AuthenticationService,
-    private userService: UserService,
-    private subscriptionService: SubscriptionService,
-    private wishlistService: WishlistService
-  ) {
-    this.userId = localStorage.getItem("userId");
-    this.wishlistService
-      .getWishlistItems(this.userId)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe();
-    this.userService
-      .getCartItemCount(this.userId)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data: number) => {
-        this.subscriptionService.cartItemcount$.next(data);
-      });
-  }
+      vm.userData = userData;
+      vm.cartItemCount = cartItemCount;
+      vm.wishListCount = wishListCount;
 
-  ngOnInit() {
-    this.subscriptionService.userData$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        this.userData = data;
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
+      return vm;
+    })
+  );
 
   logout() {
     this.authService.logout();
     this.router.navigate(["/login"]);
+  }
+}
+
+class Vm {
+  userData: User;
+  cartItemCount: number;
+  wishListCount: number;
+
+  constructor() {
+    this.userData = new User();
+    this.cartItemCount = 0;
+    this.wishListCount = 0;
   }
 }

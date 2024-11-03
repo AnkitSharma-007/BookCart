@@ -1,18 +1,14 @@
 # BookCart
 
-An e-commerce application for an online book store created with ASP.NET Core and Angular, using SQL Server as database.
+An e-commerce application for an online book store created with .NET and Angular 18, using SQL Server as database.
 
 # Google Gemini integration
 
-
-
 https://github.com/AnkitSharma-007/BookCart/assets/33789321/f2ee777e-24b8-48ba-93c7-638cdbab25a6
-
-
 
 # Concepts Covered
 
-### ASP .NET Core
+### .NET
 
  - Web API created using EF Core DB first approach
  - Policy based Authorization using JWT
@@ -25,7 +21,8 @@ https://github.com/AnkitSharma-007/BookCart/assets/33789321/f2ee777e-24b8-48ba-9
  - Angular Material 
  - Routing & Navigation
  - Auth guards
- - Lazy loading of modules
+ - Standalone components
+ - Lazy loading of Standalone components
  - HTTP Interceptors
  - Reactive forms
  - Form validation (inbuilt and custom)

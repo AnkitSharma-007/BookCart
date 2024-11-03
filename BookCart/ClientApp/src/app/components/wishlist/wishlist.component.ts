@@ -1,35 +1,34 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Book } from "src/app/models/book";
-import { SubscriptionService } from "src/app/services/subscription.service";
-import { Observable, Subject } from "rxjs";
-import { WishlistService } from "src/app/services/wishlist.service";
-import { SnackbarService } from "src/app/services/snackbar.service";
-import { takeUntil } from "rxjs/operators";
-import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
-import { AddtocartComponent } from "../addtocart/addtocart.component";
-import { MatTooltip } from "@angular/material/tooltip";
-import {
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from "@angular/material/table";
-import { RouterLink } from "@angular/router";
+import { AsyncPipe, CurrencyPipe } from "@angular/common";
+import { Component, inject, OnDestroy } from "@angular/core";
 import { MatButton } from "@angular/material/button";
 import {
   MatCard,
+  MatCardContent,
   MatCardHeader,
   MatCardTitle,
-  MatCardContent,
 } from "@angular/material/card";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { AsyncPipe, CurrencyPipe } from "@angular/common";
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from "@angular/material/table";
+import { MatTooltip } from "@angular/material/tooltip";
+import { RouterLink } from "@angular/router";
+import { ReplaySubject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { SnackbarService } from "src/app/services/snackbar.service";
+import { SubscriptionService } from "src/app/services/subscription.service";
+import { WishlistService } from "src/app/services/wishlist.service";
+import { AddtocartComponent } from "../addtocart/addtocart.component";
+import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
 
 @Component({
   selector: "app-wishlist",
@@ -61,35 +60,20 @@ import { AsyncPipe, CurrencyPipe } from "@angular/common";
     CurrencyPipe,
   ],
 })
-export class WishlistComponent implements OnInit, OnDestroy {
-  wishlistItems$: Observable<Book[]>;
-  isLoading: boolean;
-  userId;
+export class WishlistComponent implements OnDestroy {
+  private subscriptionService = inject(SubscriptionService);
+  private wishlistService = inject(WishlistService);
+  private snackBarService = inject(SnackbarService);
+  private destroyed$ = new ReplaySubject<void>(1);
+
+  wishlistItems$ = this.subscriptionService.wishlistItem$;
+  userId = localStorage.getItem("userId");
   displayedColumns: string[] = ["image", "title", "price", "cart", "wishlist"];
-  private unsubscribe$ = new Subject<void>();
-
-  constructor(
-    private subscriptionService: SubscriptionService,
-    private wishlistService: WishlistService,
-    private snackBarService: SnackbarService
-  ) {
-    this.userId = localStorage.getItem("userId");
-  }
-
-  ngOnInit(): void {
-    this.isLoading = true;
-    this.getWishlistItems();
-  }
-
-  getWishlistItems() {
-    this.wishlistItems$ = this.subscriptionService.wishlistItem$;
-    this.isLoading = false;
-  }
 
   clearWishlist() {
     this.wishlistService
-      .clearWishlist(this.userId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .clearWishlist(Number(this.userId))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (result) => {
           this.subscriptionService.wishlistItemcount$.next(result);
@@ -102,7 +86,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

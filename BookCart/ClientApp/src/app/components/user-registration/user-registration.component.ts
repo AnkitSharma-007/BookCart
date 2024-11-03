@@ -1,25 +1,45 @@
-import { Component, OnDestroy } from "@angular/core";
-import { Validators, FormBuilder, ReactiveFormsModule } from "@angular/forms";
-import { UserService } from "src/app/services/user.service";
-import { CustomValidationService } from "src/app/services/custom-validation.service";
-import { Router, RouterLink } from "@angular/router";
-import { SnackbarService } from "src/app/services/snackbar.service";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { MatRadioGroup, MatRadioButton } from "@angular/material/radio";
-import { MatIcon } from "@angular/material/icon";
-
-import { MatInput } from "@angular/material/input";
-import { MatFormField, MatLabel, MatError, MatSuffix } from "@angular/material/form-field";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+} from "@angular/core";
+import {
+  FormControl,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { MatButton } from "@angular/material/button";
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } from "@angular/material/card";
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from "@angular/material/card";
+import {
+  MatError,
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from "@angular/material/form-field";
+import { MatIcon } from "@angular/material/icon";
+import { MatInput } from "@angular/material/input";
+import { MatRadioButton, MatRadioGroup } from "@angular/material/radio";
+import { Router, RouterLink } from "@angular/router";
+import { ReplaySubject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { CustomValidationService } from "src/app/services/custom-validation.service";
+import { SnackbarService } from "src/app/services/snackbar.service";
+import { UserService } from "src/app/services/user.service";
 
 @Component({
-    selector: "app-user-registration",
-    templateUrl: "./user-registration.component.html",
-    styleUrls: ["./user-registration.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-user-registration",
+  templateUrl: "./user-registration.component.html",
+  styleUrls: ["./user-registration.component.scss"],
+  standalone: true,
+  imports: [
     MatCard,
     MatCardHeader,
     MatCardTitle,
@@ -35,43 +55,44 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } 
     MatSuffix,
     MatRadioGroup,
     MatRadioButton,
-    MatCardActions
-],
+    MatCardActions,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserRegistrationComponent implements OnDestroy {
+  private readonly userService = inject(UserService);
+  private readonly router = inject(Router);
+  private readonly snackBarService = inject(SnackbarService);
+  private readonly customValidation = inject(CustomValidationService);
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+
   showPassword = true;
   showConfirmPassword = true;
-  private unsubscribe$ = new Subject<void>();
+  private destroyed$ = new ReplaySubject<void>(1);
 
-  constructor(
-    private userService: UserService,
-    private router: Router,
-    private fb: FormBuilder,
-    private snackBarService: SnackbarService,
-    private customValidation: CustomValidationService
-  ) {}
-
-  registrationForm = this.fb.group(
+  registrationForm = this.formBuilder.group(
     {
-      firstname: ["", Validators.required],
-      lastname: ["", Validators.required],
-      username: [
+      firstname: new FormControl("", Validators.required),
+      lastname: new FormControl("", Validators.required),
+      username: new FormControl(
         "",
         [Validators.required],
-        this.customValidation.userNameValidator.bind(this.customValidation),
-      ],
-      password: [
+        this.customValidation.userNameValidator.bind(this.customValidation)
+      ),
+      password: new FormControl(
         "",
         Validators.compose([
           Validators.required,
           this.customValidation.patternValidator(),
-        ]),
-      ],
-      confirmPassword: ["", [Validators.required]],
-      gender: ["", Validators.required],
+        ])
+      ),
+      confirmPassword: new FormControl("", [Validators.required]),
+      gender: new FormControl("", Validators.required),
     },
     {
-      validator: this.customValidation.confirmPasswordValidator,
+      validators: [
+        this.customValidation.matchPassword("password", "confirmPassword"),
+      ],
     }
   );
 
@@ -83,7 +104,7 @@ export class UserRegistrationComponent implements OnDestroy {
     if (this.registrationForm.valid) {
       this.userService
         .registerUser(this.registrationForm.value)
-        .pipe(takeUntil(this.unsubscribe$))
+        .pipe(takeUntil(this.destroyed$))
         .subscribe({
           next: () => {
             this.router.navigate(["/login"]);
@@ -97,7 +118,7 @@ export class UserRegistrationComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

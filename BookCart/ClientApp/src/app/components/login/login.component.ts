@@ -1,4 +1,10 @@
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
 import {
   FormControl,
   FormGroup,
@@ -54,14 +60,15 @@ import {
     MatSuffix,
     MatCardActions,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private cartService = inject(CartService);
-  private authenticationService = inject(AuthenticationService);
-  private subscriptionService = inject(SubscriptionService);
-  private wishlistService = inject(WishlistService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly cartService = inject(CartService);
+  private readonly authenticationService = inject(AuthenticationService);
+  private readonly subscriptionService = inject(SubscriptionService);
+  private readonly wishlistService = inject(WishlistService);
 
   showPassword = true;
   userId;
@@ -87,20 +94,16 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   login() {
     if (this.loginForm.valid) {
-      // This logic needs refactoring as the UI is not smooth after login.
       this.authenticationService
         .login(this.loginForm.value)
         .pipe(
           switchMap(() => {
-            return combineLatest([
-              this.cartService.setCart(
-                this.authenticationService.oldUserId,
-                this.userId
-              ),
-              this.wishlistService.getWishlistItems(this.userId),
-            ]);
+            return this.cartService.setCart(
+              this.authenticationService.oldUserId,
+              this.userId
+            );
           }),
-          switchMap(([cartItemcount]) => {
+          switchMap((cartItemcount) => {
             this.subscriptionService.cartItemcount$.next(cartItemcount);
             return this.wishlistService.getWishlistItems(this.userId);
           }),

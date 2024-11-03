@@ -1,37 +1,33 @@
-import { Component, Input, OnDestroy } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Component, inject, Input, OnDestroy } from "@angular/core";
+import { MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { ReplaySubject, takeUntil } from "rxjs";
 import { CartService } from "src/app/services/cart.service";
 import { SnackbarService } from "src/app/services/snackbar.service";
 import { SubscriptionService } from "src/app/services/subscription.service";
-import { MatIcon } from "@angular/material/icon";
-import { MatButton } from "@angular/material/button";
 
 @Component({
-    selector: "app-addtocart",
-    templateUrl: "./addtocart.component.html",
-    styleUrls: ["./addtocart.component.scss"],
-    standalone: true,
-    imports: [MatButton, MatIcon],
+  selector: "app-addtocart",
+  templateUrl: "./addtocart.component.html",
+  styleUrls: ["./addtocart.component.scss"],
+  standalone: true,
+  imports: [MatButton, MatIcon],
 })
 export class AddtocartComponent implements OnDestroy {
   @Input()
   bookId: number;
 
-  userId;
-  private unsubscribe$ = new Subject<void>();
+  private readonly cartService = inject(CartService);
+  private readonly snackBarService = inject(SnackbarService);
+  private readonly subscriptionService = inject(SubscriptionService);
 
-  constructor(
-    private cartService: CartService,
-    private snackBarService: SnackbarService,
-    private subscriptionService: SubscriptionService
-  ) {
-    this.userId = localStorage.getItem("userId");
-  }
+  userId = localStorage.getItem("userId");
+  private destroyed$ = new ReplaySubject<void>(1);
 
   addToCart() {
     this.cartService
-      .addBookToCart(this.userId, this.bookId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .addBookToCart(Number(this.userId), this.bookId)
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (result) => {
           this.subscriptionService.cartItemcount$.next(result);
@@ -44,7 +40,7 @@ export class AddtocartComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

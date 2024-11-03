@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, inject } from "@angular/core";
 import { ShoppingCart } from "src/app/models/shoppingcart";
 import { CartService } from "src/app/services/cart.service";
 import { SnackbarService } from "src/app/services/snackbar.service";
-import { Subject } from "rxjs";
+import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { SubscriptionService } from "src/app/services/subscription.service";
 import { MatIcon } from "@angular/material/icon";
@@ -61,13 +61,14 @@ import { CurrencyPipe } from "@angular/common";
 })
 export class ShoppingcartComponent implements OnInit, OnDestroy {
   private readonly cartService = inject(CartService);
-  private snackBarService = inject(SnackbarService);
-  private subscriptionService = inject(SubscriptionService);
-  public cartItems: ShoppingCart[];
+  private readonly snackBarService = inject(SnackbarService);
+  private readonly subscriptionService = inject(SubscriptionService);
+  private destroyed$ = new ReplaySubject<void>(1);
+
+  cartItems: ShoppingCart[];
 
   userId = localStorage.getItem("userId");
   totalPrice: number;
-  private unsubscribe$ = new Subject<void>();
   isLoading: boolean;
   displayedColumns: string[] = [
     "image",
@@ -87,7 +88,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
   getShoppingCartItems() {
     this.cartService
       .getCartItems(Number(this.userId))
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (result) => {
           this.cartItems = result;
@@ -113,7 +114,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
   deleteCartItem(bookId: number) {
     this.cartService
       .removeCartItems(Number(this.userId), bookId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (result) => {
           this.subscriptionService.cartItemcount$.next(result);
@@ -129,7 +130,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
   addToCart(bookId: number) {
     this.cartService
       .addBookToCart(Number(this.userId), bookId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (result) => {
           this.subscriptionService.cartItemcount$.next(result);
@@ -145,7 +146,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
   deleteOneCartItem(bookId: number) {
     this.cartService
       .deleteOneCartItem(Number(this.userId), bookId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (result) => {
           this.subscriptionService.cartItemcount$.next(result);
@@ -161,7 +162,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
   clearCart() {
     this.cartService
       .clearCart(Number(this.userId))
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (result) => {
           this.subscriptionService.cartItemcount$.next(result);
@@ -175,7 +176,7 @@ export class ShoppingcartComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

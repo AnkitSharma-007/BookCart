@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, inject, Input } from "@angular/core";
 import { Book } from "src/app/models/book";
 import { SubscriptionService } from "src/app/services/subscription.service";
 import { AddtocartComponent } from "../addtocart/addtocart.component";
@@ -9,11 +9,11 @@ import { RouterLink } from "@angular/router";
 import { MatCard, MatCardImage, MatCardContent } from "@angular/material/card";
 
 @Component({
-    selector: "app-book-card",
-    templateUrl: "./book-card.component.html",
-    styleUrls: ["./book-card.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-book-card",
+  templateUrl: "./book-card.component.html",
+  styleUrls: ["./book-card.component.scss"],
+  standalone: true,
+  imports: [
     MatCard,
     RouterLink,
     MatTooltip,
@@ -22,15 +22,15 @@ import { MatCard, MatCardImage, MatCardContent } from "@angular/material/card";
     AddtowishlistComponent,
     AddtocartComponent,
     AsyncPipe,
-    CurrencyPipe
-],
+    CurrencyPipe,
+  ],
 })
 export class BookCardComponent {
   @Input()
   book: Book;
 
+  private readonly subscriptionService = inject(SubscriptionService);
+
   isActive = false;
   userData$ = this.subscriptionService.userData$;
-
-  constructor(private subscriptionService: SubscriptionService) {}
 }

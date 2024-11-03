@@ -1,21 +1,18 @@
-import { Component, Input, OnChanges, OnDestroy } from "@angular/core";
-import { WishlistService } from "src/app/services/wishlist.service";
-import { SubscriptionService } from "src/app/services/subscription.service";
-import { SnackbarService } from "src/app/services/snackbar.service";
-import { Book } from "src/app/models/book";
-import { Subject, takeUntil } from "rxjs";
-import { MatButton } from "@angular/material/button";
 import { NgClass } from "@angular/common";
+import { Component, inject, Input, OnChanges, OnDestroy } from "@angular/core";
+import { MatButton } from "@angular/material/button";
+import { ReplaySubject, takeUntil } from "rxjs";
+import { Book } from "src/app/models/book";
+import { SnackbarService } from "src/app/services/snackbar.service";
+import { SubscriptionService } from "src/app/services/subscription.service";
+import { WishlistService } from "src/app/services/wishlist.service";
 
 @Component({
-    selector: "app-addtowishlist",
-    templateUrl: "./addtowishlist.component.html",
-    styleUrls: ["./addtowishlist.component.scss"],
-    standalone: true,
-    imports: [
-    MatButton,
-    NgClass
-],
+  selector: "app-addtowishlist",
+  templateUrl: "./addtowishlist.component.html",
+  styleUrls: ["./addtowishlist.component.scss"],
+  standalone: true,
+  imports: [MatButton, NgClass],
 })
 export class AddtowishlistComponent implements OnChanges, OnDestroy {
   @Input()
@@ -24,22 +21,18 @@ export class AddtowishlistComponent implements OnChanges, OnDestroy {
   @Input()
   showButton = false;
 
-  userId;
+  private readonly wishlistService = inject(WishlistService);
+  private readonly subscriptionService = inject(SubscriptionService);
+  private readonly snackBarService = inject(SnackbarService);
+
+  userId = localStorage.getItem("userId");
   toggle: boolean;
   buttonText: string;
-  private unsubscribe$ = new Subject<void>();
-
-  constructor(
-    private wishlistService: WishlistService,
-    private subscriptionService: SubscriptionService,
-    private snackBarService: SnackbarService
-  ) {
-    this.userId = localStorage.getItem("userId");
-  }
+  private destroyed$ = new ReplaySubject<void>(1);
 
   ngOnChanges() {
     this.subscriptionService.wishlistItem$
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((bookData: Book[]) => {
         this.setFavourite(bookData);
         this.setButtonText();
@@ -69,8 +62,8 @@ export class AddtowishlistComponent implements OnChanges, OnDestroy {
     this.setButtonText();
 
     this.wishlistService
-      .toggleWishlistItem(this.userId, this.bookId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .toggleWishlistItem(Number(this.userId), this.bookId)
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: () => {
           if (this.toggle) {
@@ -88,7 +81,7 @@ export class AddtowishlistComponent implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

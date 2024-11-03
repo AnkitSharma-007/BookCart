@@ -1,28 +1,36 @@
-import { Component } from "@angular/core";
-import { BookService } from "src/app/services/book.service";
+import { AsyncPipe } from "@angular/common";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from "@angular/material/card";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ActivatedRoute } from "@angular/router";
 import { switchMap } from "rxjs";
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { BookService } from "src/app/services/book.service";
 import { BookCardComponent } from "../book-card/book-card.component";
-import { AsyncPipe } from "@angular/common";
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from "@angular/material/card";
 
 @Component({
-    selector: "app-similarbooks",
-    templateUrl: "./similarbooks.component.html",
-    styleUrls: ["./similarbooks.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-similarbooks",
+  templateUrl: "./similarbooks.component.html",
+  styleUrls: ["./similarbooks.component.scss"],
+  standalone: true,
+  imports: [
     MatCard,
     MatCardHeader,
     MatCardTitle,
     MatCardContent,
     BookCardComponent,
     MatProgressSpinner,
-    AsyncPipe
-],
+    AsyncPipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SimilarbooksComponent {
+  private readonly bookService = inject(BookService);
+  private readonly activatedRoute = inject(ActivatedRoute);
   private readonly queryParams$ = this.activatedRoute.paramMap;
 
   similarBooks$ = this.queryParams$.pipe(
@@ -31,9 +39,4 @@ export class SimilarbooksComponent {
       return this.bookService.getsimilarBooks(bookId);
     })
   );
-
-  constructor(
-    private readonly bookService: BookService,
-    private readonly activatedRoute: ActivatedRoute
-  ) {}
 }

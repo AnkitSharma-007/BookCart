@@ -1,7 +1,12 @@
 import { inject, Injectable } from "@angular/core";
-import { ValidatorFn, AbstractControl, FormControl } from "@angular/forms";
-import { UserService } from "./user.service";
+import {
+  AbstractControl,
+  FormControl,
+  ValidationErrors,
+  ValidatorFn,
+} from "@angular/forms";
 import { debounceTime } from "rxjs";
+import { UserService } from "./user.service";
 
 @Injectable({
   providedIn: "root",
@@ -21,12 +26,30 @@ export class CustomValidationService {
     };
   }
 
-  confirmPasswordValidator(control: AbstractControl) {
-    const password: string = control.get("password").value;
-    const confirmPassword: string = control.get("confirmPassword").value;
-    if (password !== confirmPassword) {
-      control.get("confirmPassword").setErrors({ passwordMismatch: true });
-    }
+  matchPassword(password: string, confirmPassword: string) {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const passwordControl = formGroup.get(password);
+      const confirmPasswordControl = formGroup.get(confirmPassword);
+
+      if (!passwordControl || !confirmPasswordControl) {
+        return null;
+      }
+
+      if (
+        confirmPasswordControl.errors &&
+        !confirmPasswordControl.errors["passwordMismatch"]
+      ) {
+        return null;
+      }
+
+      if (passwordControl.value !== confirmPasswordControl.value) {
+        confirmPasswordControl.setErrors({ passwordMismatch: true });
+        return { passwordMismatch: true };
+      } else {
+        confirmPasswordControl.setErrors(null);
+        return null;
+      }
+    };
   }
 
   userNameValidator(userControl: FormControl) {

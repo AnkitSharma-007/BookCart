@@ -7,7 +7,7 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
 import { MatToolbar, MatToolbarRow } from "@angular/material/toolbar";
 import { MatTooltip } from "@angular/material/tooltip";
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { combineLatestWith, map } from "rxjs";
+import { combineLatestWith, map, Observable } from "rxjs";
 import { User } from "src/app/models/user";
 import { UserType } from "src/app/models/usertype";
 import { AuthenticationService } from "src/app/services/authentication.service";
@@ -57,7 +57,7 @@ export class NavBarComponent {
     Number(this.userId)
   );
 
-  vm$ = this.getCartItemCount$.pipe(
+  vm$: Observable<Vm> = this.getCartItemCount$.pipe(
     combineLatestWith(
       this.userData$,
       this.cartItemCount$,
@@ -65,13 +65,11 @@ export class NavBarComponent {
       this.getWishlistItems$
     ),
     map(([, userData, cartItemCount, wishListCount]) => {
-      let vm = new Vm();
-
-      vm.userData = userData;
-      vm.cartItemCount = cartItemCount;
-      vm.wishListCount = wishListCount;
-
-      return vm;
+      return {
+        userData: userData,
+        cartItemCount: cartItemCount,
+        wishListCount: wishListCount,
+      };
     })
   );
 

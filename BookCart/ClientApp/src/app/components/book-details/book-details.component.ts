@@ -1,22 +1,28 @@
-import { Component } from "@angular/core";
-import { BookService } from "src/app/services/book.service";
+import { AsyncPipe, CurrencyPipe } from "@angular/common";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { MatButton } from "@angular/material/button";
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardImage,
+  MatCardTitle,
+} from "@angular/material/card";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { combineLatestWith, map } from "rxjs/operators";
+import { BookService } from "src/app/services/book.service";
 import { SubscriptionService } from "src/app/services/subscription.service";
-import { MatButton } from "@angular/material/button";
-import { SimilarbooksComponent } from "../similarbooks/similarbooks.component";
-import { BookSummaryComponent } from "../book-summary/book-summary.component";
-import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
 import { AddtocartComponent } from "../addtocart/addtocart.component";
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardImage } from "@angular/material/card";
-import { AsyncPipe, CurrencyPipe } from "@angular/common";
+import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
+import { BookSummaryComponent } from "../book-summary/book-summary.component";
+import { SimilarbooksComponent } from "../similarbooks/similarbooks.component";
 
 @Component({
-    selector: "app-book-details",
-    templateUrl: "./book-details.component.html",
-    styleUrls: ["./book-details.component.scss"],
-    standalone: true,
-    imports: [
+  selector: "app-book-details",
+  templateUrl: "./book-details.component.html",
+  styleUrls: ["./book-details.component.scss"],
+  standalone: true,
+  imports: [
     MatCard,
     MatCardHeader,
     MatCardTitle,
@@ -29,10 +35,15 @@ import { AsyncPipe, CurrencyPipe } from "@angular/common";
     MatButton,
     RouterLink,
     AsyncPipe,
-    CurrencyPipe
-],
+    CurrencyPipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookDetailsComponent {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly bookService = inject(BookService);
+  private readonly subscriptionService = inject(SubscriptionService);
+
   userData$ = this.subscriptionService.userData$.asObservable();
 
   private readonly queryParams$ = this.activatedRoute.paramMap;
@@ -45,10 +56,4 @@ export class BookDetailsComponent {
       return bookList.find((book) => book.bookId === selectedBookId);
     })
   );
-
-  constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private bookService: BookService,
-    private subscriptionService: SubscriptionService
-  ) {}
 }

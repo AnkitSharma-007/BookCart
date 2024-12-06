@@ -26,7 +26,7 @@ export class BookSummaryComponent {
   showLoader = false;
 
   MODEL_NAME = "gemini-1.5-flash";
-  API_KEY = "YOUR_API_KEY_HERE";
+  API_KEY = "AIzaSyB88VzQVRWpEl5UKPUvzVZ8dIlYR-FV8gg";
 
   generationConfig = {
     temperature: 1,

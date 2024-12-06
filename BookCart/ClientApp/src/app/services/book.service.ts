@@ -1,6 +1,6 @@
-import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { shareReplay, map } from "rxjs/operators";
+import { inject, Injectable } from "@angular/core";
+import { map, shareReplay } from "rxjs/operators";
 import { Book } from "../models/book";
 import { Categories } from "../models/categories";
 
@@ -10,10 +10,6 @@ import { Categories } from "../models/categories";
 export class BookService {
   private readonly http = inject(HttpClient);
   private readonly baseURL = "/api/book/";
-
-  categories$ = this.http
-    .get<Categories[]>(this.baseURL + "GetCategoriesList")
-    .pipe(shareReplay(1));
 
   books$ = this.getAllBooks().pipe(shareReplay(1));
 
@@ -30,7 +26,7 @@ export class BookService {
   }
 
   getsimilarBooks(bookId: number) {
-    return this.http.get<Book[]>(this.baseURL + "GetSimilarBooks/" + bookId);
+    return this.http.get<Book[]>(`${this.baseURL}/GetSimilarBooks/${bookId}`);
   }
 
   updateBookDetails(book) {
@@ -39,5 +35,9 @@ export class BookService {
 
   deleteBook(id: number) {
     return this.http.delete(this.baseURL + id);
+  }
+
+  getCategories() {
+    return this.http.get<Categories[]>(`${this.baseURL}/GetCategoriesList`);
   }
 }

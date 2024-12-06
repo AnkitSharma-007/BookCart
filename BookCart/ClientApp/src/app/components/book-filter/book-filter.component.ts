@@ -3,9 +3,11 @@ import { Component, inject, Input } from "@angular/core";
 import { MatDivider } from "@angular/material/divider";
 import { MatListItem, MatNavList } from "@angular/material/list";
 import { RouterLink } from "@angular/router";
+import { Store } from "@ngrx/store";
 import { EMPTY } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { BookService } from "src/app/services/book.service";
+import { loadCategories } from "src/app/state/actions/categories.actions";
+import { selectCategories } from "src/app/state/selectors/categories.selectors";
 
 @Component({
   selector: "app-book-filter",
@@ -25,12 +27,16 @@ export class BookFilterComponent {
   @Input()
   category: string;
 
-  private bookService = inject(BookService);
+  private readonly store = inject(Store);
 
-  categories$ = this.bookService.categories$.pipe(
+  categories$ = this.store.select(selectCategories).pipe(
     catchError((error) => {
       console.log("Error ocurred while fetching category List : ", error);
       return EMPTY;
     })
   );
+
+  constructor() {
+    this.store.dispatch(loadCategories());
+  }
 }

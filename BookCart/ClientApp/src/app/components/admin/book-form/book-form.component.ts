@@ -20,11 +20,14 @@ import { MatIcon } from "@angular/material/icon";
 import { MatInput } from "@angular/material/input";
 import { MatSelect } from "@angular/material/select";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Store } from "@ngrx/store";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Book } from "src/app/models/book";
 import { BookService } from "src/app/services/book.service";
 import { SnackbarService } from "src/app/services/snackbar.service";
+import { loadCategories } from "src/app/state/actions/categories.actions";
+import { selectCategories } from "src/app/state/selectors/categories.selectors";
 
 @Component({
   selector: "app-book-form",
@@ -58,13 +61,14 @@ export class BookFormComponent implements OnInit, OnDestroy {
   private readonly snackBarService = inject(SnackbarService);
   private readonly formData = new FormData();
   private destroyed$ = new ReplaySubject<void>(1);
+  private readonly store = inject(Store);
 
   book: Book = new Book();
   formTitle = "Add";
   coverImagePath;
   bookId;
   files;
-  categoryList = this.bookService.categories$;
+  categoryList = this.store.select(selectCategories);
 
   bookForm = this.fb.group({
     bookId: 0,
@@ -76,6 +80,10 @@ export class BookFormComponent implements OnInit, OnDestroy {
 
   protected get movieFormControl() {
     return this.bookForm.controls;
+  }
+
+  constructor() {
+    this.store.dispatch(loadCategories());
   }
 
   ngOnInit() {

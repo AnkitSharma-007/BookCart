@@ -1,5 +1,11 @@
 import { CurrencyPipe } from "@angular/common";
-import { Component, Input, OnDestroy, inject } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  inject,
+} from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   MatCard,
@@ -15,6 +21,7 @@ import { SubscriptionService } from "src/app/services/subscription.service";
   templateUrl: "./price-filter.component.html",
   styleUrls: ["./price-filter.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatCard,
     MatCardHeader,

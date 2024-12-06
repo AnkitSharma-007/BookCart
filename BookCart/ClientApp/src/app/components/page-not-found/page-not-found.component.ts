@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { MatButton } from "@angular/material/button";
 import {
@@ -13,6 +13,7 @@ import {
   templateUrl: "./page-not-found.component.html",
   styleUrls: ["./page-not-found.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatCard,
     MatCardHeader,

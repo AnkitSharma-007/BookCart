@@ -1,5 +1,10 @@
-import { CurrencyPipe } from "@angular/common";
-import { Component, OnDestroy, ViewChild, inject } from "@angular/core";
+import { AsyncPipe, CurrencyPipe } from "@angular/common";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  ViewChild,
+} from "@angular/core";
 import { MatButton, MatIconButton } from "@angular/material/button";
 import {
   MatCard,
@@ -28,17 +33,17 @@ import {
   MatTableDataSource,
 } from "@angular/material/table";
 import { RouterLink } from "@angular/router";
-import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { Book } from "src/app/models/book";
-import { BookService } from "src/app/services/book.service";
-import { SnackbarService } from "src/app/services/snackbar.service";
+import { Store } from "@ngrx/store";
+import { BehaviorSubject, combineLatest, map } from "rxjs";
+import { loadBooks } from "src/app/state/actions/book.actions";
+import { selectBooks } from "src/app/state/selectors/book.selectors";
 import { DeleteBookComponent } from "../delete-book/delete-book.component";
 
 @Component({
   selector: "app-manage-books",
   templateUrl: "./manage-books.component.html",
   styleUrls: ["./manage-books.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     MatCard,
@@ -67,20 +72,36 @@ import { DeleteBookComponent } from "../delete-book/delete-book.component";
     MatNoDataRow,
     MatPaginator,
     CurrencyPipe,
+    AsyncPipe,
   ],
 })
-export class ManageBooksComponent implements OnDestroy {
-  private readonly bookService = inject(BookService);
+export class ManageBooksComponent {
   private readonly dialog = inject(MatDialog);
-  private readonly snackBarService = inject(SnackbarService);
+  private readonly store = inject(Store);
 
-  @ViewChild(MatSort) set matSort(sort: MatSort) {
-    this.dataSource.sort = sort;
-  }
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
 
-  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
-    this.dataSource.paginator = paginator;
-  }
+  @ViewChild(MatSort)
+  sort!: MatSort;
+
+  private readonly searchValue$ = new BehaviorSubject<string>("");
+
+  bookTableData$ = combineLatest([
+    this.store.select(selectBooks),
+    this.searchValue$,
+  ]).pipe(
+    map(([books, searchValue]) => {
+      let dataSource = new MatTableDataSource(books);
+      dataSource.paginator = this.paginator;
+      dataSource.sort = this.sort;
+      if (searchValue.length > 0) {
+        dataSource.filter = searchValue.trim().toLowerCase();
+        dataSource.paginator.firstPage();
+      }
+      return dataSource;
+    })
+  );
 
   displayedColumns: string[] = [
     "id",
@@ -91,55 +112,18 @@ export class ManageBooksComponent implements OnDestroy {
     "operation",
   ];
 
-  dataSource = new MatTableDataSource<Book>();
-  private destroyed$ = new ReplaySubject<void>(1);
-
   constructor() {
-    this.getAllBookData();
-  }
-
-  getAllBookData() {
-    this.bookService
-      .getAllBooks()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (data) => {
-          this.dataSource.data = data;
-        },
-        error: (error) => {
-          console.log("Error ocurred while fetching book details : ", error);
-        },
-      });
+    this.store.dispatch(loadBooks());
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.searchValue$.next(filterValue);
   }
 
-  deleteConfirm(id: number): void {
-    const dialogRef = this.dialog.open(DeleteBookComponent, {
-      data: id,
+  deleteConfirm(bookId: number): void {
+    this.dialog.open(DeleteBookComponent, {
+      data: bookId,
     });
-
-    dialogRef
-      .afterClosed()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((result) => {
-        if (result === 1) {
-          this.getAllBookData();
-          this.snackBarService.showSnackBar("Data deleted successfully");
-        } else {
-          this.snackBarService.showSnackBar("Error occurred!! Try again");
-        }
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }

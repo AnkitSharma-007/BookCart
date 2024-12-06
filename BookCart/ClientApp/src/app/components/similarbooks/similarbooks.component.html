@@ -4,17 +4,17 @@
   </mat-card-header>
   <mat-card-content class="p-3">
     @if (similarBooks$ | async; as books) {
-      <div class="d-flex justify-content-start flex-wrap">
-        @for (book of books; track book) {
-          <div class="p-1">
-            <app-book-card [book]="book"></app-book-card>
-          </div>
-        }
+    <div class="d-flex justify-content-start flex-wrap">
+      @for (book of books; track book) {
+      <div class="p-1">
+        <app-book-card [book]="book"></app-book-card>
       </div>
+      }
+    </div>
     } @else {
-      <div class="d-flex align-items-center justify-content-center">
-        <mat-spinner></mat-spinner>
-      </div>
+    <div class="d-flex align-items-center justify-content-center">
+      <mat-spinner></mat-spinner>
+    </div>
     }
   </mat-card-content>
 </mat-card>

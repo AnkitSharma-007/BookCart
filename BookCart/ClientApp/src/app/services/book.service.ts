@@ -11,26 +11,20 @@ export class BookService {
   private readonly http = inject(HttpClient);
   private readonly baseURL = "/api/book/";
 
-  books$ = this.getAllBooks().pipe(shareReplay(1));
-
   getAllBooks() {
     return this.http.get<Book[]>(this.baseURL);
   }
 
-  addBook(book) {
-    return this.http.post(this.baseURL, book);
+  addBook(book: FormData) {
+    return this.http.post<Book>(this.baseURL, book);
   }
 
-  getBookById(id: number) {
-    return this.books$.pipe(map((book) => book.find((b) => b.bookId === id)));
-  }
-
-  getsimilarBooks(bookId: number) {
+  getSimilarBooks(bookId: number) {
     return this.http.get<Book[]>(`${this.baseURL}/GetSimilarBooks/${bookId}`);
   }
 
-  updateBookDetails(book) {
-    return this.http.put(this.baseURL, book);
+  updateBookDetails(book: FormData) {
+    return this.http.put<Book>(this.baseURL, book);
   }
 
   deleteBook(id: number) {

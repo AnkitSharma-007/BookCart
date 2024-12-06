@@ -1,5 +1,10 @@
 import { AsyncPipe, LowerCasePipe } from "@angular/common";
-import { Component, inject, Input } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+} from "@angular/core";
 import { MatDivider } from "@angular/material/divider";
 import { MatListItem, MatNavList } from "@angular/material/list";
 import { RouterLink } from "@angular/router";
@@ -14,6 +19,7 @@ import { selectCategories } from "src/app/state/selectors/categories.selectors";
   templateUrl: "./book-filter.component.html",
   styleUrls: ["./book-filter.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatNavList,
     MatListItem,

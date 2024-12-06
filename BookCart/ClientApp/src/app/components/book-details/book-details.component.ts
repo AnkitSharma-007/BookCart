@@ -8,10 +8,11 @@ import {
   MatCardImage,
   MatCardTitle,
 } from "@angular/material/card";
-import { ActivatedRoute, RouterLink } from "@angular/router";
-import { combineLatestWith, map } from "rxjs/operators";
-import { BookService } from "src/app/services/book.service";
+import { RouterLink } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { combineLatest, map } from "rxjs";
 import { SubscriptionService } from "src/app/services/subscription.service";
+import { selectCurrentBookDetails } from "src/app/state/selectors/book.selectors";
 import { AddtocartComponent } from "../addtocart/addtocart.component";
 import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
 import { BookSummaryComponent } from "../book-summary/book-summary.component";
@@ -21,6 +22,7 @@ import { SimilarbooksComponent } from "../similarbooks/similarbooks.component";
   selector: "app-book-details",
   templateUrl: "./book-details.component.html",
   styleUrls: ["./book-details.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     MatCard,
@@ -37,23 +39,18 @@ import { SimilarbooksComponent } from "../similarbooks/similarbooks.component";
     AsyncPipe,
     CurrencyPipe,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookDetailsComponent {
-  private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly bookService = inject(BookService);
   private readonly subscriptionService = inject(SubscriptionService);
+  private readonly store = inject(Store);
 
   userData$ = this.subscriptionService.userData$.asObservable();
 
-  private readonly queryParams$ = this.activatedRoute.paramMap;
-  private readonly book$ = this.bookService.books$;
-
-  bookDetails$ = this.queryParams$.pipe(
-    combineLatestWith(this.book$),
-    map(([params, bookList]) => {
-      const selectedBookId = Number(params.get("id"));
-      return bookList.find((book) => book.bookId === selectedBookId);
+  bookDetails$ = combineLatest([
+    this.store.select(selectCurrentBookDetails),
+  ]).pipe(
+    map(([book]) => {
+      return book ?? null;
     })
   );
 }

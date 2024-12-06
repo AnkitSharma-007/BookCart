@@ -1,6 +1,7 @@
+@if(filterSuggetions$ | async; as filterSuggetions){
 <form>
   <input
-    (keydown.enter)="searchStore()"
+    (keydown.enter)="searchBooks()"
     class="searchbox"
     type="search"
     aria-label="search"
@@ -8,12 +9,13 @@
     [formControl]="searchControl"
     [matAutocomplete]="auto"
     (search)="cancelSearch()"
-    />
-    <mat-autocomplete (optionSelected)="searchStore()" #auto="matAutocomplete">
-      @for (book of filteredBooks | async; track book) {
-        <mat-option [value]="book.title">
-          {{ book.title }}
-        </mat-option>
-      }
-    </mat-autocomplete>
-  </form>
+  />
+  <mat-autocomplete (optionSelected)="searchBooks()" #auto="matAutocomplete">
+    @for (book of filterSuggetions; track book) {
+    <mat-option [value]="book.title">
+      {{ book.title }}
+    </mat-option>
+    }
+  </mat-autocomplete>
+</form>
+}

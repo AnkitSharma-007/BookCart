@@ -1,11 +1,22 @@
 import { AsyncPipe } from "@angular/common";
-import { Component, inject, OnDestroy } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+} from "@angular/core";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ActivatedRoute } from "@angular/router";
+import { Store } from "@ngrx/store";
 import { combineLatestWith, map } from "rxjs/operators";
 import { Book } from "src/app/models/book";
-import { BookService } from "src/app/services/book.service";
 import { SubscriptionService } from "src/app/services/subscription.service";
+import {
+  loadBooks,
+  resetSearchItemValue,
+  setSearchItemValue,
+} from "src/app/state/actions/book.actions";
+import { selectBooks } from "src/app/state/selectors/book.selectors";
 import { BookCardComponent } from "../book-card/book-card.component";
 import { BookFilterComponent } from "../book-filter/book-filter.component";
 import { PriceFilterComponent } from "../price-filter/price-filter.component";
@@ -15,6 +26,7 @@ import { PriceFilterComponent } from "../price-filter/price-filter.component";
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     BookFilterComponent,
     PriceFilterComponent,
@@ -25,12 +37,12 @@ import { PriceFilterComponent } from "../price-filter/price-filter.component";
 })
 export class HomeComponent implements OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly bookService = inject(BookService);
   private readonly subscriptionService = inject(SubscriptionService);
+  private readonly store = inject(Store);
 
   // Added the following two variables for better readability
   private readonly queryParams$ = this.activatedRoute.queryParams;
-  private readonly book$ = this.bookService.books$;
+  private readonly book$ = this.store.select(selectBooks);
 
   vm$ = this.queryParams$.pipe(
     combineLatestWith(this.book$, this.subscriptionService.priceFilterValue$),
@@ -43,7 +55,9 @@ export class HomeComponent implements OnDestroy {
       homeVm.minPriceFilterValue = Math.min(...books.map((b) => b.price));
       homeVm.maxPriceFilterValue = Math.max(...books.map((b) => b.price));
 
-      this.subscriptionService.searchItemValue$.next(homeVm.searchItem);
+      this.store.dispatch(
+        setSearchItemValue({ searchItem: homeVm.searchItem })
+      );
 
       if (homeVm.selectedCategory) {
         const filteredBookByCategory = books.filter(
@@ -77,8 +91,12 @@ export class HomeComponent implements OnDestroy {
     })
   );
 
+  constructor() {
+    this.store.dispatch(loadBooks());
+  }
+
   ngOnDestroy() {
-    this.subscriptionService.searchItemValue$.next("");
+    this.store.dispatch(resetSearchItemValue());
   }
 }
 

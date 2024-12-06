@@ -11,6 +11,9 @@ import { ActivatedRoute } from "@angular/router";
 import { switchMap } from "rxjs";
 import { BookService } from "src/app/services/book.service";
 import { BookCardComponent } from "../book-card/book-card.component";
+import { Store } from "@ngrx/store";
+import { loadSimilarBooks } from "src/app/state/actions/similar-books.actions";
+import { selectSimilarBooks } from "src/app/state/selectors/similar-books.selectors";
 
 @Component({
   selector: "app-similarbooks",
@@ -29,14 +32,10 @@ import { BookCardComponent } from "../book-card/book-card.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SimilarbooksComponent {
-  private readonly bookService = inject(BookService);
-  private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly queryParams$ = this.activatedRoute.paramMap;
+  private readonly store = inject(Store);
+  protected readonly similarBooks$ = this.store.select(selectSimilarBooks);
 
-  similarBooks$ = this.queryParams$.pipe(
-    switchMap((params) => {
-      const bookId = Number(params.get("id"));
-      return this.bookService.getsimilarBooks(bookId);
-    })
-  );
+  constructor() {
+    this.store.dispatch(loadSimilarBooks());
+  }
 }

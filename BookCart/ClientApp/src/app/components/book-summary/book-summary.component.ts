@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import {
   GoogleGenerativeAI,
   HarmBlockThreshold,
@@ -13,6 +13,7 @@ import { MatCard, MatCardContent } from "@angular/material/card";
   templateUrl: "./book-summary.component.html",
   styleUrls: ["./book-summary.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatCard, MatCardContent, MatButton, MatProgressSpinner],
 })
 export class BookSummaryComponent {

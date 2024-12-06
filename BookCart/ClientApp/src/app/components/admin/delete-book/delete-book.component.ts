@@ -1,5 +1,5 @@
 import { AsyncPipe, CurrencyPipe } from "@angular/common";
-import { Component, inject, OnDestroy } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { MatButton } from "@angular/material/button";
 import {
   MAT_DIALOG_DATA,
@@ -9,15 +9,16 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from "@angular/material/dialog";
-import { EMPTY, ReplaySubject } from "rxjs";
-import { catchError, takeUntil } from "rxjs/operators";
-import { BookService } from "src/app/services/book.service";
+import { Store } from "@ngrx/store";
+import { deleteBook } from "src/app/state/actions/book.actions";
+import { selectBookById } from "src/app/state/selectors/book.selectors";
 
 @Component({
   selector: "app-delete-book",
   templateUrl: "./delete-book.component.html",
   styleUrls: ["./delete-book.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatDialogTitle,
     MatDialogContent,
@@ -28,36 +29,18 @@ import { BookService } from "src/app/services/book.service";
     CurrencyPipe,
   ],
 })
-export class DeleteBookComponent implements OnDestroy {
-  private readonly bookService = inject(BookService);
+export class DeleteBookComponent {
   private readonly dialogRef = inject(MatDialogRef<DeleteBookComponent>);
   private readonly bookid = inject<number>(MAT_DIALOG_DATA);
+  private readonly store = inject(Store);
 
-  bookData$ = this.bookService.getBookById(this.bookid).pipe(
-    catchError((error) => {
-      console.log("Error ocurred while fetching book data : ", error);
-      return EMPTY;
-    })
-  );
-  private destroyed$ = new ReplaySubject<void>(1);
+  bookData$ = this.store.select(selectBookById(this.bookid));
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   confirmDelete(): void {
-    this.bookService
-      .deleteBook(this.bookid)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        error: (error) => {
-          console.log("Error ocurred while fetching book data : ", error);
-        },
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+    this.store.dispatch(deleteBook({ bookId: this.bookid }));
   }
 }

@@ -1,5 +1,5 @@
-import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { AsyncPipe } from "@angular/common";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { MatBadge } from "@angular/material/badge";
 import { MatAnchor, MatButton, MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
@@ -21,6 +21,7 @@ import { SearchComponent } from "../search/search.component";
   templateUrl: "./nav-bar.component.html",
   styleUrls: ["./nav-bar.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatToolbar,
     MatToolbarRow,
@@ -37,7 +38,6 @@ import { SearchComponent } from "../search/search.component";
     MatMenu,
     MatMenuItem,
     AsyncPipe,
-    NgTemplateOutlet,
   ],
 })
 export class NavBarComponent {

@@ -1,5 +1,5 @@
 import { AsyncPipe } from "@angular/common";
-import { Component, OnDestroy, OnInit, inject } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatButton } from "@angular/material/button";
 import {
@@ -19,14 +19,15 @@ import {
 import { MatIcon } from "@angular/material/icon";
 import { MatInput } from "@angular/material/input";
 import { MatSelect } from "@angular/material/select";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { Book } from "src/app/models/book";
-import { BookService } from "src/app/services/book.service";
+import { combineLatest, EMPTY } from "rxjs";
+import { catchError, map } from "rxjs/operators";
+import { Categories } from "src/app/models/categories";
 import { SnackbarService } from "src/app/services/snackbar.service";
+import { addBook, updateBook } from "src/app/state/actions/book.actions";
 import { loadCategories } from "src/app/state/actions/categories.actions";
+import { selectCurrentBookDetails } from "src/app/state/selectors/book.selectors";
 import { selectCategories } from "src/app/state/selectors/categories.selectors";
 
 @Component({
@@ -53,22 +54,15 @@ import { selectCategories } from "src/app/state/selectors/categories.selectors";
     AsyncPipe,
   ],
 })
-export class BookFormComponent implements OnInit, OnDestroy {
-  private readonly bookService = inject(BookService);
-  private readonly route = inject(ActivatedRoute);
+export class BookFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly snackBarService = inject(SnackbarService);
   private readonly formData = new FormData();
-  private destroyed$ = new ReplaySubject<void>(1);
   private readonly store = inject(Store);
 
-  book: Book = new Book();
-  formTitle = "Add";
   coverImagePath;
-  bookId;
   files;
-  categoryList = this.store.select(selectCategories);
 
   bookForm = this.fb.group({
     bookId: 0,
@@ -78,21 +72,34 @@ export class BookFormComponent implements OnInit, OnDestroy {
     price: ["", [Validators.required, Validators.min(0)]],
   });
 
-  protected get movieFormControl() {
-    return this.bookForm.controls;
-  }
+  bookFormData$ = combineLatest([
+    this.store.select(selectCurrentBookDetails),
+    this.store.select(selectCategories),
+  ]).pipe(
+    map(([book, categoryList]) => {
+      if (book !== undefined) {
+        this.setBookFormData(book);
+      }
+      return {
+        formTitle: book?.bookId ? "Edit" : "Add",
+        categoryList,
+      };
+    }),
+    catchError((error) => {
+      this.snackBarService.showSnackBar(
+        "Error ocurred while fetching book data"
+      );
+      console.error("Error ocurred while fetching book data : ", error);
+      return EMPTY;
+    })
+  );
 
   constructor() {
     this.store.dispatch(loadCategories());
   }
 
-  ngOnInit() {
-    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
-      if (params.id) {
-        this.bookId = +params.id;
-        this.fetchBookData();
-      }
-    });
+  protected get bookFormControl() {
+    return this.bookForm.controls;
   }
 
   onFormSubmit() {
@@ -100,16 +107,14 @@ export class BookFormComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.files && this.files.length > 0) {
-      for (let j = 0; j < this.files.length; j++) {
-        this.formData.append("file" + j, this.files[j]);
-      }
+      this.formData.append("file", this.files[0]);
     }
     this.formData.append("bookFormData", JSON.stringify(this.bookForm.value));
 
-    if (this.bookId) {
-      this.editBookDetails();
+    if (this.bookForm.controls.bookId.value > 0) {
+      this.store.dispatch(updateBook({ book: this.formData }));
     } else {
-      this.saveBookDetails();
+      this.store.dispatch(addBook({ book: this.formData }));
     }
   }
 
@@ -126,56 +131,6 @@ export class BookFormComponent implements OnInit, OnDestroy {
     this.router.navigate(["/admin/books"]);
   }
 
-  private fetchBookData() {
-    this.formTitle = "Edit";
-    this.bookService
-      .getBookById(this.bookId)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (result: Book) => {
-          this.setBookFormData(result);
-        },
-        error: (error) => {
-          console.log("Error ocurred while fetching book data : ", error);
-        },
-      });
-  }
-
-  private editBookDetails() {
-    this.bookService
-      .updateBookDetails(this.formData)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: () => {
-          this.snackBarService.showSnackBar(
-            "The book data is updated successfully."
-          );
-          this.navigateToAdminPanel();
-        },
-        error: (error) => {
-          console.log("Error ocurred while updating book data : ", error);
-        },
-      });
-  }
-
-  private saveBookDetails() {
-    this.bookService
-      .addBook(this.formData)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: () => {
-          this.snackBarService.showSnackBar(
-            "The book data is added successfully."
-          );
-          this.navigateToAdminPanel();
-        },
-        error: (error) => {
-          this.bookForm.reset();
-          console.log("Error ocurred while adding book data : ", error);
-        },
-      });
-  }
-
   private setBookFormData(bookFormData) {
     this.bookForm.setValue({
       bookId: bookFormData.bookId,
@@ -185,10 +140,5 @@ export class BookFormComponent implements OnInit, OnDestroy {
       price: bookFormData.price,
     });
     this.coverImagePath = "/Upload/" + bookFormData.coverFileName;
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }

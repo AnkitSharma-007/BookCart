@@ -8,7 +8,6 @@ import { User } from "../models/user";
 })
 export class SubscriptionService {
   userData$ = new BehaviorSubject<User>(new User());
-  searchItemValue$ = new BehaviorSubject<string>("");
   wishlistItemcount$ = new BehaviorSubject<number>(0);
   wishlistItem$ = new BehaviorSubject<Book[]>([]);
   cartItemcount$ = new BehaviorSubject<number>(0);

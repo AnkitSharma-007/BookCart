@@ -1,6 +1,9 @@
+@if(bookFormData$ | async; as bookFormData) {
 <mat-card class="my-4">
   <mat-card-header class="custom-card-header mat-elevation-z2">
-    <mat-card-title class="mat-h1">{{ formTitle }} Book </mat-card-title>
+    <mat-card-title class="mat-h1"
+      >{{ bookFormData.formTitle }} Book
+    </mat-card-title>
   </mat-card-header>
   <mat-card-content class="p-3">
     <div class="row">
@@ -10,7 +13,7 @@
             enctype="multipart/form-data"
             [formGroup]="bookForm"
             (ngSubmit)="onFormSubmit()"
-            >
+          >
             <mat-form-field class="w-100" appearance="outline">
               <mat-label>Title</mat-label>
               <input
@@ -18,130 +21,108 @@
                 placeholder="Title"
                 formControlName="title"
                 required
-                />
-                @if (
-                  movieFormControl.title.touched &&
-                  movieFormControl.title.invalid
-                  ) {
-                  <mat-error
-                    >Title is required</mat-error
-                    >
+              />
+              @if ( bookFormControl.title.touched &&
+              bookFormControl.title.invalid ) {
+              <mat-error>Title is required</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Author</mat-label>
+              <input
+                matInput
+                placeholder="Author"
+                formControlName="author"
+                required
+              />
+              @if ( bookFormControl.author.touched &&
+              bookFormControl.author.invalid ) {
+              <mat-error>Author name is required</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Category</mat-label>
+              <mat-select
+                placeholder="Category"
+                formControlName="category"
+                required
+              >
+                @for (category of bookFormData.categoryList; track category) {
+                <mat-option [value]="category.categoryName">
+                  {{ category.categoryName }}
+                </mat-option>
                 }
-              </mat-form-field>
+              </mat-select>
+              @if ( bookFormControl.category.touched &&
+              bookFormControl.category.invalid ) {
+              <mat-error>Category is required</mat-error>
+              }
+            </mat-form-field>
 
-              <mat-form-field class="w-100" appearance="outline">
-                <mat-label>Author</mat-label>
-                <input
-                  matInput
-                  placeholder="Author"
-                  formControlName="author"
-                  required
-                  />
-                  @if (
-                    movieFormControl.author.touched &&
-                    movieFormControl.author.invalid
-                    ) {
-                    <mat-error
-                      >Author name is required</mat-error
-                      >
-                  }
-                </mat-form-field>
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Price</mat-label>
+              <span matTextPrefix>&#8377; &nbsp;</span>
+              <input
+                matInput
+                placeholder="Price"
+                formControlName="price"
+                type="number"
+                required
+              />
 
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label>Category</mat-label>
-                  <mat-select
-                    placeholder="Category"
-                    formControlName="category"
-                    required
-                    >
-                    @for (category of categoryList | async; track category) {
-                      <mat-option
-                        [value]="category.categoryName"
-                        >
-                        {{ category.categoryName }}
-                      </mat-option>
-                    }
-                  </mat-select>
-                  @if (
-                    movieFormControl.category.touched &&
-                    movieFormControl.category.invalid
-                    ) {
-                    <mat-error
-                      >Category is required</mat-error
-                      >
-                    }
-                  </mat-form-field>
-
-                  <mat-form-field class="w-100" appearance="outline">
-                    <mat-label>Price</mat-label>
-                    <span matTextPrefix>&#8377; &nbsp;</span>
-                    <input
-                      matInput
-                      placeholder="Price"
-                      formControlName="price"
-                      type="number"
-                      required
-                      />
-
-                      @if (
-                        movieFormControl.price.touched &&
-                        movieFormControl.price.errors?.required
-                        ) {
-                        <mat-error
-                          >Price is required</mat-error
-                          >
-                      }
-                      @if (
-                        movieFormControl.price.touched &&
-                        movieFormControl.price.errors?.min
-                        ) {
-                        <mat-error
-                          >Price cannot be less than 0
-                        </mat-error>
-                      }
-                    </mat-form-field>
-                    <mat-card-actions align="end" class="p-0">
-                      <button type="submit" mat-raised-button color="primary">
-                        Save
-                      </button>
-                      <button
-                        type="button"
-                        mat-raised-button
-                        color="warn"
-                        class="ms-2"
-                        (click)="navigateToAdminPanel()"
-                        >
-                        Cancel
-                      </button>
-                    </mat-card-actions>
-                  </form>
-                </mat-card-content>
-              </div>
-              <div
-                class="col-md-4 d-flex flex-column align-items-center justify-content-center"
-                >
-                <mat-card-content class="d-flex flex-column">
-                  <img
-                    class="preview-image p-2"
-                    mat-card-image
-                    src="{{ coverImagePath }}"
-                    alt="Upload a poster image"
-                    />
-                    <div class="my-2">
-                      <label
-                        for="file-upload"
-                        class="custom-file-upload mat-elevation-z4 py-2 px-3 d-flex align-items-center"
-                        >
-                        <mat-icon class="mx-2">cloud_upload</mat-icon> Upload poster
-                      </label>
-                      <input
-                        id="file-upload"
-                        type="file"
-                        (change)="uploadImage($event)"
-                        />
-                      </div>
-                    </mat-card-content>
-                  </div>
-                </div>
-              </mat-card-content>
-            </mat-card>
+              @if ( bookFormControl.price.touched &&
+              bookFormControl.price.errors?.required ) {
+              <mat-error>Price is required</mat-error>
+              } @if ( bookFormControl.price.touched &&
+              bookFormControl.price.errors?.min ) {
+              <mat-error>Price cannot be less than 0 </mat-error>
+              }
+            </mat-form-field>
+            <mat-card-actions align="end" class="p-0">
+              <button type="submit" mat-raised-button color="primary">
+                Save
+              </button>
+              <button
+                type="button"
+                mat-raised-button
+                color="warn"
+                class="ms-2"
+                (click)="navigateToAdminPanel()"
+              >
+                Cancel
+              </button>
+            </mat-card-actions>
+          </form>
+        </mat-card-content>
+      </div>
+      <div
+        class="col-md-4 d-flex flex-column align-items-center justify-content-center"
+      >
+        <mat-card-content class="d-flex flex-column">
+          <img
+            class="preview-image p-2"
+            mat-card-image
+            src="{{ coverImagePath }}"
+            alt="Upload a poster image"
+          />
+          <div class="my-2">
+            <label
+              for="file-upload"
+              class="custom-file-upload mat-elevation-z4 py-2 px-3 d-flex align-items-center"
+            >
+              <mat-icon class="mx-2">cloud_upload</mat-icon> Upload poster
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              (change)="uploadImage($event)"
+            />
+          </div>
+        </mat-card-content>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+}

@@ -1,5 +1,5 @@
 import { AsyncPipe } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   MatAutocomplete,
@@ -7,17 +7,24 @@ import {
 } from "@angular/material/autocomplete";
 import { MatOption } from "@angular/material/core";
 import { Router } from "@angular/router";
-import { Observable, ReplaySubject } from "rxjs";
-import { map, startWith, takeUntil } from "rxjs/operators";
-import { Book } from "src/app/models/book";
-import { BookService } from "src/app/services/book.service";
-import { SubscriptionService } from "src/app/services/subscription.service";
+import { Store } from "@ngrx/store";
+import {
+  combineLatestWith,
+  distinctUntilChanged,
+  map,
+  startWith,
+} from "rxjs/operators";
+import {
+  selectBooks,
+  selectSearchItemValue,
+} from "src/app/state/selectors/book.selectors";
 
 @Component({
   selector: "app-search",
   templateUrl: "./search.component.html",
   styleUrls: ["./search.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
     FormsModule,
@@ -27,23 +34,38 @@ import { SubscriptionService } from "src/app/services/subscription.service";
     AsyncPipe,
   ],
 })
-export class SearchComponent implements OnInit, OnDestroy {
-  private readonly bookService = inject(BookService);
+export class SearchComponent {
   private readonly router = inject(Router);
-  private readonly subscriptionService = inject(SubscriptionService);
-  private destroyed$ = new ReplaySubject<void>(1);
+  private readonly store = inject(Store);
 
-  books: Book[];
-  searchControl = new FormControl();
-  filteredBooks: Observable<Book[]>;
+  searchControl = new FormControl("", { nonNullable: true });
+  private readonly books$ = this.store.select(selectBooks);
 
-  ngOnInit(): void {
-    this.loadBookData();
-    this.setSearchControlValue();
-    this.filterBookData();
-  }
+  searchItemValue$ = this.store.select(selectSearchItemValue).pipe(
+    map((data) => {
+      this.searchControl.setValue(data);
+    })
+  );
 
-  searchStore() {
+  filterSuggetions$ = this.searchControl.valueChanges.pipe(
+    startWith(""),
+    combineLatestWith(this.books$, this.searchItemValue$),
+    distinctUntilChanged(),
+    map(([searchValue, books]) => {
+      const value = searchValue.toLowerCase();
+      if (value.length > 0) {
+        return books.filter(
+          (book) =>
+            book.title.toLocaleLowerCase().includes(value) ||
+            book.author.toLocaleLowerCase().includes(value)
+        );
+      } else {
+        return [];
+      }
+    })
+  );
+
+  searchBooks() {
     const searchItem = this.searchControl.value;
     if (searchItem !== "") {
       this.router.navigate(["/search"], {
@@ -51,51 +73,12 @@ export class SearchComponent implements OnInit, OnDestroy {
           item: searchItem.toLowerCase(),
         },
       });
+    } else {
+      this.cancelSearch();
     }
   }
 
   cancelSearch() {
     this.router.navigate(["/"]);
-  }
-
-  private loadBookData() {
-    this.bookService.books$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data: Book[]) => {
-        this.books = data;
-      });
-  }
-
-  private setSearchControlValue() {
-    this.subscriptionService.searchItemValue$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data) => {
-        if (data) {
-          this.searchControl.setValue(data);
-        } else {
-          this.searchControl.setValue("");
-        }
-      });
-  }
-
-  private filterBookData() {
-    this.filteredBooks = this.searchControl.valueChanges.pipe(
-      startWith(""),
-      map((value) => (value.length >= 1 ? this._filter(value) : []))
-    );
-  }
-
-  private _filter(value: string) {
-    const filterValue = value.toLowerCase();
-    return this.books?.filter(
-      (option) =>
-        option.title.toLowerCase().includes(filterValue) ||
-        option.author.toLowerCase().includes(filterValue)
-    );
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 }

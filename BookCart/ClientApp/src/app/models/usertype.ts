@@ -1,4 +1,1 @@
-export enum UserType {
-  admin = 1,
-  user = 2,
-}
+export type UserType = "Unk" | "Admin" | "User";

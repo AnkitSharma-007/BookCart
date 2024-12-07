@@ -50,19 +50,18 @@ namespace BookCart.Controllers
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            List<Claim> userClaims = new()
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userInfo.Username),
-                new Claim("userid", userInfo.UserId.ToString(CultureInfo.InvariantCulture)),
-                new Claim("userTypeId", userInfo.UserTypeId.ToString(CultureInfo.InvariantCulture)),
-                new Claim(ClaimTypes.Role,userInfo.UserTypeId.ToString(CultureInfo.InvariantCulture)),
+                new Claim(JwtRegisteredClaimNames.Name, userInfo.Username),
+                new Claim(JwtRegisteredClaimNames.Sub, userInfo.UserTypeName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("userId", userInfo.UserId.ToString()),
             };
 
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
-                claims: claims,
+                claims: userClaims,
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: credentials
             );

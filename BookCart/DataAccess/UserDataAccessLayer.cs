@@ -24,7 +24,7 @@ namespace BookCart.DataAccess
                 {
                     Username = userDetails.Username,
                     UserId = userDetails.UserId,
-                    UserTypeId = userDetails.UserTypeId
+                    UserTypeName = userDetails.UserTypeId == 1 ? "Admin" : "User"
                 };
             }
             return authenticatedUser;

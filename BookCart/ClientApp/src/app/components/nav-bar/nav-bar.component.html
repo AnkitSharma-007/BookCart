@@ -9,35 +9,35 @@
       <app-search></app-search>
     </div>
     <div class="d-flex align-items-center">
-      @if((vm$ | async); as vm){ @if (vm.userData.isLoggedIn) {
-      <button
+      @if (userState$ | async; as userState) { @if (userState.isAuthenticated) {
+      <!-- <button
         mat-icon-button
         [routerLinkActive]="['link-active']"
         [routerLink]="['/wishlist']"
       >
         <mat-icon
-          matBadge="{{ vm.wishListCount }}"
+          matBadge="{{ userState.wishListCount }}"
           matBadgeColor="warn"
           aria-hidden="false"
           >favorite</mat-icon
         >
-      </button>
+      </button> -->
       }
 
-      <button
+      <!-- <button
         mat-icon-button
         [routerLinkActive]="['link-active']"
         [routerLink]="['/shopping-cart']"
       >
         <mat-icon
-          matBadge="{{ vm.cartItemCount }}"
+          matBadge="{{ userState.cartItemCount }}"
           matBadgeColor="warn"
           aria-hidden="false"
           >shopping_cart</mat-icon
         >
-      </button>
+      </button> -->
 
-      @if (!vm.userData.isLoggedIn) {
+      @if (!userState.isAuthenticated) {
       <button
         mat-flat-button
         color="primary"
@@ -47,7 +47,7 @@
       >
         Login
       </button>
-      } @if (vm.userData.userTypeId == userType.admin) {
+      } @if (userState.user?.userTypeName === 'Admin') {
       <button
         mat-flat-button
         color="primary"
@@ -56,10 +56,10 @@
       >
         Admin Panel
       </button>
-      } @if (vm.userData.isLoggedIn) {
+      } @if (userState.isAuthenticated) {
       <a mat-flat-button color="primary" [matMenuTriggerFor]="menu">
         <mat-icon>account_circle</mat-icon>
-        <span> {{ vm.userData.username }}</span>
+        <span> {{ userState.user?.username }}</span>
         <mat-icon>arrow_drop_down</mat-icon>
       </a>
       <mat-menu #menu="matMenu">

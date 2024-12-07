@@ -24,6 +24,11 @@ import {
 import { ROUTER_FEATURE_KEY } from "./app/state/selectors/router.selectors";
 import { environment } from "./environments/environment";
 import { SimilarBooksEffects } from "./app/state/effects/similar-books.effects";
+import {
+  AUTH_FEATURE_KEY,
+  authReducer,
+} from "./app/state/reducers/auth.reducers";
+import { AuthEffects } from "./app/state/effects/auth.effects";
 
 if (environment.production) {
   enableProdMode();
@@ -43,9 +48,10 @@ bootstrapApplication(AppComponent, {
       })
     ),
     provideStore(),
-    provideEffects(CategoriesEffects, BookEffects),
+    provideEffects(CategoriesEffects, BookEffects, AuthEffects),
     provideState({ name: CATEGORIES_FEATURE_KEY, reducer: categoryReducer }),
     provideState({ name: BOOK_FEATURE_KEY, reducer: bookReducer }),
+    provideState({ name: AUTH_FEATURE_KEY, reducer: authReducer }),
     provideRouterStore(),
     provideStore({ [ROUTER_FEATURE_KEY]: routerReducer }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),

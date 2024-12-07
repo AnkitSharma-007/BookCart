@@ -1,12 +1,16 @@
-import { Component, inject, Input } from "@angular/core";
-import { Book } from "src/app/models/book";
-import { SubscriptionService } from "src/app/services/subscription.service";
-import { AddtocartComponent } from "../addtocart/addtocart.component";
-import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
 import { AsyncPipe, CurrencyPipe } from "@angular/common";
+import { Component, inject, Input } from "@angular/core";
+import { MatCard, MatCardContent, MatCardImage } from "@angular/material/card";
 import { MatTooltip } from "@angular/material/tooltip";
 import { RouterLink } from "@angular/router";
-import { MatCard, MatCardImage, MatCardContent } from "@angular/material/card";
+import { Store } from "@ngrx/store";
+import { Book } from "src/app/models/book";
+import {
+  selectAuthenticatedUser,
+  selectIsAuthenticated,
+} from "src/app/state/selectors/auth.selectors";
+import { AddtocartComponent } from "../addtocart/addtocart.component";
+import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
 
 @Component({
   selector: "app-book-card",
@@ -29,8 +33,9 @@ export class BookCardComponent {
   @Input()
   book: Book;
 
-  private readonly subscriptionService = inject(SubscriptionService);
-
   isActive = false;
-  userData$ = this.subscriptionService.userData$;
+
+  private readonly store = inject(Store);
+
+  isAuthenticatedUser$ = this.store.select(selectIsAuthenticated);
 }

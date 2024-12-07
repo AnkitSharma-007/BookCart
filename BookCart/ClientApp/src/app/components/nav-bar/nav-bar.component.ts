@@ -7,7 +7,7 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
 import { MatToolbar, MatToolbarRow } from "@angular/material/toolbar";
 import { MatTooltip } from "@angular/material/tooltip";
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { combineLatestWith, map, Observable } from "rxjs";
+import { combineLatest, combineLatestWith, map, Observable } from "rxjs";
 import { User } from "src/app/models/user";
 import { UserType } from "src/app/models/usertype";
 import { AuthenticationService } from "src/app/services/authentication.service";
@@ -15,6 +15,12 @@ import { SubscriptionService } from "src/app/services/subscription.service";
 import { UserService } from "src/app/services/user.service";
 import { WishlistService } from "src/app/services/wishlist.service";
 import { SearchComponent } from "../search/search.component";
+import {
+  selectAuthenticatedUser,
+  selectIsAuthenticated,
+} from "src/app/state/selectors/auth.selectors";
+import { Store } from "@ngrx/store";
+import { logout } from "src/app/state/actions/auth.actions";
 
 @Component({
   selector: "app-nav-bar",
@@ -41,52 +47,33 @@ import { SearchComponent } from "../search/search.component";
   ],
 })
 export class NavBarComponent {
-  private readonly router = inject(Router);
-  private readonly authService = inject(AuthenticationService);
   private readonly userService = inject(UserService);
   private readonly subscriptionService = inject(SubscriptionService);
   private readonly wishlistService = inject(WishlistService);
+  private readonly store = inject(Store);
 
-  userId = localStorage.getItem("userId");
-  userType = UserType;
-  userData$ = this.subscriptionService.userData$.asObservable();
-  cartItemCount$ = this.subscriptionService.cartItemcount$.asObservable();
-  getCartItemCount$ = this.userService.getCartItemCount(Number(this.userId));
-  wishListCount$ = this.subscriptionService.wishlistItemcount$.asObservable();
-  getWishlistItems$ = this.wishlistService.getWishlistItems(
-    Number(this.userId)
-  );
+  userType: UserType;
+  // userData$ = this.subscriptionService.userData$.asObservable();
+  // cartItemCount$ = this.subscriptionService.cartItemcount$.asObservable();
+  // getCartItemCount$ = this.userService.getCartItemCount(Number(this.userId));
+  // wishListCount$ = this.subscriptionService.wishlistItemcount$.asObservable();
+  // getWishlistItems$ = this.wishlistService.getWishlistItems(
+  //   Number(this.userId)
+  // );
 
-  vm$: Observable<Vm> = this.getCartItemCount$.pipe(
-    combineLatestWith(
-      this.userData$,
-      this.cartItemCount$,
-      this.wishListCount$,
-      this.getWishlistItems$
-    ),
-    map(([, userData, cartItemCount, wishListCount]) => {
+  userState$ = combineLatest([
+    this.store.select(selectIsAuthenticated),
+    this.store.select(selectAuthenticatedUser),
+  ]).pipe(
+    map(([isAuthenticated, user]) => {
       return {
-        userData: userData,
-        cartItemCount: cartItemCount,
-        wishListCount: wishListCount,
+        isAuthenticated,
+        user,
       };
     })
   );
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(["/login"]);
-  }
-}
-
-class Vm {
-  userData: User;
-  cartItemCount: number;
-  wishListCount: number;
-
-  constructor() {
-    this.userData = new User();
-    this.cartItemCount = 0;
-    this.wishListCount = 0;
+    this.store.dispatch(logout());
   }
 }

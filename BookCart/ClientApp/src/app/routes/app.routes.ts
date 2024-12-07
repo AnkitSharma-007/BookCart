@@ -1,15 +1,20 @@
 import { Routes } from "@angular/router";
+import { provideEffects } from "@ngrx/effects";
+import { provideState } from "@ngrx/store";
 import { HomeComponent } from "../components/home/home.component";
 import { PageNotFoundComponent } from "../components/page-not-found/page-not-found.component";
 import { AdminAuthGuard } from "../guards/admin-auth.guard";
 import { AuthGuard } from "../guards/auth.guard";
-import { provideEffects } from "@ngrx/effects";
+import { RegisterEffects } from "../state/effects/register.effects";
 import { SimilarBooksEffects } from "../state/effects/similar-books.effects";
+import {
+  REGISTER_FEATURE_KEY,
+  registerReducer,
+} from "../state/reducers/register.reducer";
 import {
   SIMILAR_BOOKS_FEATURE_KEY,
   similarBooksReducer,
 } from "../state/reducers/similar-books.reducers";
-import { provideState } from "@ngrx/store";
 
 export const APP_ROUTES: Routes = [
   { path: "", component: HomeComponent, pathMatch: "full", title: "Home" },
@@ -25,6 +30,10 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: "register",
+    providers: [
+      provideEffects([RegisterEffects]),
+      provideState(REGISTER_FEATURE_KEY, registerReducer),
+    ],
     loadComponent: () =>
       import(
         "../components/user-registration/user-registration.component"

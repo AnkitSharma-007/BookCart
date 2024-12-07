@@ -1,27 +1,22 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, Route } from "@angular/router";
-import { Observable } from "rxjs";
-import { User } from "../models/user";
-import { SubscriptionService } from "../services/subscription.service";
-import { UserType } from "../models/usertype";
+import { inject, Injectable } from "@angular/core";
+import {
+  ActivatedRouteSnapshot,
+  Route,
+  Router,
+  RouterStateSnapshot,
+  UrlSegment,
+  UrlTree,
+} from "@angular/router";
+import { Store } from "@ngrx/store";
+import { map, Observable } from "rxjs";
+import { selectAuthenticatedUser } from "../state/selectors/auth.selectors";
 
 @Injectable({
   providedIn: "root",
 })
-export class AdminAuthGuard  {
-  userDataSubscription: any;
-  userData = new User();
-
-  constructor(
-    private router: Router,
-    private subscriptionService: SubscriptionService
-  ) {
-    this.userDataSubscription = this.subscriptionService.userData$
-      .asObservable()
-      .subscribe((data) => {
-        this.userData = data;
-      });
-  }
+export class AdminAuthGuard {
+  private readonly store = inject(Store);
+  private readonly router = inject(Router);
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -31,12 +26,17 @@ export class AdminAuthGuard  {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (this.userData.userTypeId === UserType.admin) {
-      return true;
-    }
-
-    this.router.navigate(["/login"], { queryParams: { returnUrl: state.url } });
-    return false;
+    return this.store.select(selectAuthenticatedUser).pipe(
+      map((user) => {
+        if (user?.userTypeName == "Admin") {
+          return true;
+        }
+        this.router.navigate(["/login"], {
+          queryParams: { returnUrl: state.url },
+        });
+        return false;
+      })
+    );
   }
 
   canActivateChild(
@@ -50,12 +50,26 @@ export class AdminAuthGuard  {
     return this.canActivate(route, state);
   }
 
-  canLoad(route: Route): boolean {
+  canLoad(
+    route: Route,
+    segments: UrlSegment[]
+  ):
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
     const url = `/${route.path}`;
-    if (this.userData.userTypeId === UserType.admin) {
-      return true;
-    }
-    this.router.navigate(["/login"], { queryParams: { returnUrl: url } });
-    return false;
+
+    return this.store.select(selectAuthenticatedUser).pipe(
+      map((user) => {
+        if (user?.userTypeName == "Admin") {
+          return true;
+        }
+        this.router.navigate(["/login"], {
+          queryParams: { returnUrl: url },
+        });
+        return false;
+      })
+    );
   }
 }

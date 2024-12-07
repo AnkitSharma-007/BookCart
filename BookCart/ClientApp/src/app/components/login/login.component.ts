@@ -1,13 +1,7 @@
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
-import {
-  FormControl,
   FormGroup,
+  NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
@@ -19,14 +13,8 @@ import {
 } from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
 import { MatInput } from "@angular/material/input";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { combineLatest, ReplaySubject } from "rxjs";
-import { switchMap, takeUntil } from "rxjs/operators";
-import { User } from "src/app/models/user";
-import { AuthenticationService } from "src/app/services/authentication.service";
-import { CartService } from "src/app/services/cart.service";
-import { SubscriptionService } from "src/app/services/subscription.service";
-import { WishlistService } from "src/app/services/wishlist.service";
+import { RouterLink } from "@angular/router";
+import { map } from "rxjs/operators";
 
 import { MatButton } from "@angular/material/button";
 import {
@@ -37,6 +25,12 @@ import {
   MatCardSubtitle,
   MatCardTitle,
 } from "@angular/material/card";
+import { Store } from "@ngrx/store";
+import { LoginForm } from "src/app/models/loginForm";
+import { UserLogin } from "src/app/models/userLogin";
+import { login } from "src/app/state/actions/auth.actions";
+import { selectLoginError } from "src/app/state/selectors/auth.selectors";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-login",
@@ -59,75 +53,75 @@ import {
     MatIcon,
     MatSuffix,
     MatCardActions,
+    AsyncPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit, OnDestroy {
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
-  private readonly cartService = inject(CartService);
-  private readonly authenticationService = inject(AuthenticationService);
-  private readonly subscriptionService = inject(SubscriptionService);
-  private readonly wishlistService = inject(WishlistService);
+export class LoginComponent {
+  private readonly store = inject(Store);
+  private readonly formBuilder = inject(NonNullableFormBuilder);
 
-  showPassword = true;
-  userId;
-  private destroyed$ = new ReplaySubject<void>(1);
-
-  loginForm = new FormGroup({
-    username: new FormControl("", Validators.required),
-    password: new FormControl("", Validators.required),
+  protected loginForm: FormGroup<LoginForm> = this.formBuilder.group({
+    username: this.formBuilder.control("", Validators.required),
+    password: this.formBuilder.control("", Validators.required),
   });
+  showPassword = false;
+
+  error$ = this.store.select(selectLoginError).pipe(
+    map((error) => {
+      if (error?.includes("Unauthorized")) {
+        this.loginForm.reset();
+        this.loginForm.setErrors({ invalidCredentials: true });
+      }
+      return error;
+    })
+  );
 
   protected get loginFormControl() {
     return this.loginForm.controls;
   }
 
-  ngOnInit() {
-    this.subscriptionService.userData$
-      .asObservable()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((data: User) => {
-        this.userId = data.userId;
-      });
-  }
-
   login() {
     if (this.loginForm.valid) {
-      this.authenticationService
-        .login(this.loginForm.value)
-        .pipe(
-          switchMap(() => {
-            return this.cartService.setCart(
-              this.authenticationService.oldUserId,
-              this.userId
-            );
-          }),
-          switchMap((cartItemcount) => {
-            this.subscriptionService.cartItemcount$.next(cartItemcount);
-            return this.wishlistService.getWishlistItems(this.userId);
-          }),
-          switchMap(() => this.route.queryParams),
-          takeUntil(this.destroyed$)
-        )
-        .subscribe({
-          next: (params) => {
-            const returnUrl = params["returnUrl"] || "/";
-            this.router.navigate([returnUrl]);
-          },
-          error: (error) => {
-            console.error("Error occurred while login : ", error);
-            this.loginForm.reset();
-            this.loginForm.setErrors({
-              invalidLogin: true,
-            });
-          },
-        });
+      this.store.dispatch(
+        login({
+          loginCredentials: this.loginForm.value as UserLogin,
+        })
+      );
     }
   }
 
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
+  // login() {
+  //   if (this.loginForm.valid) {
+  //     this.authenticationService
+  //       .login(this.loginForm.value)
+  //       .pipe(
+  //         switchMap(() => {
+  //           return this.cartService.setCart(
+  //             this.authenticationService.oldUserId,
+  //             this.userId
+  //           );
+  //         }),
+  //         switchMap((cartItemcount) => {
+  //           this.subscriptionService.cartItemcount$.next(cartItemcount);
+  //           return this.wishlistService.getWishlistItems(this.userId);
+  //         }),
+  //         switchMap(() => this.route.queryParams),
+  //         takeUntil(this.destroyed$)
+  //       )
+  //       .subscribe({
+  //         next: (params) => {
+  //           const returnUrl = params["returnUrl"] || "/";
+  //           this.router.navigate([returnUrl]);
+  //         },
+  //         error: (error) => {
+  //           console.error("Error occurred while login : ", error);
+  //           this.loginForm.reset();
+  //           this.loginForm.setErrors({
+  //             invalidLogin: true,
+  //           });
+  //         },
+  //       });
+  //   }
+  // }
 }

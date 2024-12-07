@@ -6,6 +6,6 @@
 
         public string Username { get; set; } = string.Empty;
 
-        public int UserTypeId { get; set; } = 2;
+        public string UserTypeName { get; set; } = string.Empty;
     }
 }

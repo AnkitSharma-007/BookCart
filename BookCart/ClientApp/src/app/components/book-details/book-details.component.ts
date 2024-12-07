@@ -11,7 +11,7 @@ import {
 import { RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { combineLatest, map } from "rxjs";
-import { SubscriptionService } from "src/app/services/subscription.service";
+import { selectIsAuthenticated } from "src/app/state/selectors/auth.selectors";
 import { selectCurrentBookDetails } from "src/app/state/selectors/book.selectors";
 import { AddtocartComponent } from "../addtocart/addtocart.component";
 import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
@@ -41,16 +41,21 @@ import { SimilarbooksComponent } from "../similarbooks/similarbooks.component";
   ],
 })
 export class BookDetailsComponent {
-  private readonly subscriptionService = inject(SubscriptionService);
   private readonly store = inject(Store);
-
-  userData$ = this.subscriptionService.userData$.asObservable();
 
   bookDetails$ = combineLatest([
     this.store.select(selectCurrentBookDetails),
+    this.store.select(selectIsAuthenticated),
   ]).pipe(
-    map(([book]) => {
-      return book ?? null;
+    map(([book, isAuthenticated]) => {
+      if (book === undefined) {
+        return null;
+      } else {
+        return {
+          book,
+          isAuthenticated,
+        };
+      }
     })
   );
 }

@@ -1,4 +1,4 @@
-@if (bookDetails$ | async; as book) {
+@if (bookDetails$ | async; as bookDetails) {
 <mat-card class="mt-4">
   <mat-card-header class="mat-elevation-z2 custom-card-header">
     <mat-card-title class="mat-h1">Book Details</mat-card-title>
@@ -7,7 +7,7 @@
     <div class="col-md-3 col-sm-12">
       <img
         mat-card-image
-        src="/Upload/{{ book.coverFileName }}"
+        src="/Upload/{{ bookDetails.book.coverFileName }}"
         alt="No image available"
       />
     </div>
@@ -16,27 +16,27 @@
         <tbody>
           <tr>
             <td><strong>Title</strong></td>
-            <td>{{ book.title }}</td>
+            <td>{{ bookDetails.book.title }}</td>
           </tr>
           <tr>
             <td><strong>Author</strong></td>
-            <td>{{ book.author }}</td>
+            <td>{{ bookDetails.book.author }}</td>
           </tr>
           <tr>
             <td><strong>Category</strong></td>
-            <td>{{ book.category }}</td>
+            <td>{{ bookDetails.book.category }}</td>
           </tr>
           <tr>
             <td><strong>Price</strong></td>
-            <td>{{ book.price | currency : "INR" }}</td>
+            <td>{{ bookDetails.book.price | currency : "INR" }}</td>
           </tr>
         </tbody>
       </table>
       <div>
-        <app-addtocart [bookId]="book.bookId"></app-addtocart>
-        @if ((userData$ | async).isLoggedIn) {
+        <app-addtocart [bookId]="bookDetails.book.bookId"></app-addtocart>
+        @if (bookDetails.isAuthenticated) {
         <app-addtowishlist
-          [bookId]="book.bookId"
+          [bookId]="bookDetails.book.bookId"
           [showButton]="true"
           class="ms-2"
         >
@@ -46,7 +46,7 @@
     </div>
   </mat-card-content>
 </mat-card>
-<app-book-summary [bookTitle]="book.title"></app-book-summary>
+<app-book-summary [bookTitle]="bookDetails.book.title"></app-book-summary>
 <app-similarbooks></app-similarbooks>
 } @else {
 <div class="d-flex flex-column align-items-center mt-4">

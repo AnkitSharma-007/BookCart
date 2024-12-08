@@ -10,18 +10,18 @@
     </div>
     <div class="d-flex align-items-center">
       @if (userState$ | async; as userState) { @if (userState.isAuthenticated) {
-      <!-- <button
+      <button
         mat-icon-button
         [routerLinkActive]="['link-active']"
         [routerLink]="['/wishlist']"
       >
         <mat-icon
-          matBadge="{{ userState.wishListCount }}"
+          matBadge="{{ userState.wishlistItemcount }}"
           matBadgeColor="warn"
           aria-hidden="false"
           >favorite</mat-icon
         >
-      </button> -->
+      </button>
       }
 
       <!-- <button

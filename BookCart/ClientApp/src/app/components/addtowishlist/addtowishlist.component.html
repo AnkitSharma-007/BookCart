@@ -1,21 +1,20 @@
 @if (showButton) {
-  <button
-    [ngClass]="{ wishlisted: toggle, 'not-wishlisted': !toggle }"
-    mat-raised-button
-    (click)="toggleValue()"
-    >
-    {{ buttonText }}
-  </button>
+<button
+  [ngClass]="{ wishlisted: toggle, 'not-wishlisted': !toggle }"
+  mat-raised-button
+  (click)="toggleValue()"
+>
+  {{ buttonText }}
+</button>
 } @else {
-  <span
-    (click)="toggleValue()"
-    [ngClass]="{
-      'favourite-selected': toggle,
-      'favourite-unselected': !toggle
-    }"
-    class="material-icons"
-    >
-    favorite
-  </span>
+<span
+  (click)="toggleValue()"
+  [ngClass]="{
+    'favourite-selected': toggle,
+    'favourite-unselected': !toggle
+  }"
+  class="material-icons"
+>
+  favorite
+</span>
 }
-

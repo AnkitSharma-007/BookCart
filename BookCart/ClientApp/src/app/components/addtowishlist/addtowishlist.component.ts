@@ -1,11 +1,11 @@
 import { NgClass } from "@angular/common";
 import { Component, inject, Input, OnChanges, OnDestroy } from "@angular/core";
 import { MatButton } from "@angular/material/button";
+import { Store } from "@ngrx/store";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { Book } from "src/app/models/book";
-import { SnackbarService } from "src/app/services/snackbar.service";
-import { SubscriptionService } from "src/app/services/subscription.service";
-import { WishlistService } from "src/app/services/wishlist.service";
+import { toggleWishlistItem } from "src/app/state/actions/wishlist.actions";
+import { selectWishlistItems } from "src/app/state/selectors/wishlist.selectors";
 
 @Component({
   selector: "app-addtowishlist",
@@ -21,17 +21,16 @@ export class AddtowishlistComponent implements OnChanges, OnDestroy {
   @Input()
   showButton = false;
 
-  private readonly wishlistService = inject(WishlistService);
-  private readonly subscriptionService = inject(SubscriptionService);
-  private readonly snackBarService = inject(SnackbarService);
+  private readonly store = inject(Store);
 
   userId = localStorage.getItem("userId");
-  toggle: boolean;
-  buttonText: string;
+  toggle = false;
+  buttonText = "";
   private destroyed$ = new ReplaySubject<void>(1);
 
   ngOnChanges() {
-    this.subscriptionService.wishlistItem$
+    this.store
+      .select(selectWishlistItems)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((bookData: Book[]) => {
         this.setFavourite(bookData);
@@ -39,7 +38,7 @@ export class AddtowishlistComponent implements OnChanges, OnDestroy {
       });
   }
 
-  setFavourite(bookData: Book[]) {
+  private setFavourite(bookData: Book[]) {
     const favBook = bookData.find((f) => f.bookId === this.bookId);
 
     if (favBook) {
@@ -49,7 +48,7 @@ export class AddtowishlistComponent implements OnChanges, OnDestroy {
     }
   }
 
-  setButtonText() {
+  private setButtonText() {
     if (this.toggle) {
       this.buttonText = "Remove from Wishlist";
     } else {
@@ -61,23 +60,12 @@ export class AddtowishlistComponent implements OnChanges, OnDestroy {
     this.toggle = !this.toggle;
     this.setButtonText();
 
-    this.wishlistService
-      .toggleWishlistItem(Number(this.userId), this.bookId)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: () => {
-          if (this.toggle) {
-            this.snackBarService.showSnackBar("Item added to your Wishlist");
-          } else {
-            this.snackBarService.showSnackBar(
-              "Item removed from your Wishlist"
-            );
-          }
-        },
-        error: (error) => {
-          console.log("Error ocurred while adding to wishlist : ", error);
-        },
-      });
+    this.store.dispatch(
+      toggleWishlistItem({
+        bookId: this.bookId,
+        isAdd: this.toggle,
+      })
+    );
   }
 
   ngOnDestroy() {

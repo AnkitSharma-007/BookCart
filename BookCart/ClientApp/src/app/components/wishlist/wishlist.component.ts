@@ -1,5 +1,5 @@
 import { AsyncPipe, CurrencyPipe } from "@angular/common";
-import { Component, inject, OnDestroy } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { MatButton } from "@angular/material/button";
 import {
   MatCard,
@@ -22,11 +22,12 @@ import {
 } from "@angular/material/table";
 import { MatTooltip } from "@angular/material/tooltip";
 import { RouterLink } from "@angular/router";
-import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { SnackbarService } from "src/app/services/snackbar.service";
-import { SubscriptionService } from "src/app/services/subscription.service";
-import { WishlistService } from "src/app/services/wishlist.service";
+import { Store } from "@ngrx/store";
+import {
+  clearWishlist,
+  loadWishlist,
+} from "src/app/state/actions/wishlist.actions";
+import { selectWishlistItems } from "src/app/state/selectors/wishlist.selectors";
 import { AddtocartComponent } from "../addtocart/addtocart.component";
 import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
 
@@ -35,6 +36,7 @@ import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component
   templateUrl: "./wishlist.component.html",
   styleUrls: ["./wishlist.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatProgressSpinner,
     MatCard,
@@ -60,33 +62,17 @@ import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component
     CurrencyPipe,
   ],
 })
-export class WishlistComponent implements OnDestroy {
-  private subscriptionService = inject(SubscriptionService);
-  private wishlistService = inject(WishlistService);
-  private snackBarService = inject(SnackbarService);
-  private destroyed$ = new ReplaySubject<void>(1);
+export class WishlistComponent {
+  private readonly store = inject(Store);
+  protected readonly wishlistItems$ = this.store.select(selectWishlistItems);
 
-  wishlistItems$ = this.subscriptionService.wishlistItem$;
-  userId = localStorage.getItem("userId");
   displayedColumns: string[] = ["image", "title", "price", "cart", "wishlist"];
 
-  clearWishlist() {
-    this.wishlistService
-      .clearWishlist(Number(this.userId))
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (result) => {
-          this.subscriptionService.wishlistItemcount$.next(result);
-          this.snackBarService.showSnackBar("Wishlist cleared!!!");
-        },
-        error: (error) => {
-          console.log("Error ocurred while deleting wishlist item : ", error);
-        },
-      });
+  ngOnInit(): void {
+    this.store.dispatch(loadWishlist());
   }
 
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+  clearWishlist() {
+    this.store.dispatch(clearWishlist());
   }
 }

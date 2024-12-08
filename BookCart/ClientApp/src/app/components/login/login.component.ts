@@ -16,6 +16,7 @@ import { MatInput } from "@angular/material/input";
 import { RouterLink } from "@angular/router";
 import { map } from "rxjs/operators";
 
+import { AsyncPipe } from "@angular/common";
 import { MatButton } from "@angular/material/button";
 import {
   MatCard,
@@ -30,7 +31,6 @@ import { LoginForm } from "src/app/models/loginForm";
 import { UserLogin } from "src/app/models/userLogin";
 import { login } from "src/app/state/actions/auth.actions";
 import { selectLoginError } from "src/app/state/selectors/auth.selectors";
-import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-login",
@@ -90,38 +90,4 @@ export class LoginComponent {
       );
     }
   }
-
-  // login() {
-  //   if (this.loginForm.valid) {
-  //     this.authenticationService
-  //       .login(this.loginForm.value)
-  //       .pipe(
-  //         switchMap(() => {
-  //           return this.cartService.setCart(
-  //             this.authenticationService.oldUserId,
-  //             this.userId
-  //           );
-  //         }),
-  //         switchMap((cartItemcount) => {
-  //           this.subscriptionService.cartItemcount$.next(cartItemcount);
-  //           return this.wishlistService.getWishlistItems(this.userId);
-  //         }),
-  //         switchMap(() => this.route.queryParams),
-  //         takeUntil(this.destroyed$)
-  //       )
-  //       .subscribe({
-  //         next: (params) => {
-  //           const returnUrl = params["returnUrl"] || "/";
-  //           this.router.navigate([returnUrl]);
-  //         },
-  //         error: (error) => {
-  //           console.error("Error occurred while login : ", error);
-  //           this.loginForm.reset();
-  //           this.loginForm.setErrors({
-  //             invalidLogin: true,
-  //           });
-  //         },
-  //       });
-  //   }
-  // }
 }

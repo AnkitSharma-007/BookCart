@@ -6,16 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookCart.Controllers
 {
     [Route("api/[controller]")]
-    public class ShoppingCartController : Controller
+    public class ShoppingCartController(ICartService cartService, IBookService bookService) : Controller
     {
-        readonly ICartService _cartService;
-        readonly IBookService _bookService;
-
-        public ShoppingCartController(ICartService cartService, IBookService bookService)
-        {
-            _cartService = cartService;
-            _bookService = bookService;
-        }
+        readonly ICartService _cartService = cartService;
+        readonly IBookService _bookService = bookService;
 
         /// <summary>
         /// Get the shopping cart for a user upon Login. If the user logs in for the first time, creates the shopping cart.

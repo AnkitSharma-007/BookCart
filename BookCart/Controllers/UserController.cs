@@ -5,16 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookCart.Controllers
 {
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class UserController(IUserService userService, ICartService cartService) : Controller
     {
-        readonly IUserService _userService;
-        readonly ICartService _cartService;
-
-        public UserController(IUserService userService, ICartService cartService)
-        {
-            _userService = userService;
-            _cartService = cartService;
-        }
+        readonly IUserService _userService = userService;
+        readonly ICartService _cartService = cartService;
 
         /// <summary>
         /// Get the count of item in the shopping cart

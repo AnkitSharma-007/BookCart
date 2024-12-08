@@ -3,30 +3,27 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import { Store } from "@ngrx/store";
 import { catchError, map, of, switchMap, tap } from "rxjs";
+import { CartService } from "src/app/services/cart.service";
 import { SnackbarService } from "src/app/services/snackbar.service";
 import { setAuthState } from "../actions/auth.actions";
 import {
+  addToCart,
+  addToCartFailure,
+  addToCartSuccess,
   clearCart,
   clearCartFailure,
   clearCartSuccess,
   loadCart,
   loadCartFailure,
   loadCartSuccess,
-  addToCart,
-  addToCartFailure,
-  addToCartSuccess,
+  reduceCartQuantity,
+  reduceCartQuantityFailure,
+  reduceCartQuantitySuccess,
   removeCartItem,
   removeCartItemFailure,
   removeCartItemSuccess,
-  reduceCartQuantity,
-  reduceCartQuantitySuccess,
-  reduceCartQuantityFailure,
 } from "../actions/cart.actions";
-import { CartService } from "src/app/services/cart.service";
-import {
-  selectAuthenticatedUser,
-  selectCurrentUser,
-} from "../selectors/auth.selectors";
+import { selectCurrentUser } from "../selectors/auth.selectors";
 
 @Injectable()
 export class CartEffects {

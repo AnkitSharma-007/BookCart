@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookCart.DataAccess
 {
-    public class CartDataAccessLayer : ICartService
+    public class CartDataAccessLayer(BookDBContext dbContext) : ICartService
     {
-        readonly BookDBContext _dbContext;
-
-        public CartDataAccessLayer(BookDBContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        readonly BookDBContext _dbContext = dbContext;
 
         public void AddBookToCart(int userId, int bookId)
         {

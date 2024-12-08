@@ -5,13 +5,10 @@ using System.Text;
 
 namespace BookCart.DataAccess
 {
-    public class OrderDataAccessLayer : IOrderService
+    public class OrderDataAccessLayer(BookDBContext dbContext) : IOrderService
     {
-        readonly BookDBContext _dbContext;
-        public OrderDataAccessLayer(BookDBContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        readonly BookDBContext _dbContext = dbContext;
+
         public void CreateOrder(int userId, OrdersDto orderDetails)
         {
             try

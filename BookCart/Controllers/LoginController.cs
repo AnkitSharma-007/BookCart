@@ -10,16 +10,10 @@ using System.Text;
 namespace BookCart.Controllers
 {
     [Route("api/[controller]")]
-    public class LoginController : Controller
+    public class LoginController(IConfiguration config, IUserService userService) : Controller
     {
-        readonly IUserService _userService;
-        readonly IConfiguration _config;
-
-        public LoginController(IConfiguration config, IUserService userService)
-        {
-            _config = config;
-            _userService = userService;
-        }
+        readonly IUserService _userService = userService;
+        readonly IConfiguration _config = config;
 
         /// <summary>
         /// Login to the application

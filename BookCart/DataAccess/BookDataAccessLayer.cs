@@ -5,14 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookCart.DataAccess
 {
-    public class BookDataAccessLayer : IBookService
+    public class BookDataAccessLayer(BookDBContext dbContext) : IBookService
     {
-        readonly BookDBContext _dbContext;
-
-        public BookDataAccessLayer(BookDBContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        readonly BookDBContext _dbContext = dbContext;
 
         public List<Book> GetAllBooks()
         {

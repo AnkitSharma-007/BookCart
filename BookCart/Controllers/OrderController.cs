@@ -7,14 +7,9 @@ namespace BookCart.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class OrderController : Controller
+    public class OrderController(IOrderService orderService) : Controller
     {
-        readonly IOrderService _orderService;
-
-        public OrderController(IOrderService orderService)
-        {
-            _orderService = orderService;
-        }
+        readonly IOrderService _orderService = orderService;
 
         /// <summary>
         /// Get the list of all the orders placed by a particular user

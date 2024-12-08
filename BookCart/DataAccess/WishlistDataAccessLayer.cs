@@ -3,14 +3,9 @@ using BookCart.Models;
 
 namespace BookCart.DataAccess
 {
-    public class WishlistDataAccessLayer : IWishlistService
+    public class WishlistDataAccessLayer(BookDBContext dbContext) : IWishlistService
     {
-        readonly BookDBContext _dbContext;
-
-        public WishlistDataAccessLayer(BookDBContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        readonly BookDBContext _dbContext = dbContext;
 
         public void ToggleWishlistItem(int userId, int bookId)
         {

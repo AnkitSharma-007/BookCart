@@ -15,6 +15,11 @@ import {
   SIMILAR_BOOKS_FEATURE_KEY,
   similarBooksReducer,
 } from "../state/reducers/similar-books.reducers";
+import { OrderEffects } from "../state/effects/order.effects";
+import {
+  ORDER_FEATURE_KEY,
+  orderReducer,
+} from "../state/reducers/order.reducers";
 
 export const APP_ROUTES: Routes = [
   { path: "", component: HomeComponent, pathMatch: "full", title: "Home" },
@@ -72,6 +77,10 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: "myorders",
+    providers: [
+      provideEffects([OrderEffects]),
+      provideState(ORDER_FEATURE_KEY, orderReducer),
+    ],
     loadComponent: () =>
       import("../components/my-orders/my-orders.component").then(
         (c) => c.MyOrdersComponent

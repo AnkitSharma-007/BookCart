@@ -6,18 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookCart.Controllers
 {
     [Route("api/[controller]")]
-    public class WishlistController : Controller
+    public class WishlistController(IWishlistService wishlistService, IBookService bookService, IUserService userService) : Controller
     {
-        readonly IWishlistService _wishlistService;
-        readonly IBookService _bookService;
-        readonly IUserService _userService;
-
-        public WishlistController(IWishlistService wishlistService, IBookService bookService, IUserService userService)
-        {
-            _wishlistService = wishlistService;
-            _bookService = bookService;
-            _userService = userService;
-        }
+        readonly IWishlistService _wishlistService = wishlistService;
+        readonly IBookService _bookService = bookService;
+        readonly IUserService _userService = userService;
 
         /// <summary>
         /// Get the list of items in the Wishlist

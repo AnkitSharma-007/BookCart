@@ -5,8 +5,13 @@ import {
   transition,
   trigger,
 } from "@angular/animations";
-import { CurrencyPipe, DatePipe } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { AsyncPipe, CurrencyPipe, DatePipe } from "@angular/common";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  ViewChild,
+} from "@angular/core";
 import { MatButton } from "@angular/material/button";
 import {
   MatCard,
@@ -33,10 +38,15 @@ import {
   MatTableDataSource,
 } from "@angular/material/table";
 import { RouterLink } from "@angular/router";
-import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { Order } from "src/app/models/order";
-import { MyordersService } from "src/app/services/myorders.service";
+import { Store } from "@ngrx/store";
+import { BehaviorSubject, combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
+import { LoadingState } from "src/app/shared/call-state";
+import { loadOrders } from "src/app/state/actions/order.actions";
+import {
+  selectOrderCallState,
+  selectOrderItems,
+} from "src/app/state/selectors/order.selectors";
 
 @Component({
   selector: "app-my-orders",
@@ -44,15 +54,16 @@ import { MyordersService } from "src/app/services/myorders.service";
   styleUrls: ["./my-orders.component.scss"],
   animations: [
     trigger("detailExpand", [
-      state(
-        "collapsed, void",
-        style({ height: "0px", minHeight: "0", display: "none" })
-      ),
+      state("collapsed,void", style({ height: "0px", minHeight: "0" })),
       state("expanded", style({ height: "*" })),
-      transition("* <=> *", animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")),
+      transition(
+        "expanded <=> collapsed",
+        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
+      ),
     ]),
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatCard,
     MatCardHeader,
@@ -78,58 +89,43 @@ import { MyordersService } from "src/app/services/myorders.service";
     MatButton,
     CurrencyPipe,
     DatePipe,
+    AsyncPipe,
   ],
 })
-export class MyOrdersComponent implements OnInit, OnDestroy {
-  private readonly orderService = inject(MyordersService);
+export class MyOrdersComponent {
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+
+  private readonly store = inject(Store);
+  loadingState = LoadingState;
 
   displayedColumns: string[] = ["orderId", "orderedOn", "orderTotal"];
-  dataSource = new MatTableDataSource<Order>();
   expandedElement: null;
 
-  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
-    this.dataSource.paginator = mp;
-  }
+  private readonly searchValue$ = new BehaviorSubject<string>("");
 
-  userId = localStorage.getItem("userId");
-  isLoading: boolean;
-  private destroyed$ = new ReplaySubject<void>(1);
+  orderTableData$ = combineLatest([
+    this.store.select(selectOrderItems),
+    this.store.select(selectOrderCallState),
+    this.searchValue$,
+  ]).pipe(
+    map(([order, callState, searchValue]) => {
+      let dataSource = new MatTableDataSource(order);
+      dataSource.paginator = this.paginator;
+      if (searchValue.length > 0) {
+        dataSource.filter = searchValue.trim().toLowerCase();
+        dataSource.paginator.firstPage();
+      }
+      return { dataSource, callState };
+    })
+  );
 
-  ngOnInit() {
-    this.getMyOrderDetails();
-  }
-
-  getMyOrderDetails() {
-    this.isLoading = true;
-    this.orderService
-      .myOrderDetails(Number(this.userId))
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (result) => {
-          if (result != null) {
-            this.dataSource.data = result;
-            this.isLoading = false;
-          }
-        },
-        error: (error) => {
-          console.log(
-            "Error ocurred while fetching the order details : ",
-            error
-          );
-        },
-      });
+  constructor() {
+    this.store.dispatch(loadOrders());
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+    this.searchValue$.next(filterValue);
   }
 }

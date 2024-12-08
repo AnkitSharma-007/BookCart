@@ -7,16 +7,10 @@ namespace BookCart.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class CheckOutController : Controller
+    public class CheckOutController(IOrderService orderService, ICartService cartService) : Controller
     {
-        readonly IOrderService _orderService;
-        readonly ICartService _cartService;
-
-        public CheckOutController(IOrderService orderService, ICartService cartService)
-        {
-            _orderService = orderService;
-            _cartService = cartService;
-        }
+        readonly IOrderService _orderService = orderService;
+        readonly ICartService _cartService = cartService;
 
         /// <summary>
         /// Checkout from shopping cart

@@ -1,22 +1,21 @@
 import { createReducer, on } from "@ngrx/store";
-import { Book } from "src/app/models/book";
+import { ShoppingCart } from "src/app/models/shoppingcart";
 import { CallState, LoadingState } from "src/app/shared/call-state";
 import { logout } from "../actions/auth.actions";
 import {
+  addToCart,
+  addToCartFailure,
+  addToCartSuccess,
   clearCart,
   clearCartFailure,
   clearCartSuccess,
   loadCart,
   loadCartFailure,
   loadCartSuccess,
-  addToCart,
-  addToCartFailure,
-  addToCartSuccess,
   removeCartItem,
   removeCartItemFailure,
   removeCartItemSuccess,
 } from "../actions/cart.actions";
-import { ShoppingCart } from "src/app/models/shoppingcart";
 
 export const CART_FEATURE_KEY = "cart";
 

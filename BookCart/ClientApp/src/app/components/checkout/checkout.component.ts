@@ -122,7 +122,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroyed$))
         .subscribe({
           next: (result) => {
-            this.subscriptionService.cartItemcount$.next(result);
+            // this.subscriptionService.cartItemcount$.next(result);
             this.router.navigate(["/myorders"]);
             this.snackBarService.showSnackBar("Order placed successfully!!!");
           },

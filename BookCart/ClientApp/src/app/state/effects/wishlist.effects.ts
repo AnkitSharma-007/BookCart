@@ -26,7 +26,7 @@ export class WishlistEffects {
   private readonly store = inject(Store);
   private readonly snackbarService = inject(SnackbarService);
 
-  getWishlist$ = createEffect(() =>
+  loadWishlist$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadWishlist, setAuthState),
       concatLatestFrom(() => this.store.select(selectAuthenticatedUser)),

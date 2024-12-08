@@ -48,7 +48,8 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(logout),
         tap(() => {
-          this.authenticationService.logout();
+          localStorage.clear();
+          this.authenticationService.setTempUserId();
           this.router.navigate(["/login"]);
         })
       ),

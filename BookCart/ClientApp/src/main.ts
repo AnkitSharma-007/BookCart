@@ -13,6 +13,7 @@ import { HttpInterceptorService } from "./app/interceptors/http-interceptor.serv
 import { APP_ROUTES } from "./app/routes/app.routes";
 import { AuthEffects } from "./app/state/effects/auth.effects";
 import { BookEffects } from "./app/state/effects/book.effects";
+import { CartEffects } from "./app/state/effects/cart.effects";
 import { CategoriesEffects } from "./app/state/effects/categories.effects";
 import { WishlistEffects } from "./app/state/effects/wishlist.effects";
 import {
@@ -23,6 +24,10 @@ import {
   BOOK_FEATURE_KEY,
   bookReducer,
 } from "./app/state/reducers/book.reducers";
+import {
+  CART_FEATURE_KEY,
+  cartReducer,
+} from "./app/state/reducers/cart.reducers";
 import {
   CATEGORIES_FEATURE_KEY,
   categoryReducer,
@@ -56,12 +61,14 @@ bootstrapApplication(AppComponent, {
       CategoriesEffects,
       BookEffects,
       AuthEffects,
-      WishlistEffects
+      WishlistEffects,
+      CartEffects
     ),
     provideState({ name: CATEGORIES_FEATURE_KEY, reducer: categoryReducer }),
     provideState({ name: BOOK_FEATURE_KEY, reducer: bookReducer }),
     provideState({ name: AUTH_FEATURE_KEY, reducer: authReducer }),
     provideState({ name: WISHLIST_FEATURE_KEY, reducer: wishlistReducer }),
+    provideState({ name: CART_FEATURE_KEY, reducer: cartReducer }),
     provideRouterStore(),
     provideStore({ [ROUTER_FEATURE_KEY]: routerReducer }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),

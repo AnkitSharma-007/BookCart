@@ -23,13 +23,18 @@ import {
 import { MatTooltip } from "@angular/material/tooltip";
 import { RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
+import { combineLatest, map } from "rxjs";
 import {
   clearWishlist,
   loadWishlist,
 } from "src/app/state/actions/wishlist.actions";
-import { selectWishlistItems } from "src/app/state/selectors/wishlist.selectors";
+import {
+  selectWishlistCallState,
+  selectWishlistItems,
+} from "src/app/state/selectors/wishlist.selectors";
 import { AddtocartComponent } from "../addtocart/addtocart.component";
 import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
+import { LoadingState } from "src/app/shared/call-state";
 
 @Component({
   selector: "app-wishlist",
@@ -64,8 +69,17 @@ import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component
 })
 export class WishlistComponent {
   private readonly store = inject(Store);
-  protected readonly wishlistItems$ = this.store.select(selectWishlistItems);
+  loadingState = LoadingState;
 
+  protected readonly wishlistItems$ = combineLatest([
+    this.store.select(selectWishlistItems),
+    this.store.select(selectWishlistCallState),
+  ]).pipe(
+    map(([items, callState]) => ({
+      items,
+      callState,
+    }))
+  );
   displayedColumns: string[] = ["image", "title", "price", "cart", "wishlist"];
 
   ngOnInit(): void {

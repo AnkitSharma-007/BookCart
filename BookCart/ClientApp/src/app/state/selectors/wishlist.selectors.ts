@@ -4,15 +4,20 @@ import {
   WishlistState,
 } from "../reducers/wishlist.reducers";
 
-const selectGenresFeatureState =
+const selectWishlistFeatureState =
   createFeatureSelector<WishlistState>(WISHLIST_FEATURE_KEY);
 
 export const selectWishlistItems = createSelector(
-  selectGenresFeatureState,
+  selectWishlistFeatureState,
   (state: WishlistState) => state.wishlist
 );
 
 export const selectWishlistItemsCount = createSelector(
-  selectGenresFeatureState,
+  selectWishlistFeatureState,
   (state: WishlistState) => state?.wishlist.length
+);
+
+export const selectWishlistCallState = createSelector(
+  selectWishlistFeatureState,
+  (state) => state.wishlistCallState
 );

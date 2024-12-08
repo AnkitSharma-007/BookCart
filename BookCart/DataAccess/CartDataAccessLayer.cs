@@ -154,7 +154,7 @@ namespace BookCart.DataAccess
                         }
                         else
                         {
-                            CartItems newCartItem = new CartItems
+                            CartItems newCartItem = new()
                             {
                                 CartId = permCartId,
                                 ProductId = item.ProductId,
@@ -163,8 +163,8 @@ namespace BookCart.DataAccess
                             _dbContext.CartItems.Add(newCartItem);
                         }
                         _dbContext.CartItems.Remove(item);
-                        _dbContext.SaveChanges();
                     }
+                    _dbContext.SaveChanges();
                     DeleteCart(tempCartId);
                 }
             }
@@ -179,15 +179,15 @@ namespace BookCart.DataAccess
             try
             {
                 string cartId = GetCartId(userId);
-                List<CartItems> cartItem = _dbContext.CartItems.Where(x => x.CartId == cartId).ToList();
+                List<CartItems> cartItem = [.. _dbContext.CartItems.Where(x => x.CartId == cartId)];
 
                 if (!string.IsNullOrEmpty(cartId))
                 {
                     foreach (CartItems item in cartItem)
                     {
                         _dbContext.CartItems.Remove(item);
-                        _dbContext.SaveChanges();
                     }
+                    _dbContext.SaveChanges();
                 }
                 return 0;
             }
@@ -199,9 +199,12 @@ namespace BookCart.DataAccess
 
         void DeleteCart(string cartId)
         {
-            Cart cart = _dbContext.Cart.Find(cartId);
-            _dbContext.Cart.Remove(cart);
-            _dbContext.SaveChanges();
+            Cart? cart = _dbContext.Cart.Find(cartId);
+            if (cart != null)
+            {
+                _dbContext.Cart.Remove(cart);
+                _dbContext.SaveChanges();
+            }
         }
     }
 }

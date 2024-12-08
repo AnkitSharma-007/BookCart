@@ -15,6 +15,7 @@ import {
   selectAuthenticatedUser,
   selectIsAuthenticated,
 } from "src/app/state/selectors/auth.selectors";
+import { selectCarttemsCount } from "src/app/state/selectors/cart.selectors";
 import { selectWishlistItemsCount } from "src/app/state/selectors/wishlist.selectors";
 import { SearchComponent } from "../search/search.component";
 
@@ -46,20 +47,19 @@ export class NavBarComponent {
   private readonly store = inject(Store);
 
   userType: UserType;
-  // cartItemCount$ = this.subscriptionService.cartItemcount$.asObservable();
-  // getCartItemCount$ = this.userService.getCartItemCount(Number(this.userId));
-  // );
 
   userState$ = combineLatest([
     this.store.select(selectIsAuthenticated),
     this.store.select(selectAuthenticatedUser),
     this.store.select(selectWishlistItemsCount),
+    this.store.select(selectCarttemsCount),
   ]).pipe(
-    map(([isAuthenticated, user, wishlistItemcount]) => {
+    map(([isAuthenticated, user, wishlistItemcount, cartItemCount]) => {
       return {
         isAuthenticated,
         user,
         wishlistItemcount,
+        cartItemCount,
       };
     })
   );

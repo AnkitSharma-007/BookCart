@@ -49,13 +49,13 @@ namespace BookCart.Controllers
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="bookId"></param>
-        /// <returns>Count of items in the shopping cart</returns>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddToCart/{userId}/{bookId}")]
-        public int Post(int userId, int bookId)
+        public async Task<List<CartItemDto>> Post(int userId, int bookId)
         {
             _cartService.AddBookToCart(userId, bookId);
-            return _cartService.GetCartItemCount(userId);
+            return await Get(userId);
         }
 
         /// <summary>
@@ -65,10 +65,10 @@ namespace BookCart.Controllers
         /// <param name="bookId"></param>
         /// <returns></returns>
         [HttpPut("{userId}/{bookId}")]
-        public int Put(int userId, int bookId)
+        public async Task<List<CartItemDto>> Put(int userId, int bookId)
         {
             _cartService.DeleteOneCartItem(userId, bookId);
-            return _cartService.GetCartItemCount(userId);
+            return await Get(userId);
         }
 
         /// <summary>
@@ -78,10 +78,10 @@ namespace BookCart.Controllers
         /// <param name="bookId"></param>
         /// <returns></returns>
         [HttpDelete("{userId}/{bookId}")]
-        public int Delete(int userId, int bookId)
+        public async Task<List<CartItemDto>> Delete(int userId, int bookId)
         {
             _cartService.RemoveCartItem(userId, bookId);
-            return _cartService.GetCartItemCount(userId);
+            return await Get(userId);
         }
 
         /// <summary>

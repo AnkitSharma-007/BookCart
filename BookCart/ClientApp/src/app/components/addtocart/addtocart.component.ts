@@ -1,46 +1,29 @@
-import { Component, inject, Input, OnDestroy } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+} from "@angular/core";
 import { MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
-import { ReplaySubject, takeUntil } from "rxjs";
-import { CartService } from "src/app/services/cart.service";
-import { SnackbarService } from "src/app/services/snackbar.service";
-import { SubscriptionService } from "src/app/services/subscription.service";
+import { Store } from "@ngrx/store";
+import { addToCart } from "src/app/state/actions/cart.actions";
 
 @Component({
   selector: "app-addtocart",
   templateUrl: "./addtocart.component.html",
   styleUrls: ["./addtocart.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatButton, MatIcon],
 })
-export class AddtocartComponent implements OnDestroy {
+export class AddtocartComponent {
   @Input()
   bookId: number;
 
-  private readonly cartService = inject(CartService);
-  private readonly snackBarService = inject(SnackbarService);
-  private readonly subscriptionService = inject(SubscriptionService);
+  private readonly store = inject(Store);
 
-  userId = localStorage.getItem("userId");
-  private destroyed$ = new ReplaySubject<void>(1);
-
-  addToCart() {
-    this.cartService
-      .addBookToCart(Number(this.userId), this.bookId)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (result) => {
-          this.subscriptionService.cartItemcount$.next(result);
-          this.snackBarService.showSnackBar("One Item added to cart");
-        },
-        error: (error) => {
-          console.log("Error ocurred while addToCart data : ", error);
-        },
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+  addBookToCart() {
+    this.store.dispatch(addToCart({ bookId: this.bookId }));
   }
 }

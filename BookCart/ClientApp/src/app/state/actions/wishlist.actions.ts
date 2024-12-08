@@ -1,15 +1,15 @@
 import { createAction, props } from "@ngrx/store";
 import { Book } from "src/app/models/book";
 
-export const loadWishlist = createAction("[Wishlist] Get Wishlist");
+export const loadWishlist = createAction("[Wishlist] Load Wishlist");
 
 export const loadWishlistSuccess = createAction(
-  "[Wishlist] Get Wishlist Success",
+  "[Wishlist] Load Wishlist Success",
   props<{ wishlist: Book[] }>()
 );
 
 export const loadWishlistFailure = createAction(
-  "[Wishlist] Get Wishlist Failure",
+  "[Wishlist] Load Wishlist Failure",
   props<{ errorMessage: string }>()
 );
 

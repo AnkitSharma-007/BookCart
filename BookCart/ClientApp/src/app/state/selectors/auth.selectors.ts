@@ -19,3 +19,12 @@ export const selectLoginError = createSelector(
   selectAuthFeatureState,
   (state) => getCallStateError(state.authCallState)
 );
+
+export const selectCurrentUser = createSelector(
+  selectAuthenticatedUser,
+  (authenticatedUser) => {
+    return authenticatedUser === null
+      ? localStorage.getItem("userId")
+      : authenticatedUser;
+  }
+);

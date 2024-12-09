@@ -38,6 +38,10 @@ namespace BookCart.DataAccess
         {
             try
             {
+                if (userId <= 0)
+                {
+                    return string.Empty;
+                }
                 Cart cart = _dbContext.Cart.FirstOrDefault(x => x.UserId == userId);
 
                 if (cart != null)
@@ -48,7 +52,6 @@ namespace BookCart.DataAccess
                 {
                     return CreateCart(userId);
                 }
-
             }
             catch
             {
@@ -60,7 +63,11 @@ namespace BookCart.DataAccess
         {
             try
             {
-                Cart shoppingCart = new Cart
+                if (userId <= 0)
+                {
+                    return string.Empty;
+                }
+                Cart shoppingCart = new()
                 {
                     CartId = Guid.NewGuid().ToString(),
                     UserId = userId,
@@ -83,10 +90,13 @@ namespace BookCart.DataAccess
             try
             {
                 string cartId = GetCartId(userId);
-                CartItems cartItem = _dbContext.CartItems.FirstOrDefault(x => x.ProductId == bookId && x.CartId == cartId);
+                CartItems? cartItem = _dbContext.CartItems.FirstOrDefault(x => x.ProductId == bookId && x.CartId == cartId);
 
-                _dbContext.CartItems.Remove(cartItem);
-                _dbContext.SaveChanges();
+                if (cartItem != null)
+                {
+                    _dbContext.CartItems.Remove(cartItem);
+                    _dbContext.SaveChanges();
+                }
             }
             catch
             {
@@ -99,11 +109,14 @@ namespace BookCart.DataAccess
             try
             {
                 string cartId = GetCartId(userId);
-                CartItems cartItem = _dbContext.CartItems.FirstOrDefault(x => x.ProductId == bookId && x.CartId == cartId);
+                CartItems? cartItem = _dbContext.CartItems.FirstOrDefault(x => x.ProductId == bookId && x.CartId == cartId);
 
-                cartItem.Quantity -= 1;
-                _dbContext.Entry(cartItem).State = EntityState.Modified;
-                _dbContext.SaveChanges();
+                if (cartItem != null)
+                {
+                    cartItem.Quantity = cartItem.Quantity > 0 ? cartItem.Quantity -= 1 : 0;
+                    _dbContext.Entry(cartItem).State = EntityState.Modified;
+                    _dbContext.SaveChanges();
+                }
             }
             catch
             {
@@ -140,7 +153,7 @@ namespace BookCart.DataAccess
 
                     foreach (CartItems item in tempCartItems)
                     {
-                        CartItems cartItem = _dbContext.CartItems.FirstOrDefault(x => x.ProductId == item.ProductId && x.CartId == permCartId);
+                        CartItems? cartItem = _dbContext.CartItems.FirstOrDefault(x => x.ProductId == item.ProductId && x.CartId == permCartId);
 
                         if (cartItem != null)
                         {
@@ -174,7 +187,7 @@ namespace BookCart.DataAccess
             try
             {
                 string cartId = GetCartId(userId);
-                List<CartItems> cartItem = [.. _dbContext.CartItems.Where(x => x.CartId == cartId)];
+                List<CartItems> cartItem = _dbContext.CartItems.Where(x => x.CartId == cartId).ToList();
 
                 if (!string.IsNullOrEmpty(cartId))
                 {

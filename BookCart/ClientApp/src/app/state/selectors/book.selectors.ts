@@ -43,3 +43,13 @@ export const selectBookById = (bookId: number) =>
     if (bookId == null || !books) return undefined;
     return books[bookId];
   });
+
+export const selectMinBookPrice = createSelector(selectBooks, (books) => {
+  if (!books) return undefined;
+  return Math.min(...books.map((b) => b.price));
+});
+
+export const selectMaxBookPrice = createSelector(selectBooks, (books) => {
+  if (!books) return undefined;
+  return Math.max(...books.map((b) => b.price));
+});

@@ -7,10 +7,9 @@ namespace BookCart.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class CheckOutController(IOrderService orderService, ICartService cartService) : Controller
+    public class CheckOutController(IOrderService orderService) : Controller
     {
         readonly IOrderService _orderService = orderService;
-        readonly ICartService _cartService = cartService;
 
         /// <summary>
         /// Checkout from shopping cart
@@ -19,10 +18,10 @@ namespace BookCart.Controllers
         /// <param name="checkedOutItems"></param>
         /// <returns></returns>
         [HttpPost("{userId}")]
-        public int Post(int userId, [FromBody]OrdersDto checkedOutItems)
+        public IActionResult Post(int userId, [FromBody] Checkout checkedOutItems)
         {
             _orderService.CreateOrder(userId, checkedOutItems);
-            return _cartService.ClearCart(userId);
+            return Ok();
         }
     }
 }

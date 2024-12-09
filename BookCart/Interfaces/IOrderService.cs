@@ -5,7 +5,7 @@ namespace BookCart.Interfaces
 {
     public interface IOrderService
     {
-        void CreateOrder(int userId, OrdersDto orderDetails);
+        void CreateOrder(int userId, Checkout orderDetails);
         List<OrdersDto> GetOrderList(int userId);
     }
 }

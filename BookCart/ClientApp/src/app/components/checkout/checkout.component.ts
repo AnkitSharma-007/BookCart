@@ -1,6 +1,11 @@
-import { CurrencyPipe } from "@angular/common";
-import { Component, OnDestroy, OnInit, inject } from "@angular/core";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { AsyncPipe, CurrencyPipe } from "@angular/common";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import {
+  FormGroup,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { MatButton } from "@angular/material/button";
 import {
   MatCard,
@@ -12,20 +17,24 @@ import {
 import { MatError, MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { Router, RouterLink } from "@angular/router";
-import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { Order } from "src/app/models/order";
-import { CartService } from "src/app/services/cart.service";
-import { CheckoutService } from "src/app/services/checkout.service";
-import { SnackbarService } from "src/app/services/snackbar.service";
-import { SubscriptionService } from "src/app/services/subscription.service";
+import { RouterLink } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
+import { CheckOutForm } from "src/app/models/checkoutForm";
+import { LoadingState } from "src/app/shared/call-state";
+import { placeOrder } from "src/app/state/actions/checkout.actions";
+import {
+  selectCartCallState,
+  selectCartItems,
+} from "src/app/state/selectors/cart.selectors";
 
 @Component({
   selector: "app-checkout",
   templateUrl: "./checkout.component.html",
   styleUrls: ["./checkout.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatCard,
     MatCardHeader,
@@ -41,25 +50,17 @@ import { SubscriptionService } from "src/app/services/subscription.service";
     RouterLink,
     MatProgressSpinner,
     CurrencyPipe,
+    AsyncPipe,
   ],
 })
-export class CheckoutComponent implements OnInit, OnDestroy {
-  private readonly fb = inject(FormBuilder);
-  private readonly router = inject(Router);
-  private readonly cartService = inject(CartService);
-  private readonly checkOutService = inject(CheckoutService);
-  private readonly snackBarService = inject(SnackbarService);
-  private readonly subscriptionService = inject(SubscriptionService);
+export class CheckoutComponent {
+  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly store = inject(Store);
+  protected readonly loadingState = LoadingState;
 
-  userId = localStorage.getItem("userId");
   totalPrice = 0;
-  checkOutItems: Order = {
-    orderDetails: [],
-  };
-  showLoader = false;
-  private destroyed$ = new ReplaySubject<void>(1);
 
-  checkOutForm = this.fb.group({
+  checkOutForm: FormGroup<CheckOutForm> = this.fb.group({
     name: ["", Validators.required],
     addressLine1: ["", Validators.required],
     addressLine2: ["", Validators.required],
@@ -77,64 +78,24 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return this.checkOutForm.controls;
   }
 
-  ngOnInit() {
-    this.getCheckOutItems();
-  }
-
-  getCheckOutItems() {
-    this.showLoader = true;
-    this.cartService
-      .getCartItems(Number(this.userId))
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (result) => {
-          const checkedOutItemCount = result.length;
-          if (checkedOutItemCount > 0) {
-            this.checkOutItems.orderDetails = result;
-            this.getTotalPrice();
-          } else {
-            this.checkOutForm.disable();
-          }
-          this.showLoader = false;
-        },
-        error: (error) => {
-          console.log(
-            "Error ocurred while fetching shopping cart item : ",
-            error
-          );
-          this.showLoader = false;
-        },
-      });
-  }
-
-  getTotalPrice() {
-    this.totalPrice = 0;
-    this.checkOutItems.orderDetails.map((item) => {
-      this.totalPrice += item.book.price * item.quantity;
-    });
-    this.checkOutItems.cartTotal = this.totalPrice;
-  }
+  protected readonly checkOutItems$ = combineLatest([
+    this.store.select(selectCartItems),
+    this.store.select(selectCartCallState),
+  ]).pipe(
+    map(([items, callState]) => {
+      if (items.length > 0) {
+        this.totalPrice = items.reduce(
+          (total, item) => total + item.book.price * item.quantity,
+          0
+        );
+      } else if (items.length === 0 && callState === LoadingState.LOADED) {
+        this.checkOutForm.disable();
+      }
+      return { items, callState };
+    })
+  );
 
   placeOrder() {
-    if (this.checkOutForm.valid) {
-      this.checkOutService
-        .placeOrder(Number(this.userId), this.checkOutItems)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe({
-          next: (result) => {
-            // this.subscriptionService.cartItemcount$.next(result);
-            this.router.navigate(["/myorders"]);
-            this.snackBarService.showSnackBar("Order placed successfully!!!");
-          },
-          error: (error) => {
-            console.log("Error ocurred while placing order : ", error);
-          },
-        });
-    }
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+    this.store.dispatch(placeOrder({ totalPrice: this.totalPrice }));
   }
 }

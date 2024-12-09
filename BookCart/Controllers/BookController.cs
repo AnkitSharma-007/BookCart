@@ -18,9 +18,9 @@ namespace BookCart.Controllers
 
         public BookController(IConfiguration config, IWebHostEnvironment hostingEnvironment, IBookService bookService)
         {
-            _config = config;
-            _bookService = bookService;
-            _hostingEnvironment = hostingEnvironment;
+            _config = config ?? throw new ArgumentNullException(nameof(config));
+            _bookService = bookService ?? throw new ArgumentNullException(nameof(bookService));
+            _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
             coverImageFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "Upload");
             if (!Directory.Exists(coverImageFolderPath))
             {
@@ -91,9 +91,9 @@ namespace BookCart.Controllers
             {
                 var file = Request.Form.Files[0];
 
-                if (file.Length > 0)
+                if (file.Length > 0 && !string.IsNullOrEmpty(file.ContentDisposition))
                 {
-                    string fileName = Guid.NewGuid() + ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    string fileName = $"{Guid.NewGuid()}{ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"')}";
                     string fullPath = Path.Combine(coverImageFolderPath, fileName);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
@@ -104,7 +104,7 @@ namespace BookCart.Controllers
             }
             else
             {
-                book.CoverFileName = _config["DefaultCoverImageFile"];
+                book.CoverFileName = _config["DefaultCoverImageFile"] ?? throw new InvalidOperationException("Default cover image file is not configured.");
             }
             return _bookService.AddBook(book);
         }

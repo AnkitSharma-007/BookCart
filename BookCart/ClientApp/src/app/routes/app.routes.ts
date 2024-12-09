@@ -20,6 +20,7 @@ import {
   ORDER_FEATURE_KEY,
   orderReducer,
 } from "../state/reducers/order.reducers";
+import { CheckoutEffects } from "../state/effects/checkout.effects";
 
 export const APP_ROUTES: Routes = [
   { path: "", component: HomeComponent, pathMatch: "full", title: "Home" },
@@ -68,6 +69,7 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: "checkout",
+    providers: [provideEffects([CheckoutEffects])],
     loadComponent: () =>
       import("../components/checkout/checkout.component").then(
         (c) => c.CheckoutComponent

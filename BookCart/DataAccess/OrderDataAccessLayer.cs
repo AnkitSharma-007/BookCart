@@ -9,7 +9,7 @@ namespace BookCart.DataAccess
     {
         readonly BookDBContext _dbContext = dbContext;
 
-        public void CreateOrder(int userId, OrdersDto orderDetails)
+        public void CreateOrder(int userId, Checkout orderDetails)
         {
             try
             {
@@ -18,7 +18,7 @@ namespace BookCart.DataAccess
                 orderid.Append('-');
                 orderid.Append(CreateRandomNumber(6));
 
-                CustomerOrders customerOrder = new CustomerOrders
+                CustomerOrders customerOrder = new()
                 {
                     OrderId = orderid.ToString(),
                     UserId = userId,
@@ -30,7 +30,7 @@ namespace BookCart.DataAccess
 
                 foreach (CartItemDto order in orderDetails.OrderDetails)
                 {
-                    CustomerOrderDetails productDetails = new CustomerOrderDetails
+                    CustomerOrderDetails productDetails = new()
                     {
                         OrderId = orderid.ToString(),
                         ProductId = order.Book.BookId,
@@ -49,38 +49,42 @@ namespace BookCart.DataAccess
 
         public List<OrdersDto> GetOrderList(int userId)
         {
-            List<OrdersDto> userOrders = new List<OrdersDto>();
-            List<string> userOrderId = new List<string>();
+            List<OrdersDto> userOrders = new();
+            List<string> userOrderId = new();
 
             userOrderId = _dbContext.CustomerOrders.Where(x => x.UserId == userId)
                 .Select(x => x.OrderId).ToList();
 
             foreach (string orderid in userOrderId)
             {
-                OrdersDto order = new OrdersDto
+                var customerOrder = _dbContext.CustomerOrders.FirstOrDefault(x => x.OrderId == orderid);
+                if (customerOrder == null) continue;
+
+                OrdersDto order = new()
                 {
                     OrderId = orderid,
-                    CartTotal = _dbContext.CustomerOrders.FirstOrDefault(x => x.OrderId == orderid).CartTotal,
-                    OrderDate = _dbContext.CustomerOrders.FirstOrDefault(x => x.OrderId == orderid).DateCreated
+                    CartTotal = customerOrder.CartTotal,
+                    OrderDate = customerOrder.DateCreated,
+                    OrderDetails = []
                 };
 
                 List<CustomerOrderDetails> orderDetail = _dbContext.CustomerOrderDetails.Where(x => x.OrderId == orderid).ToList();
 
-                order.OrderDetails = new List<CartItemDto>();
-
-                foreach (CustomerOrderDetails customerOrder in orderDetail)
+                foreach (CustomerOrderDetails customerOrderDetail in orderDetail)
                 {
-                    CartItemDto item = new CartItemDto();
+                    var book = _dbContext.Book.FirstOrDefault(x => x.BookId == customerOrderDetail.ProductId && customerOrderDetail.OrderId == orderid);
+                    if (book == null) continue;
 
-                    Book book = new Book
+                    CartItemDto item = new()
                     {
-                        BookId = customerOrder.ProductId,
-                        Title = _dbContext.Book.FirstOrDefault(x => x.BookId == customerOrder.ProductId && customerOrder.OrderId == orderid).Title,
-                        Price = _dbContext.CustomerOrderDetails.FirstOrDefault(x => x.ProductId == customerOrder.ProductId && customerOrder.OrderId == orderid).Price
+                        Book = new Book
+                        {
+                            BookId = customerOrderDetail.ProductId,
+                            Title = book.Title,
+                            Price = customerOrderDetail.Price
+                        },
+                        Quantity = customerOrderDetail.Quantity
                     };
-
-                    item.Book = book;
-                    item.Quantity = _dbContext.CustomerOrderDetails.FirstOrDefault(x => x.ProductId == customerOrder.ProductId && x.OrderId == orderid).Quantity;
 
                     order.OrderDetails.Add(item);
                 }
@@ -91,7 +95,7 @@ namespace BookCart.DataAccess
 
         int CreateRandomNumber(int length)
         {
-            Random rnd = new Random();
+            Random rnd = new();
             return rnd.Next(Convert.ToInt32(Math.Pow(10, length - 1)), Convert.ToInt32(Math.Pow(10, length)));
         }
     }

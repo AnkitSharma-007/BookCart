@@ -52,8 +52,6 @@ export class HomeComponent implements OnDestroy {
       homeVm.bookList = books;
       homeVm.selectedCategory = params.category;
       homeVm.searchItem = params.item;
-      homeVm.minPriceFilterValue = Math.min(...books.map((b) => b.price));
-      homeVm.maxPriceFilterValue = Math.max(...books.map((b) => b.price));
 
       this.store.dispatch(
         setSearchItemValue({ searchItem: homeVm.searchItem })
@@ -104,14 +102,10 @@ class Vm {
   bookList: Book[];
   selectedCategory: string;
   searchItem: string;
-  minPriceFilterValue: number;
-  maxPriceFilterValue: number;
 
   constructor() {
     this.bookList = [];
     this.selectedCategory = "";
     this.searchItem = "";
-    this.minPriceFilterValue = 0;
-    this.maxPriceFilterValue = Number.MAX_SAFE_INTEGER;
   }
 }

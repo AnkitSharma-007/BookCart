@@ -3,10 +3,7 @@
   <div class="col-md-3 col-sm-12">
     <div class="filter-container">
       <app-book-filter [category]="vm.selectedCategory"></app-book-filter>
-      <app-price-filter
-        [minFilterValue]="vm.minPriceFilterValue"
-        [maxFilterValue]="vm.maxPriceFilterValue"
-      ></app-price-filter>
+      <app-price-filter></app-price-filter>
     </div>
   </div>
   <div class="col mb-3">

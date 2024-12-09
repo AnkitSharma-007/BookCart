@@ -11,7 +11,8 @@ export const selectCartItems = createSelector(
 
 export const selectCarttemsCount = createSelector(
   selectCartFeatureState,
-  (state: CartState) => state?.shoppingCart.length
+  (state: CartState) =>
+    state?.shoppingCart.reduce((acc, item) => acc + item.quantity, 0)
 );
 
 export const selectCartCallState = createSelector(

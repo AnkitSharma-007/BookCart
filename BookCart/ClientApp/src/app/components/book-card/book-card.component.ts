@@ -1,5 +1,10 @@
 import { AsyncPipe, CurrencyPipe } from "@angular/common";
-import { Component, inject, Input } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+} from "@angular/core";
 import { MatCard, MatCardContent, MatCardImage } from "@angular/material/card";
 import { MatTooltip } from "@angular/material/tooltip";
 import { RouterLink } from "@angular/router";
@@ -17,6 +22,7 @@ import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component
   templateUrl: "./book-card.component.html",
   styleUrls: ["./book-card.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatCard,
     RouterLink,

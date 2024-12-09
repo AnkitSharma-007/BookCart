@@ -1,5 +1,5 @@
-import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
 import { Order } from "../models/order";
 
 @Injectable({
@@ -10,6 +10,6 @@ export class CheckoutService {
   private readonly baseURL = "/api/CheckOut/";
 
   placeOrder(userId: number, checkedOutItems: Order) {
-    return this.http.post<number>(this.baseURL + `${userId}`, checkedOutItems);
+    return this.http.post(this.baseURL + `${userId}`, checkedOutItems);
   }
 }

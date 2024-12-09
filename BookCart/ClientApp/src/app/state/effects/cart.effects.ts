@@ -23,7 +23,7 @@ import {
   removeCartItemFailure,
   removeCartItemSuccess,
 } from "../actions/cart.actions";
-import { selectCurrentUser } from "../selectors/auth.selectors";
+import { selectCurrentUserId } from "../selectors/auth.selectors";
 
 @Injectable()
 export class CartEffects {
@@ -35,10 +35,10 @@ export class CartEffects {
   loadCart$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadCart, setAuthState),
-      concatLatestFrom(() => this.store.select(selectCurrentUser)),
-      switchMap(([, currentUser]) => {
-        if (currentUser) {
-          return this.cartService.getCartItems(Number(currentUser)).pipe(
+      concatLatestFrom(() => this.store.select(selectCurrentUserId)),
+      switchMap(([, currentUserId]) => {
+        if (currentUserId) {
+          return this.cartService.getCartItems(Number(currentUserId)).pipe(
             map((shoppingCart) => loadCartSuccess({ shoppingCart })),
             catchError((error) => of(loadCartFailure({ errorMessage: error })))
           );
@@ -51,11 +51,11 @@ export class CartEffects {
   addToCart$ = createEffect(() =>
     this.actions$.pipe(
       ofType(addToCart),
-      concatLatestFrom(() => this.store.select(selectCurrentUser)),
-      switchMap(([action, currentUser]) => {
-        if (currentUser) {
+      concatLatestFrom(() => this.store.select(selectCurrentUserId)),
+      switchMap(([action, currentUserId]) => {
+        if (currentUserId) {
           return this.cartService
-            .addBookToCart(Number(currentUser), action.bookId)
+            .addBookToCart(Number(currentUserId), action.bookId)
             .pipe(
               map((shoppingCart) => addToCartSuccess({ shoppingCart })),
               tap(() => {
@@ -74,11 +74,11 @@ export class CartEffects {
   removeCartItem$ = createEffect(() =>
     this.actions$.pipe(
       ofType(removeCartItem),
-      concatLatestFrom(() => this.store.select(selectCurrentUser)),
-      switchMap(([action, currentUser]) => {
-        if (currentUser) {
+      concatLatestFrom(() => this.store.select(selectCurrentUserId)),
+      switchMap(([action, currentUserId]) => {
+        if (currentUserId) {
           return this.cartService
-            .removeBookFromCart(Number(currentUser), action.bookId)
+            .removeBookFromCart(Number(currentUserId), action.bookId)
             .pipe(
               map((shoppingCart) => removeCartItemSuccess({ shoppingCart })),
               tap(() => {
@@ -97,11 +97,11 @@ export class CartEffects {
   reduceCartQuantity$ = createEffect(() =>
     this.actions$.pipe(
       ofType(reduceCartQuantity),
-      concatLatestFrom(() => this.store.select(selectCurrentUser)),
-      switchMap(([action, currentUser]) => {
-        if (currentUser) {
+      concatLatestFrom(() => this.store.select(selectCurrentUserId)),
+      switchMap(([action, currentUserId]) => {
+        if (currentUserId) {
           return this.cartService
-            .reduceCartQuantity(Number(currentUser), action.bookId)
+            .reduceCartQuantity(Number(currentUserId), action.bookId)
             .pipe(
               map((shoppingCart) =>
                 reduceCartQuantitySuccess({ shoppingCart })
@@ -124,10 +124,10 @@ export class CartEffects {
   clearCart$ = createEffect(() =>
     this.actions$.pipe(
       ofType(clearCart),
-      concatLatestFrom(() => this.store.select(selectCurrentUser)),
-      switchMap(([, currentUser]) => {
-        if (currentUser) {
-          return this.cartService.clearCart(Number(currentUser)).pipe(
+      concatLatestFrom(() => this.store.select(selectCurrentUserId)),
+      switchMap(([, currentUserId]) => {
+        if (currentUserId) {
+          return this.cartService.clearCart(Number(currentUserId)).pipe(
             map(() => clearCartSuccess()),
             tap(() => {
               this.snackbarService.showSnackBar("Cart cleared");

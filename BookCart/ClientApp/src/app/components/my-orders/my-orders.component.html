@@ -20,11 +20,11 @@
             <th mat-header-cell *matHeaderCellDef>Order Id</th>
             <td mat-cell *matCellDef="let row">{{ row.orderId }}</td>
           </ng-container>
-          <ng-container matColumnDef="orderedOn">
+          <ng-container matColumnDef="orderDate">
             <th mat-header-cell *matHeaderCellDef>Ordered On</th>
             <td mat-cell *matCellDef="let row">{{ row.orderDate | date }}</td>
           </ng-container>
-          <ng-container matColumnDef="orderTotal">
+          <ng-container matColumnDef="cartTotal">
             <th mat-header-cell *matHeaderCellDef>Order Total</th>
             <td mat-cell *matCellDef="let row">
               {{ row.cartTotal | currency : "INR" }}

@@ -2,7 +2,7 @@
 {
     public static class UserRoles
     {
-        public const string Admin = "1";
-        public const string User = "2";
+        public const string Admin = "Admin";
+        public const string User = "User";
     }
 }

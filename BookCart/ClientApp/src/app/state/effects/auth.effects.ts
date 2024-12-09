@@ -13,6 +13,8 @@ import {
   setAuthState,
 } from "../actions/auth.actions";
 import { selectQueryParams } from "../selectors/router.selectors";
+import { connect } from "http2";
+import { loadCart } from "../actions/cart.actions";
 
 @Injectable()
 export class AuthEffects {

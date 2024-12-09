@@ -76,14 +76,13 @@ import {
 })
 export class ShoppingcartComponent implements OnInit {
   private readonly store = inject(Store);
-  loadingState = LoadingState;
+  protected readonly loadingState = LoadingState;
 
   protected readonly cartItems$ = combineLatest([
     this.store.select(selectCartItems),
     this.store.select(selectCartCallState),
   ]).pipe(
     map(([items, callState]) => {
-      console.log(callState);
       const total = items.reduce(
         (total, item) => total + item.book.price * item.quantity,
         0

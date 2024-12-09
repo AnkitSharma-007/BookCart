@@ -2,7 +2,6 @@
 using BookCart.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -49,6 +48,7 @@ namespace BookCart.Controllers
                 new Claim(JwtRegisteredClaimNames.Name, userInfo.Username),
                 new Claim(JwtRegisteredClaimNames.Sub, userInfo.UserTypeName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role,userInfo.UserTypeName),
                 new Claim("userId", userInfo.UserId.ToString()),
             };
 
@@ -56,7 +56,7 @@ namespace BookCart.Controllers
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: userClaims,
-                expires: DateTime.Now.AddMinutes(60),
+                expires: DateTime.Now.AddHours(24),
                 signingCredentials: credentials
             );
 

@@ -20,11 +20,11 @@ export const selectLoginError = createSelector(
   (state) => getCallStateError(state.authCallState)
 );
 
-export const selectCurrentUser = createSelector(
+export const selectCurrentUserId = createSelector(
   selectAuthenticatedUser,
   (authenticatedUser) => {
     return authenticatedUser === null
       ? localStorage.getItem("userId")
-      : authenticatedUser;
+      : authenticatedUser.userId;
   }
 );

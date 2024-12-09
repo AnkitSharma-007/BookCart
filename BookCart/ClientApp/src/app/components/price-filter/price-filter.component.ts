@@ -1,8 +1,7 @@
-import { CurrencyPipe } from "@angular/common";
+import { AsyncPipe, CurrencyPipe } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   OnDestroy,
   inject,
 } from "@angular/core";
@@ -14,7 +13,13 @@ import {
   MatCardTitle,
 } from "@angular/material/card";
 import { MatSlider, MatSliderThumb } from "@angular/material/slider";
+import { Store } from "@ngrx/store";
+import { combineLatest, map } from "rxjs";
 import { SubscriptionService } from "src/app/services/subscription.service";
+import {
+  selectMaxBookPrice,
+  selectMinBookPrice,
+} from "src/app/state/selectors/book.selectors";
 
 @Component({
   selector: "app-price-filter",
@@ -32,15 +37,21 @@ import { SubscriptionService } from "src/app/services/subscription.service";
     ReactiveFormsModule,
     FormsModule,
     CurrencyPipe,
+    AsyncPipe,
   ],
 })
 export class PriceFilterComponent implements OnDestroy {
   private readonly subscriptionService = inject(SubscriptionService);
+  private readonly store = inject(Store);
 
-  @Input({ required: true }) minFilterValue: number;
-  @Input({ required: true }) maxFilterValue: number;
-
-  value = Number.MAX_SAFE_INTEGER;
+  bookPriceRange$ = combineLatest([
+    this.store.select(selectMinBookPrice),
+    this.store.select(selectMaxBookPrice),
+  ]).pipe(
+    map(([minPrice, maxPrice]) => {
+      return { minPrice, maxPrice };
+    })
+  );
 
   formatLabel(labelValue: number): string {
     if (labelValue >= 1000) {
@@ -54,6 +65,6 @@ export class PriceFilterComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptionService.priceFilterValue$.next(this.maxFilterValue);
+    this.subscriptionService.priceFilterValue$.next(Number.MAX_SAFE_INTEGER);
   }
 }

@@ -1,3 +1,4 @@
+@if(bookPriceRange$ | async; as bookPriceRange){
 <mat-card class="my-4">
   <mat-card-header class="custom-card-header justify-content-between">
     <mat-card-title class="mat-h1"> Price Filter </mat-card-title>
@@ -5,24 +6,29 @@
   <mat-card-content>
     <mat-slider
       class="m-0"
-      [max]="maxFilterValue"
-      [min]="minFilterValue"
+      [max]="bookPriceRange.maxPrice"
+      [min]="bookPriceRange.minPrice"
       [step]="100"
       [discrete]="true"
       [displayWith]="formatLabel"
     >
-      <input matSliderThumb [(ngModel)]="value" (change)="onChange($event)" />
+      <input
+        [value]="bookPriceRange.maxPrice"
+        matSliderThumb
+        (change)="onChange($event)"
+      />
     </mat-slider>
   </mat-card-content>
   <mat-card-content>
     <div class="d-flex justify-content-between">
       <div>
-        <strong>{{ minFilterValue | currency : "INR" }}</strong>
+        <strong>{{ bookPriceRange.minPrice | currency : "INR" }}</strong>
       </div>
       <div>to</div>
       <div>
-        <strong>{{ maxFilterValue | currency : "INR" }}</strong>
+        <strong>{{ bookPriceRange.maxPrice | currency : "INR" }}</strong>
       </div>
     </div>
   </mat-card-content>
 </mat-card>
+}

@@ -12,6 +12,9 @@ import {
   loadCart,
   loadCartFailure,
   loadCartSuccess,
+  reduceCartQuantity,
+  reduceCartQuantityFailure,
+  reduceCartQuantitySuccess,
   removeCartItem,
   removeCartItemFailure,
   removeCartItemSuccess,
@@ -67,6 +70,19 @@ export const cartReducer = createReducer(
     cartCallState: LoadingState.LOADED,
   })),
   on(removeCartItemFailure, (state, { errorMessage }) => ({
+    ...state,
+    cartCallState: { errorMessage },
+  })),
+  on(reduceCartQuantity, (state) => ({
+    ...state,
+    cartCallState: LoadingState.LOADING,
+  })),
+  on(reduceCartQuantitySuccess, (state, { shoppingCart }) => ({
+    ...state,
+    shoppingCart,
+    cartCallState: LoadingState.LOADED,
+  })),
+  on(reduceCartQuantityFailure, (state, { errorMessage }) => ({
     ...state,
     cartCallState: { errorMessage },
   })),

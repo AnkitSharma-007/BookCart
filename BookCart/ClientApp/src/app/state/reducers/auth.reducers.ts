@@ -6,6 +6,7 @@ import {
   loginFailure,
   loginSuccess,
   logout,
+  resetLoginFormError,
   setAuthState,
 } from "../actions/auth.actions";
 
@@ -45,5 +46,9 @@ export const authReducer = createReducer(
   })),
   on(logout, () => ({
     ...initialState,
+  })),
+  on(resetLoginFormError, (state) => ({
+    ...state,
+    authCallState: LoadingState.INIT,
   }))
 );

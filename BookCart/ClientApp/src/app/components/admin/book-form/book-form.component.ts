@@ -23,7 +23,6 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { combineLatest, EMPTY } from "rxjs";
 import { catchError, map } from "rxjs/operators";
-import { Categories } from "src/app/models/categories";
 import { SnackbarService } from "src/app/services/snackbar.service";
 import { addBook, updateBook } from "src/app/state/actions/book.actions";
 import { loadCategories } from "src/app/state/actions/categories.actions";

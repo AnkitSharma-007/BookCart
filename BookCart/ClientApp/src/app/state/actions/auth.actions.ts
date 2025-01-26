@@ -19,6 +19,8 @@ export const loginFailure = createAction(
   props<{ errorMessage: string }>()
 );
 
+export const resetLoginFormError = createAction("[Auth] Login Error Reset");
+
 export const logout = createAction("[Auth] Logout");
 
 export const register = createAction(

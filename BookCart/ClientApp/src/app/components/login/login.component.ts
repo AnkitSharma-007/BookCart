@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from "@angular/core";
 import {
   FormGroup,
   NonNullableFormBuilder,
@@ -28,7 +33,7 @@ import {
 import { Store } from "@ngrx/store";
 import { LoginForm } from "src/app/models/loginForm";
 import { UserLogin } from "src/app/models/userLogin";
-import { login } from "src/app/state/actions/auth.actions";
+import { login, resetLoginFormError } from "src/app/state/actions/auth.actions";
 import { selectLoginError } from "src/app/state/selectors/auth.selectors";
 
 @Component({
@@ -56,7 +61,7 @@ import { selectLoginError } from "src/app/state/selectors/auth.selectors";
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
@@ -75,6 +80,10 @@ export class LoginComponent {
       return error;
     })
   );
+
+  ngOnInit(): void {
+    this.store.dispatch(resetLoginFormError());
+  }
 
   protected get loginFormControl() {
     return this.loginForm.controls;

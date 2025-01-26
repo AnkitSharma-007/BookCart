@@ -1,11 +1,11 @@
 import { createAction, props } from "@ngrx/store";
-import { Order } from "src/app/models/order";
+import { CustomerOrder } from "src/app/models/order";
 
 export const loadOrders = createAction("[Orders] Load Orders");
 
 export const loadOrdersSuccess = createAction(
   "[Orders] Load Orders Success",
-  props<{ orders: Order[] }>()
+  props<{ orders: CustomerOrder[] }>()
 );
 
 export const loadOrdersFailure = createAction(

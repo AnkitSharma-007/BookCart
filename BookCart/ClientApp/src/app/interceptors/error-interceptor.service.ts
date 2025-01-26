@@ -19,7 +19,6 @@ export const ErrorInterceptorService: HttpInterceptorFn = (
   const router = inject(Router);
   return next(request).pipe(
     catchError((error: HttpErrorResponse) => {
-      console.log(error);
       if (error.status === 401) {
         store.dispatch(logout());
         if (!request.url.includes("login")) {

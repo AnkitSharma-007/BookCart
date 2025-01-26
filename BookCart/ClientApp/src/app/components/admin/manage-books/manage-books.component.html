@@ -70,7 +70,9 @@
           ></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="4">No data matching the filter</td>
+            <td class="mat-cell p-2" colspan="2">
+              No data matching the filter
+            </td>
           </tr>
         </table>
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>

@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { Order } from "src/app/models/order";
+import { CustomerOrder } from "src/app/models/order";
 import { CallState, LoadingState } from "src/app/shared/call-state";
 import {
   loadOrders,
@@ -10,7 +10,7 @@ import {
 export const ORDER_FEATURE_KEY = "order";
 
 export interface OrderState {
-  orders: Order[];
+  orders: CustomerOrder[];
   orderCallState: CallState;
 }
 

@@ -41,7 +41,6 @@ import { RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { BehaviorSubject, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-import { Order } from "src/app/models/order";
 import { LoadingState } from "src/app/shared/call-state";
 import { loadOrders } from "src/app/state/actions/order.actions";
 import {

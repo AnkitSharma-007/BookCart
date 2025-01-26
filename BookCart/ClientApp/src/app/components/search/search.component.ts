@@ -20,19 +20,18 @@ import {
 } from "src/app/state/selectors/book.selectors";
 
 @Component({
-  selector: "app-search",
-  templateUrl: "./search.component.html",
-  styleUrls: ["./search.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    ReactiveFormsModule,
-    FormsModule,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    MatOption,
-    AsyncPipe,
-  ],
+    selector: "app-search",
+    templateUrl: "./search.component.html",
+    styleUrls: ["./search.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        MatOption,
+        AsyncPipe,
+    ]
 })
 export class SearchComponent {
   private readonly router = inject(Router);

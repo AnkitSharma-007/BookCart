@@ -15,19 +15,18 @@ import { loadCategories } from "src/app/state/actions/categories.actions";
 import { selectCategories } from "src/app/state/selectors/categories.selectors";
 
 @Component({
-  selector: "app-book-filter",
-  templateUrl: "./book-filter.component.html",
-  styleUrls: ["./book-filter.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatNavList,
-    MatListItem,
-    RouterLink,
-    MatDivider,
-    AsyncPipe,
-    LowerCasePipe,
-  ],
+    selector: "app-book-filter",
+    templateUrl: "./book-filter.component.html",
+    styleUrls: ["./book-filter.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatNavList,
+        MatListItem,
+        RouterLink,
+        MatDivider,
+        AsyncPipe,
+        LowerCasePipe,
+    ]
 })
 export class BookFilterComponent {
   @Input()

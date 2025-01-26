@@ -20,28 +20,27 @@ import { selectWishlistItemsCount } from "src/app/state/selectors/wishlist.selec
 import { SearchComponent } from "../search/search.component";
 
 @Component({
-  selector: "app-nav-bar",
-  templateUrl: "./nav-bar.component.html",
-  styleUrls: ["./nav-bar.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatToolbar,
-    MatToolbarRow,
-    MatButton,
-    RouterLink,
-    MatIcon,
-    SearchComponent,
-    MatIconButton,
-    RouterLinkActive,
-    MatBadge,
-    MatTooltip,
-    MatAnchor,
-    MatMenuTrigger,
-    MatMenu,
-    MatMenuItem,
-    AsyncPipe,
-  ],
+    selector: "app-nav-bar",
+    templateUrl: "./nav-bar.component.html",
+    styleUrls: ["./nav-bar.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatToolbar,
+        MatToolbarRow,
+        MatButton,
+        RouterLink,
+        MatIcon,
+        SearchComponent,
+        MatIconButton,
+        RouterLinkActive,
+        MatBadge,
+        MatTooltip,
+        MatAnchor,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        AsyncPipe,
+    ]
 })
 export class NavBarComponent {
   private readonly store = inject(Store);

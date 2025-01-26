@@ -31,29 +31,28 @@ import { CustomValidationService } from "src/app/services/custom-validation.serv
 import { register } from "src/app/state/actions/auth.actions";
 
 @Component({
-  selector: "app-user-registration",
-  templateUrl: "./user-registration.component.html",
-  styleUrls: ["./user-registration.component.scss"],
-  standalone: true,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatButton,
-    RouterLink,
-    MatCardContent,
-    ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatError,
-    MatIcon,
-    MatSuffix,
-    MatRadioGroup,
-    MatRadioButton,
-    MatCardActions,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-user-registration",
+    templateUrl: "./user-registration.component.html",
+    styleUrls: ["./user-registration.component.scss"],
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatButton,
+        RouterLink,
+        MatCardContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatError,
+        MatIcon,
+        MatSuffix,
+        MatRadioGroup,
+        MatRadioButton,
+        MatCardActions,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserRegistrationComponent {
   private readonly customValidation = inject(CustomValidationService);

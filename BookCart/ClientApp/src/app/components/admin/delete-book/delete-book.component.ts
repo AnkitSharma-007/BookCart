@@ -14,20 +14,19 @@ import { deleteBook } from "src/app/state/actions/book.actions";
 import { selectBookById } from "src/app/state/selectors/book.selectors";
 
 @Component({
-  selector: "app-delete-book",
-  templateUrl: "./delete-book.component.html",
-  styleUrls: ["./delete-book.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose,
-    AsyncPipe,
-    CurrencyPipe,
-  ],
+    selector: "app-delete-book",
+    templateUrl: "./delete-book.component.html",
+    styleUrls: ["./delete-book.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        MatDialogContent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+        AsyncPipe,
+        CurrencyPipe,
+    ]
 })
 export class DeleteBookComponent {
   private readonly dialogRef = inject(MatDialogRef<DeleteBookComponent>);

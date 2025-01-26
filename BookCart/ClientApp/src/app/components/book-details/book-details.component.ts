@@ -19,26 +19,25 @@ import { BookSummaryComponent } from "../book-summary/book-summary.component";
 import { SimilarbooksComponent } from "../similarbooks/similarbooks.component";
 
 @Component({
-  selector: "app-book-details",
-  templateUrl: "./book-details.component.html",
-  styleUrls: ["./book-details.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    MatCardImage,
-    AddtocartComponent,
-    AddtowishlistComponent,
-    BookSummaryComponent,
-    SimilarbooksComponent,
-    MatButton,
-    RouterLink,
-    AsyncPipe,
-    CurrencyPipe,
-  ],
+    selector: "app-book-details",
+    templateUrl: "./book-details.component.html",
+    styleUrls: ["./book-details.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        MatCardImage,
+        AddtocartComponent,
+        AddtowishlistComponent,
+        BookSummaryComponent,
+        SimilarbooksComponent,
+        MatButton,
+        RouterLink,
+        AsyncPipe,
+        CurrencyPipe,
+    ]
 })
 export class BookDetailsComponent {
   private readonly store = inject(Store);

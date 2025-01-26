@@ -16,20 +16,19 @@ import { loadSimilarBooks } from "src/app/state/actions/similar-books.actions";
 import { selectSimilarBooks } from "src/app/state/selectors/similar-books.selectors";
 
 @Component({
-  selector: "app-similarbooks",
-  templateUrl: "./similarbooks.component.html",
-  styleUrls: ["./similarbooks.component.scss"],
-  standalone: true,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    BookCardComponent,
-    MatProgressSpinner,
-    AsyncPipe,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-similarbooks",
+    templateUrl: "./similarbooks.component.html",
+    styleUrls: ["./similarbooks.component.scss"],
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        BookCardComponent,
+        MatProgressSpinner,
+        AsyncPipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SimilarbooksComponent {
   private readonly store = inject(Store);

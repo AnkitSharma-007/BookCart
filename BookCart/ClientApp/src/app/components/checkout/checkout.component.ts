@@ -30,28 +30,27 @@ import {
 } from "src/app/state/selectors/cart.selectors";
 
 @Component({
-  selector: "app-checkout",
-  templateUrl: "./checkout.component.html",
-  styleUrls: ["./checkout.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatError,
-    MatCardActions,
-    MatButton,
-    RouterLink,
-    MatProgressSpinner,
-    CurrencyPipe,
-    AsyncPipe,
-  ],
+    selector: "app-checkout",
+    templateUrl: "./checkout.component.html",
+    styleUrls: ["./checkout.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatError,
+        MatCardActions,
+        MatButton,
+        RouterLink,
+        MatProgressSpinner,
+        CurrencyPipe,
+        AsyncPipe,
+    ]
 })
 export class CheckoutComponent {
   private readonly fb = inject(NonNullableFormBuilder);

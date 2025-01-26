@@ -8,11 +8,10 @@ import { toggleWishlistItem } from "src/app/state/actions/wishlist.actions";
 import { selectWishlistItems } from "src/app/state/selectors/wishlist.selectors";
 
 @Component({
-  selector: "app-addtowishlist",
-  templateUrl: "./addtowishlist.component.html",
-  styleUrls: ["./addtowishlist.component.scss"],
-  standalone: true,
-  imports: [MatButton, NgClass],
+    selector: "app-addtowishlist",
+    templateUrl: "./addtowishlist.component.html",
+    styleUrls: ["./addtowishlist.component.scss"],
+    imports: [MatButton, NgClass]
 })
 export class AddtowishlistComponent implements OnChanges, OnDestroy {
   @Input()

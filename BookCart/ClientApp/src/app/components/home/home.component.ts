@@ -22,18 +22,17 @@ import { BookFilterComponent } from "../book-filter/book-filter.component";
 import { PriceFilterComponent } from "../price-filter/price-filter.component";
 
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    BookFilterComponent,
-    PriceFilterComponent,
-    BookCardComponent,
-    MatProgressSpinner,
-    AsyncPipe,
-  ],
+    selector: "app-home",
+    templateUrl: "./home.component.html",
+    styleUrls: ["./home.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        BookFilterComponent,
+        PriceFilterComponent,
+        BookCardComponent,
+        MatProgressSpinner,
+        AsyncPipe,
+    ]
 })
 export class HomeComponent implements OnDestroy {
   private readonly activatedRoute = inject(ActivatedRoute);

@@ -30,29 +30,28 @@ import { selectCurrentBookDetails } from "src/app/state/selectors/book.selectors
 import { selectCategories } from "src/app/state/selectors/categories.selectors";
 
 @Component({
-  selector: "app-book-form",
-  templateUrl: "./book-form.component.html",
-  styleUrls: ["./book-form.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatError,
-    MatSelect,
-    MatOption,
-    MatPrefix,
-    MatCardActions,
-    MatButton,
-    MatIcon,
-    AsyncPipe,
-  ],
+    selector: "app-book-form",
+    templateUrl: "./book-form.component.html",
+    styleUrls: ["./book-form.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatError,
+        MatSelect,
+        MatOption,
+        MatPrefix,
+        MatCardActions,
+        MatButton,
+        MatIcon,
+        AsyncPipe,
+    ]
 })
 export class BookFormComponent {
   private readonly fb = inject(FormBuilder);

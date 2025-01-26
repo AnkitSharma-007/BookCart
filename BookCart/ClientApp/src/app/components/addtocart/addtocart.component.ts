@@ -10,12 +10,11 @@ import { Store } from "@ngrx/store";
 import { addToCart } from "src/app/state/actions/cart.actions";
 
 @Component({
-  selector: "app-addtocart",
-  templateUrl: "./addtocart.component.html",
-  styleUrls: ["./addtocart.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatButton, MatIcon],
+    selector: "app-addtocart",
+    templateUrl: "./addtocart.component.html",
+    styleUrls: ["./addtocart.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatButton, MatIcon]
 })
 export class AddtocartComponent {
   @Input()

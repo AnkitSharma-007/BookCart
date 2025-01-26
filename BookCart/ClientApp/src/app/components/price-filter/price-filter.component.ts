@@ -22,23 +22,22 @@ import {
 } from "src/app/state/selectors/book.selectors";
 
 @Component({
-  selector: "app-price-filter",
-  templateUrl: "./price-filter.component.html",
-  styleUrls: ["./price-filter.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    MatSlider,
-    MatSliderThumb,
-    ReactiveFormsModule,
-    FormsModule,
-    CurrencyPipe,
-    AsyncPipe,
-  ],
+    selector: "app-price-filter",
+    templateUrl: "./price-filter.component.html",
+    styleUrls: ["./price-filter.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardContent,
+        MatSlider,
+        MatSliderThumb,
+        ReactiveFormsModule,
+        FormsModule,
+        CurrencyPipe,
+        AsyncPipe,
+    ]
 })
 export class PriceFilterComponent implements OnDestroy {
   private readonly subscriptionService = inject(SubscriptionService);

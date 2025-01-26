@@ -9,12 +9,11 @@ import { MatButton } from "@angular/material/button";
 import { MatCard, MatCardContent } from "@angular/material/card";
 
 @Component({
-  selector: "app-book-summary",
-  templateUrl: "./book-summary.component.html",
-  styleUrls: ["./book-summary.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatCard, MatCardContent, MatButton, MatProgressSpinner],
+    selector: "app-book-summary",
+    templateUrl: "./book-summary.component.html",
+    styleUrls: ["./book-summary.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatCard, MatCardContent, MatButton, MatProgressSpinner]
 })
 export class BookSummaryComponent {
   geminiInput = "";

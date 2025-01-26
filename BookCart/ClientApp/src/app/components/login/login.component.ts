@@ -37,29 +37,28 @@ import { login, resetLoginFormError } from "src/app/state/actions/auth.actions";
 import { selectLoginError } from "src/app/state/selectors/auth.selectors";
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
-  standalone: true,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatButton,
-    RouterLink,
-    MatCardSubtitle,
-    MatError,
-    MatCardContent,
-    ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatIcon,
-    MatSuffix,
-    MatCardActions,
-    AsyncPipe,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-login",
+    templateUrl: "./login.component.html",
+    styleUrls: ["./login.component.scss"],
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatButton,
+        RouterLink,
+        MatCardSubtitle,
+        MatError,
+        MatCardContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatIcon,
+        MatSuffix,
+        MatCardActions,
+        AsyncPipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
   private readonly store = inject(Store);

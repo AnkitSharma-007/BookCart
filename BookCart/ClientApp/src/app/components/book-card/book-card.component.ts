@@ -18,22 +18,21 @@ import { AddtocartComponent } from "../addtocart/addtocart.component";
 import { AddtowishlistComponent } from "../addtowishlist/addtowishlist.component";
 
 @Component({
-  selector: "app-book-card",
-  templateUrl: "./book-card.component.html",
-  styleUrls: ["./book-card.component.scss"],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatCard,
-    RouterLink,
-    MatTooltip,
-    MatCardImage,
-    MatCardContent,
-    AddtowishlistComponent,
-    AddtocartComponent,
-    AsyncPipe,
-    CurrencyPipe,
-  ],
+    selector: "app-book-card",
+    templateUrl: "./book-card.component.html",
+    styleUrls: ["./book-card.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatCard,
+        RouterLink,
+        MatTooltip,
+        MatCardImage,
+        MatCardContent,
+        AddtowishlistComponent,
+        AddtocartComponent,
+        AsyncPipe,
+        CurrencyPipe,
+    ]
 })
 export class BookCardComponent {
   @Input()

@@ -1,6 +1,6 @@
-<mat-nav-list class="p-1 mat-elevation-z2">
+<mat-list class="p-1 mat-elevation-z2">
   <mat-list-item [class.active-category]="!category" routerLink="/">
-    <a>All Categories</a>
+    All Categories
   </mat-list-item>
   @for (c of categories$ | async; track c) {
   <mat-list-item
@@ -8,8 +8,8 @@
     routerLink="/filter"
     [queryParams]="{ category: c.categoryName | lowercase }"
   >
-    <a>{{ c.categoryName }}</a>
+    {{ c.categoryName }}
     <mat-divider></mat-divider>
   </mat-list-item>
   }
-</mat-nav-list>
+</mat-list>

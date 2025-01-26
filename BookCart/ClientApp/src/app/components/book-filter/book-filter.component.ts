@@ -6,7 +6,7 @@ import {
   Input,
 } from "@angular/core";
 import { MatDivider } from "@angular/material/divider";
-import { MatListItem, MatNavList } from "@angular/material/list";
+import { MatListItem, MatListModule } from "@angular/material/list";
 import { RouterLink } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { EMPTY } from "rxjs";
@@ -15,18 +15,18 @@ import { loadCategories } from "src/app/state/actions/categories.actions";
 import { selectCategories } from "src/app/state/selectors/categories.selectors";
 
 @Component({
-    selector: "app-book-filter",
-    templateUrl: "./book-filter.component.html",
-    styleUrls: ["./book-filter.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        MatNavList,
-        MatListItem,
-        RouterLink,
-        MatDivider,
-        AsyncPipe,
-        LowerCasePipe,
-    ]
+  selector: "app-book-filter",
+  templateUrl: "./book-filter.component.html",
+  styleUrls: ["./book-filter.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatListModule,
+    MatListItem,
+    RouterLink,
+    MatDivider,
+    AsyncPipe,
+    LowerCasePipe,
+  ],
 })
 export class BookFilterComponent {
   @Input()

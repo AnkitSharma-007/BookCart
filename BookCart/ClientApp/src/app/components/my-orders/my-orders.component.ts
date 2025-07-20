@@ -11,6 +11,7 @@ import {
   Component,
   inject,
   ViewChild,
+  AfterViewInit,
 } from "@angular/core";
 import { MatButton } from "@angular/material/button";
 import {
@@ -49,46 +50,49 @@ import {
 } from "src/app/state/selectors/order.selectors";
 
 @Component({
-    selector: "app-my-orders",
-    templateUrl: "./my-orders.component.html",
-    styleUrls: ["./my-orders.component.scss"],
-    animations: [
-        trigger("detailExpand", [
-            state("collapsed,void", style({ height: "0px", minHeight: "0" })),
-            state("expanded", style({ height: "*" })),
-            transition("expanded <=> collapsed", animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")),
-        ]),
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        MatCard,
-        MatCardHeader,
-        MatCardTitle,
-        MatCardContent,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCellDef,
-        MatCell,
-        RouterLink,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        MatNoDataRow,
-        MatPaginator,
-        MatProgressSpinner,
-        MatButton,
-        CurrencyPipe,
-        DatePipe,
-        AsyncPipe,
-    ]
+  selector: "app-my-orders",
+  templateUrl: "./my-orders.component.html",
+  styleUrls: ["./my-orders.component.scss"],
+  animations: [
+    trigger("detailExpand", [
+      state("collapsed,void", style({ height: "0px", minHeight: "0" })),
+      state("expanded", style({ height: "*" })),
+      transition(
+        "expanded <=> collapsed",
+        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
+      ),
+    ]),
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    RouterLink,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatNoDataRow,
+    MatPaginator,
+    MatProgressSpinner,
+    MatButton,
+    CurrencyPipe,
+    DatePipe,
+    AsyncPipe,
+  ],
 })
-export class MyOrdersComponent {
+export class MyOrdersComponent implements AfterViewInit {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
@@ -99,22 +103,49 @@ export class MyOrdersComponent {
   expandedElement: null;
 
   private readonly searchValue$ = new BehaviorSubject<string>("");
+  private readonly paginatorReady$ = new BehaviorSubject<boolean>(false);
 
   orderTableData$ = combineLatest([
     this.store.select(selectOrderItems),
     this.store.select(selectOrderCallState),
     this.searchValue$,
+    this.paginatorReady$,
   ]).pipe(
-    map(([order, callState, searchValue]) => {
+    map(([order, callState, searchValue, paginatorReady]) => {
       let dataSource = new MatTableDataSource(order);
-      dataSource.paginator = this.paginator;
+
+      // Set up custom filter predicate for searching orders
+      dataSource.filterPredicate = (data: any, filter: string) => {
+        const transformedFilter = filter.trim().toLowerCase();
+        return (
+          data.orderId?.toString().toLowerCase().includes(transformedFilter) ||
+          data.orderDate?.toLowerCase().includes(transformedFilter) ||
+          data.cartTotal?.toString().toLowerCase().includes(transformedFilter)
+        );
+      };
+
+      // Apply the search filter if there's a search value
       if (searchValue.length > 0) {
         dataSource.filter = searchValue.trim().toLowerCase();
-        dataSource.paginator.firstPage();
+      } else {
+        dataSource.filter = "";
+      }
+
+      // Set paginator only when it's ready
+      if (paginatorReady && this.paginator) {
+        dataSource.paginator = this.paginator;
+        // Reset to first page when filter is applied
+        if (dataSource.filter) {
+          this.paginator.firstPage();
+        }
       }
       return { dataSource, callState };
     })
   );
+
+  ngAfterViewInit() {
+    this.paginatorReady$.next(true);
+  }
 
   constructor() {
     this.store.dispatch(loadOrders());

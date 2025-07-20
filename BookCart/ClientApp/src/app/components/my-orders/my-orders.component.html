@@ -13,7 +13,7 @@
       <div table-container class="mat-elevation-z2">
         <table
           mat-table
-          [dataSource]="orderTableData.dataSource.data"
+          [dataSource]="orderTableData.dataSource"
           multiTemplateDataRows
         >
           <ng-container matColumnDef="orderId">
@@ -53,7 +53,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        @for (order of element.orderDetails; track order) {
+                        @for (order of element.orderDetails; track
+                        order.book.bookId) {
                         <tr>
                           <td>
                             <a

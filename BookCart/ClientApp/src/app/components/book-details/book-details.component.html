@@ -1,4 +1,26 @@
 @if (bookDetails$ | async; as bookDetails) {
+<!-- Loading State -->
+@if (bookDetails.isLoading) {
+<div class="d-flex flex-column align-items-center mt-4">
+  <mat-spinner></mat-spinner>
+  <p class="mt-3">Loading book details...</p>
+</div>
+}
+<!-- Error State -->
+@else if (bookDetails.hasError) {
+<div class="d-flex flex-column align-items-center mt-4">
+  <div>
+    <h1 class="display-4">Error loading book details</h1>
+  </div>
+  <div>
+    <button mat-raised-button color="primary" [routerLink]="['/']">
+      Back to Home
+    </button>
+  </div>
+</div>
+}
+<!-- Success State with Book Data -->
+@else if (bookDetails.book) {
 <mat-card class="mt-4">
   <mat-card-header class="mat-elevation-z2 custom-card-header">
     <mat-card-title class="mat-h1">Book Details</mat-card-title>
@@ -48,7 +70,9 @@
 </mat-card>
 <app-book-summary [bookTitle]="bookDetails.book.title"></app-book-summary>
 <app-similarbooks></app-similarbooks>
-} @else {
+}
+<!-- No Book Found State -->
+@else {
 <div class="d-flex flex-column align-items-center mt-4">
   <div>
     <h1 class="display-4">No books found.</h1>
@@ -59,4 +83,4 @@
     </button>
   </div>
 </div>
-}
+} }

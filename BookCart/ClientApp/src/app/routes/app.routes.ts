@@ -2,7 +2,6 @@ import { Routes } from "@angular/router";
 import { provideEffects } from "@ngrx/effects";
 import { provideState } from "@ngrx/store";
 import { HomeComponent } from "../components/home/home.component";
-import { PageNotFoundComponent } from "../components/page-not-found/page-not-found.component";
 import { AdminAuthGuard } from "../guards/admin-auth.guard";
 import { AuthGuard } from "../guards/auth.guard";
 import { RegisterEffects } from "../state/effects/register.effects";
@@ -106,5 +105,12 @@ export const APP_ROUTES: Routes = [
     canActivate: [AdminAuthGuard],
     title: "Admin | Books",
   },
-  { path: "**", component: PageNotFoundComponent, title: "Not Found" },
+  {
+    path: "**",
+    loadComponent: () =>
+      import("../components/page-not-found/page-not-found.component").then(
+        (c) => c.PageNotFoundComponent
+      ),
+    title: "Not Found",
+  },
 ];

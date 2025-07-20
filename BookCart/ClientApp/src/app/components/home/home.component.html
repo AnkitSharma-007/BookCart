@@ -9,7 +9,7 @@
   <div class="col mb-3">
     @if (vm.bookList.length > 0) {
     <div class="d-flex justify-content-start card-deck-container mb-4">
-      @for (book of vm.bookList; track book) {
+      @for (book of vm.bookList; track book.bookId) {
       <div class="p-1">
         <app-book-card [book]="book"></app-book-card>
       </div>

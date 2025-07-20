@@ -2,7 +2,13 @@ import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { enableProdMode, importProvidersFrom, isDevMode } from "@angular/core";
 import { BrowserModule, bootstrapApplication } from "@angular/platform-browser";
 import { provideAnimations } from "@angular/platform-browser/animations";
-import { provideRouter, withInMemoryScrolling } from "@angular/router";
+import {
+  PreloadAllModules,
+  PreloadingStrategy,
+  provideRouter,
+  withInMemoryScrolling,
+  withPreloading,
+} from "@angular/router";
 import { provideEffects } from "@ngrx/effects";
 import { provideRouterStore, routerReducer } from "@ngrx/router-store";
 import { provideState, provideStore } from "@ngrx/store";
@@ -54,7 +60,8 @@ bootstrapApplication(AppComponent, {
       APP_ROUTES,
       withInMemoryScrolling({
         scrollPositionRestoration: "top",
-      })
+      }),
+      withPreloading(PreloadAllModules)
     ),
     provideStore(),
     provideEffects(
@@ -64,11 +71,11 @@ bootstrapApplication(AppComponent, {
       WishlistEffects,
       CartEffects
     ),
-    provideState({ name: CATEGORIES_FEATURE_KEY, reducer: categoryReducer }),
-    provideState({ name: BOOK_FEATURE_KEY, reducer: bookReducer }),
-    provideState({ name: AUTH_FEATURE_KEY, reducer: authReducer }),
-    provideState({ name: WISHLIST_FEATURE_KEY, reducer: wishlistReducer }),
-    provideState({ name: CART_FEATURE_KEY, reducer: cartReducer }),
+    provideState(CATEGORIES_FEATURE_KEY, categoryReducer),
+    provideState(BOOK_FEATURE_KEY, bookReducer),
+    provideState(AUTH_FEATURE_KEY, authReducer),
+    provideState(WISHLIST_FEATURE_KEY, wishlistReducer),
+    provideState(CART_FEATURE_KEY, cartReducer),
     provideRouterStore(),
     provideStore({ [ROUTER_FEATURE_KEY]: routerReducer }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),

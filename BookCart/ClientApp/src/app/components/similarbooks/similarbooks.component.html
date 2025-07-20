@@ -5,7 +5,7 @@
   <mat-card-content class="p-3">
     @if (similarBooks$ | async; as books) {
     <div class="d-flex justify-content-start flex-wrap">
-      @for (book of books; track book) {
+      @for (book of books; track book.bookId) {
       <div class="p-1">
         <app-book-card [book]="book"></app-book-card>
       </div>

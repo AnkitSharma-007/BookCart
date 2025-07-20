@@ -40,6 +40,8 @@
           },
           "configurations": {
             "production": {
+              "optimization": true,
+              "namedChunks": true,
               "budgets": [
                 {
                   "type": "initial",
